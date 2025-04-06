@@ -1,4 +1,4 @@
-package at.fh.burgenland.voiceart;
+package at.fh.burgenland;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

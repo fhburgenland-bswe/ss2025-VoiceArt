@@ -1,4 +1,4 @@
-package at.fh.burgenland.voiceart;
+package at.fh.burgenland;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

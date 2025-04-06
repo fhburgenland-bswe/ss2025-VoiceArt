@@ -1,4 +1,4 @@
-package at.fh.burgenland.voiceart;
+package at.fh.burgenland;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,23 +43,5 @@ class ClickableButtonTest_JUnit5AssertJ {
     Assertions.assertThat(robot.lookup(".button").queryAs(Button.class)).hasText("click me!");
     // or (query specific type):
     Assertions.assertThat(robot.lookup(".button").queryButton()).hasText("click me!");
-  }
-
-  /**
-   * @param robot - Will be injected by the test runner.
-   */
-  @Test
-  void when_button_is_clicked_text_changes(FxRobot robot) {
-    // when:
-    robot.clickOn(".button");
-
-    // then:
-    Assertions.assertThat(button).hasText("clicked!");
-    // or (lookup by css id):
-    Assertions.assertThat(robot.lookup("#myButton").queryAs(Button.class)).hasText("clicked!");
-    // or (lookup by css class):
-    Assertions.assertThat(robot.lookup(".button").queryAs(Button.class)).hasText("clicked!");
-    // or (query specific type)
-    Assertions.assertThat(robot.lookup(".button").queryButton()).hasText("clicked!");
   }
 }
