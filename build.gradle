@@ -1,5 +1,7 @@
 plugins {
   id 'java'
+  id 'checkstyle'
+  id("com.diffplug.spotless") version "7.0.2"
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.13'
   id 'org.beryx.jlink' version '2.25.0'
@@ -37,6 +39,15 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
 
+checkstyle {
+  // This is required to refer to the Google Style XML provided in the Checkstyle jar.
+  def archive = configurations.checkstyle.resolve().find { it.name.startsWith("checkstyle") }
+  config = resources.text.fromArchiveEntry(archive, "google_checks.xml")
+
+  toolVersion = '10.21.0'
+  maxWarnings = 0
+  maxErrors = 0
+}
 test {
   useJUnitPlatform()
 }
@@ -51,4 +62,10 @@ jlink {
 
 jlinkZip {
   group = 'distribution'
+}
+
+spotless {
+  java {
+    googleJavaFormat('1.17.0') // Use the formatter version you prefer
+  }
 }
