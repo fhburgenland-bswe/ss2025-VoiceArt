@@ -1,5 +1,9 @@
 package at.fh.burgenland;
 
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
@@ -7,13 +11,9 @@ import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-
+/** Sample Tests with TestFX. */
 @ExtendWith(ApplicationExtension.class)
-class ClickableButtonTest_JUnit5AssertJ {
+class ButtonClickTest {
 
   private Button button;
 
@@ -32,6 +32,8 @@ class ClickableButtonTest_JUnit5AssertJ {
   }
 
   /**
+   * clicks the button.
+   *
    * @param robot - Will be injected by the test runner.
    */
   @Test
