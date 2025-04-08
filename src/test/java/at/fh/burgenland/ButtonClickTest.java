@@ -31,6 +31,7 @@ class ButtonClickTest {
     stage.show();
   }
 
+
   /**
    * clicks the button.
    *
@@ -46,4 +47,5 @@ class ButtonClickTest {
     // or (query specific type):
     Assertions.assertThat(robot.lookup(".button").queryButton()).hasText("click me!");
   }
+
 }
