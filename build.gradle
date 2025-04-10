@@ -1,14 +1,13 @@
 plugins {
   id 'java'
+  id 'application'
   id 'checkstyle'
   id("com.diffplug.spotless") version "7.0.2"
-  id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.13'
-  id 'org.beryx.jlink' version '2.25.0'
+  id 'org.beryx.jlink' version '3.1.1'
 }
 
 group 'at.fh.burgenland'
-version '1.0-SNAPSHOT'
 
 repositories {
   mavenCentral()
@@ -16,6 +15,7 @@ repositories {
 
 ext {
   junitVersion = '5.10.0'
+  javaFxVersion = '17.0.6'
 }
 
 tasks.withType(JavaCompile) {
@@ -32,11 +32,16 @@ javafx {
 }
 
 dependencies {
-  testImplementation "org.testfx:testfx-junit5:4.0.18"
-  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
-  testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+  implementation "org.openjfx:javafx-base:${javaFxVersion}"
+  implementation "org.openjfx:javafx-controls:${javaFxVersion}"
+  implementation "org.openjfx:javafx-graphics:${javaFxVersion}"
   testImplementation 'org.hamcrest:hamcrest:3.0'
+  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
+  testImplementation "org.testfx:testfx-junit5:4.0.18"
+  testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+  testRuntimeOnly 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
+  implementation 'org.openjfx:javafx-fxml:17'
 }
 
 checkstyle {
@@ -50,6 +55,13 @@ checkstyle {
 }
 test {
   useJUnitPlatform()
+  systemProperty 'java.awt.headless', 'true'
+  systemProperty 'testfx.robot', 'glass'
+  systemProperty 'testfx.headless', 'true'
+  systemProperty 'prism.order', 'sw'
+  systemProperty 'prism.text', 't2k'
+  systemProperty 'glass.platform', 'Monocle'
+  systemProperty 'monocle.platform', 'Headless'
 }
 
 jlink {

@@ -68,22 +68,19 @@ jobs:
           java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
 
-      - name: Install Xvfb (Linux only)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          Xvfb :99 -screen 0 1920x1080x24 &
-          echo "DISPLAY=:99" >> $GITHUB_ENV
-
       - uses: gradle/actions/setup-gradle@v4.1.0
 
       - name: Make Gradle wrapper executable (non-Windows)
         if: runner.os != 'Windows'
         run: chmod +x gradlew
 
-      - name: Run tests
-        run: ./gradlew test
+      - name: Install Xvfb (Linux only)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: Run tests with Gradle
+        if: runner.os != 'Windows'
+        run: xvfb-run --server-args="-screen 0 1280x960x24" ./gradlew test
 
   build:
     needs: test
@@ -107,28 +104,14 @@ jobs:
       - name: Assemble the project
         run: ./gradlew assemble
 
-      - name: Run build
-        run: ./gradlew build
+      - name: Install xvfb for headless testing
+        run: sudo apt-get install -y xvfb
+
+      - name: Build with Gradle
+        run: xvfb-run --server-args="-screen 0 1280x960x24" ./gradlew build
 
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: voiceart.jar
+          name: demo.jar
           path: build/libs/*.jar
-
-  deploy:
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download JAR Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: voiceart.jar
-
-      - name: Release JAR
-        uses: softprops/action-gh-release@v2
-        with:
-          files: '*.jar'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
