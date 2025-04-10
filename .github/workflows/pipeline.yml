@@ -104,15 +104,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Assemble the project
-        run: ./gradlew assemble
-
-      - name: Install xvfb for headless testing
-        run: sudo apt-get install -y xvfb
-
-      - name: Build with Gradle
-        run: xvfb-run --server-args="-screen 0 1280x960x24" ./gradlew build
-
       - name: Create Fat JAR
         run: ./gradlew shadowJar
 
