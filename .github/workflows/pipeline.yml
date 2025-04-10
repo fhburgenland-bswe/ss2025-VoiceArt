@@ -119,5 +119,5 @@ jobs:
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: demo.jar
+          name: voiceart.jar
           path: build/libs/*.jar
