@@ -37,16 +37,12 @@ javafx {
 }
 
 dependencies {
-  implementation "org.openjfx:javafx-base:${javaFxVersion}"
-  implementation "org.openjfx:javafx-controls:${javaFxVersion}"
-  implementation "org.openjfx:javafx-graphics:${javaFxVersion}"
   testImplementation 'org.hamcrest:hamcrest:3.0'
   testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
   testImplementation "org.testfx:testfx-junit5:4.0.18"
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
   testRuntimeOnly 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
-  implementation 'org.openjfx:javafx-fxml:17'
 }
 
 checkstyle {
@@ -61,13 +57,6 @@ checkstyle {
 
 test {
   useJUnitPlatform()
-  systemProperty 'java.awt.headless', 'true'
-  systemProperty 'testfx.robot', 'glass'
-  systemProperty 'testfx.headless', 'true'
-  systemProperty 'prism.order', 'sw'
-  systemProperty 'prism.text', 't2k'
-  systemProperty 'glass.platform', 'Monocle'
-  systemProperty 'monocle.platform', 'Headless'
 }
 
 spotless {
