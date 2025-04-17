@@ -21,7 +21,7 @@ public class AudioLineSelectorTest {
   /** Sets stage for Tests. * */
   @Start
   public void start(Stage stage) throws Exception {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("dropdown.fxml"));
     Parent root = loader.load();
     controller = loader.getController();
 

@@ -1,4 +1,4 @@
-package at.fh.burgenland;
+package at.fh.burgenland.audioinput;
 
 // java.util.Scanner;
 

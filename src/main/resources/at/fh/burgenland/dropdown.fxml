@@ -10,6 +10,7 @@
   </padding>
 
   <ComboBox fx:id="audioInputComboBox" layoutX="250.0" layoutY="14.0" prefWidth="150.0" promptText="(Mikrophonauswahl)" />
+  <Button fx:id="recordButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Aufnehmen" />
 
   <Label fx:id="welcomeText" />
   <Button onAction="#onHelloButtonClick" text="Hello!" />
