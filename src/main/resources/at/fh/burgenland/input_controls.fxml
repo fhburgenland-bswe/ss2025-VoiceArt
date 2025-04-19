@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox fx:controller="at.fh.burgenland.audioinput.AudioInputController" alignment="CENTER_LEFT"
+  spacing="10.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+  <ComboBox fx:id="audioInputComboBox" prefWidth="150.0" promptText="(Mikrophonauswahl)"/>
+  <Button fx:id="recordButton" mnemonicParsing="false" text="Aufnehmen"/>
+</HBox>
