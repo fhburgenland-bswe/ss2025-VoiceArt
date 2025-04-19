@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="at.fh.burgenland.CoordinateSystemController">
-    <Canvas fx:id="canvas" layoutX="10" layoutY="10" width="800" height="600" />
-</AnchorPane>
+
+<VBox alignment="CENTER" prefHeight="700" prefWidth="820" spacing="20" style="-fx-padding: 30;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="at.fh.burgenland.CoordinateSystemController">
+    
+    <HBox alignment="TOP_LEFT">
+        <Label fx:id="logoLabel" text="VoiceArt" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+    </HBox>
+
+    <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Bitte starten Sie die Analyse, um das Koordinatensystem zu füllen." />
+
+    <Canvas fx:id="coordinateSystemCanvas" height="400" width="800" />
+
+    <Button fx:id="startButton" text="Start" />
+</VBox>
