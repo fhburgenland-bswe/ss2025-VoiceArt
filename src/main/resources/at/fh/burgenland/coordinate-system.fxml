@@ -3,19 +3,24 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" prefHeight="700" prefWidth="820" spacing="20" style="-fx-padding: 30;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="at.fh.burgenland.CoordinateSystemController">
+<VBox alignment="CENTER" prefHeight="700" prefWidth="820" spacing="20" style="-fx-padding: 10 30 30 30;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.CoordinateSystemController">
     
     <HBox alignment="TOP_LEFT">
-        <Label fx:id="logoLabel" text="VoiceArt" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+        <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceArt" textFill="#1d3e9a">
+        </Label>
     </HBox>
 
-    <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Bitte starten Sie die Analyse, um das Koordinatensystem zu füllen." />
+    <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Toben Sie sich kreativ aus und lassen Sie Ihre Stimme zeichnen." />
 
-    <Canvas fx:id="coordinateSystemCanvas" height="400" width="800" />
+    <Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" />
 
-    <Button fx:id="startButton" text="Start" />
+    <HBox spacing="20" alignment="CENTER">
+        <Button fx:id="backButton" text="Zurück" />
+        <Button fx:id="exportButton" text="Zeichnung exportieren" />
+    </HBox>
+
 </VBox>

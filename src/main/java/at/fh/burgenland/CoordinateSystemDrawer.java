@@ -19,7 +19,7 @@ public class CoordinateSystemDrawer {
     double width = canvas.getWidth();
     double height = canvas.getHeight();
 
-    System.out.println("Canvasgröße: " + width + " x " + height);
+    System.out.println("Canvasgroesse: " + width + " x " + height);
 
     // padding - has to be done here, because it is exactly for the canvas (coordinate system) and
     // not for the general scene
