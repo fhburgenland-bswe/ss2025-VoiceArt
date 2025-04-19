@@ -41,7 +41,7 @@ public class HelloController {
   private TargetDataLine targetDataLine;
   private boolean isRecording = false;
   private ObservableList<Mixer.Info> mixerInfos;
-
+//TODO: Funktionalität in AudioLineSelector auslagern und hier nur instanzieren.
 
   /** Methode to fill out Audio-Input-Dropdown. */
   @FXML
