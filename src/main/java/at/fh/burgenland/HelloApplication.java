@@ -6,9 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * JavaFX example using for pipeline test.
- */
+/** JavaFX example using for pipeline test. */
 public class HelloApplication extends Application {
 
   @Override
