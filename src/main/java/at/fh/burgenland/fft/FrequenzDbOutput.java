@@ -7,22 +7,32 @@ import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
 
 public class FrequenzDbOutput {
 
-    private static volatile float currentPitch = -1;
-    private static volatile double currentDb = Double.NEGATIVE_INFINITY;
+    private AudioDispatcher dispatcher;
+    private Thread audioThread;
 
-    public static void main(String[] args) throws LineUnavailableException {
+    private volatile float currentPitch = -1;
+    private volatile double currentDb = Double.NEGATIVE_INFINITY;
+
+    private boolean running = false;
+
+    private FrequencyDbListener listener;
+
+    public void setListener(FrequencyDbListener listener) {
+        this.listener = listener;
+    }
+
+    public void start() throws LineUnavailableException {
+        if (running) return;
+
         int sampleRate = 44100;
-        int bufferSize = 4096;
+        int bufferSize = 2048;
         int overlap = 0;
 
-        Mixer.Info selectedMixer = AudioSystem.getMixerInfo()[0];
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(sampleRate, bufferSize, overlap);
+        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(sampleRate, bufferSize, overlap);
 
         dispatcher.addAudioProcessor(new PitchProcessor(
                 PitchProcessor.PitchEstimationAlgorithm.YIN,
@@ -30,7 +40,7 @@ public class FrequenzDbOutput {
                 bufferSize,
                 (PitchDetectionResult result, AudioEvent audioEvent) -> {
                     currentPitch = result.getPitch();
-                    maybePrint(currentPitch, currentDb);
+                    maybeNotify();
                 }
         ));
 
@@ -44,7 +54,7 @@ public class FrequenzDbOutput {
                 }
                 rms = Math.sqrt(rms / buffer.length);
                 currentDb = 20.0 * Math.log10(rms);
-                maybePrint(currentPitch, currentDb);
+                maybeNotify();
                 return true;
             }
 
@@ -52,12 +62,25 @@ public class FrequenzDbOutput {
             public void processingFinished() {}
         });
 
-        new Thread(dispatcher).start();
+        audioThread = new Thread(dispatcher, "Audio Dispatcher");
+        audioThread.start();
+        running = true;
     }
 
-    private static synchronized void maybePrint(float pitch, double db) {
-        if (pitch != -1 && !Double.isInfinite(db)) {
-            System.out.printf("Frequency: %.2f Hz | dB Level: %.2f dB%n", pitch, db);
+    public void stop() {
+        if (!running) return;
+
+        dispatcher.stop();
+        running = false;
+    }
+
+    private synchronized void maybeNotify() {
+        if (listener != null && currentPitch != -1 && !Double.isInfinite(currentDb)) {
+            listener.onData(currentPitch, currentDb);
         }
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }
