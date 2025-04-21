@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -25,13 +24,10 @@ public class AudioInputController {
 
   @FXML private ComboBox<String> audioInputComboBox;
 
-  @FXML private Button recordButton;
-
   private AudioFormat audioFormat =
       new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 2, 4, 48000, false);
 
   private TargetDataLine targetDataLine;
-  private boolean isRecording = false;
   private ObservableList<Mixer.Info> mixerInfos;
 
   /** Methode to fill out Audio-Input-Dropdown. */
@@ -70,15 +66,6 @@ public class AudioInputController {
           audioInputComboBox.setVisible(false);
           audioInputComboBox.setManaged(false);
         });
-
-    recordButton.setOnAction(
-        event -> {
-          if (isRecording) {
-            stopRecording();
-          } else {
-            startRecording();
-          }
-        });
   }
 
   private void loadValidAudioInputs() {
@@ -109,40 +96,22 @@ public class AudioInputController {
 
   @FXML
   private void handleMicrophoneIconClick(MouseEvent event) {
+
+    if (!audioInputComboBox.isVisible()) {
+      audioInputComboBox.setVisible(true);
+      audioInputComboBox.setManaged(true);
+      audioInputComboBox.show();
+    } else {
+      audioInputComboBox.hide();
+      audioInputComboBox.setVisible(false);
+      audioInputComboBox.setManaged(false);
+    }
+
+    /*
     audioInputComboBox.setVisible(!audioInputComboBox.isVisible());
     audioInputComboBox.setManaged(!audioInputComboBox.isManaged());
-  }
 
-  private void startRecording() {
-    if (targetDataLine != null) {
-      try {
-        targetDataLine.open(audioFormat);
-        targetDataLine.start();
-        isRecording = true;
-        recordButton.setText("Stop");
-        System.out.println("Recording started");
-
-        // TODO: hier AudioaufnahmeLogik
-
-      } catch (Exception e) {
-        e.printStackTrace();
-        showErrorAlert("Recording Error", "Failed to start recording.");
-      }
-    } else {
-      showErrorAlert("Recording Error", "No audio input selected.");
-    }
-  }
-
-  private void stopRecording() {
-    if (targetDataLine != null) {
-      targetDataLine.stop();
-      targetDataLine.close();
-      isRecording = false;
-      recordButton.setText("Aufnehmen");
-      System.out.println("Recording stopped");
-
-      // TODO: hier die Audioverarbeitung
-    }
+     */
   }
 
   private void showErrorAlert(String title, String content) {

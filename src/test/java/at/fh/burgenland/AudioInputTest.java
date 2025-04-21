@@ -2,8 +2,6 @@ package at.fh.burgenland;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.testfx.api.FxAssert.verifyThat;
-import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
 import at.fh.burgenland.audioinput.AudioInputController;
 import javafx.fxml.FXMLLoader;
@@ -62,10 +60,5 @@ public class AudioInputTest {
   @Test
   void testDopdownHasItems(FxRobot robot) {
     assertNotNull(robot.lookup("#audioInputComboBox").queryComboBox().getItems());
-  }
-
-  @Test
-  void testRecordButtonInitialText(FxRobot robot) {
-    verifyThat("#recordButton", hasText("Aufnehmen"));
   }
 }
