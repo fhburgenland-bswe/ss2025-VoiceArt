@@ -37,6 +37,8 @@ javafx {
 }
 
 dependencies {
+  implementation files('libs/core-2.5.jar')
+  implementation files('libs/jvm-2.5.jar')
   testImplementation 'org.hamcrest:hamcrest:3.0'
   testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.27.3'
   testImplementation "org.testfx:testfx-junit5:4.0.18"
