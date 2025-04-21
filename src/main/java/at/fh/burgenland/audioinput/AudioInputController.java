@@ -27,25 +27,50 @@ public class AudioInputController {
   private AudioFormat audioFormat =
       new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 2, 4, 48000, false);
 
-  private static Mixer selectedMixer; // Speichert den ausgewählten Mixer
+  // private static Mixer selectedMixer; // Speichert den ausgewählten Mixer
   private ObservableList<Mixer.Info> mixerInfos;
+  private final AudioInputService audioInputService = AudioInputService.getInstance();
 
   /** Methode to fill out Audio-Input-Dropdown. */
   @FXML
   public void initialize() {
     loadValidAudioInputs();
 
+    // Stelle zuvor ausgewählten Mixer wieder her (falls vorhanden)
+    Mixer storedMixer = audioInputService.getSelectedMixer();
+
+    if (storedMixer != null) {
+      String storedMixerName = storedMixer.getMixerInfo().getName();
+      for (int i = 0; i < mixerInfos.size(); i++) {
+        if (mixerInfos.get(i).getName().equals(storedMixerName)) {
+          audioInputComboBox.getSelectionModel().select(i);
+          break;
+        }
+      }
+    } else if (audioInputService.getSelectedMixerIndex() != -1
+        && audioInputService.getSelectedMixerIndex() < mixerInfos.size()) {
+      audioInputComboBox.getSelectionModel().select(audioInputService.getSelectedMixerIndex());
+    }
+
     microphoneIcon.setOnMouseClicked(this::handleMicrophoneIconClick);
 
-
-    //TODO: Mixer wählen und speichern, keine TargetDataline
+    // TODO: Mixer wählen und speichern, keine TargetDataline
     audioInputComboBox.setOnAction(
         event -> {
           int selectedIndex = audioInputComboBox.getSelectionModel().getSelectedIndex();
           if (selectedIndex >= 0) {
-            Mixer.Info selectedMixerInfo = mixerInfos.get(selectedIndex);
-            selectedMixer = AudioSystem.getMixer(selectedMixerInfo); // Speichere den Mixer
-            System.out.println("Selected Input: " + audioInputComboBox.getValue() + " - Mixer: " + selectedMixer.getMixerInfo());
+            Mixer selectedMixer = AudioSystem.getMixer(mixerInfos.get(selectedIndex));
+            audioInputService.setSelectedMixer(selectedMixer);
+            audioInputService.setSelectedMixerIndex(selectedIndex);
+            System.out.println(
+                "Selected Input: "
+                    + audioInputComboBox.getValue()
+                    + " - Mixer: "
+                    + selectedMixer.getMixerInfo().getName());
+          } else {
+            audioInputService.setSelectedMixer(null);
+            audioInputService.setSelectedMixerIndex(-1);
+            System.out.println("No Input Selected");
           }
 
           audioInputComboBox.setVisible(false);
@@ -91,7 +116,6 @@ public class AudioInputController {
       audioInputComboBox.setVisible(false);
       audioInputComboBox.setManaged(false);
     }
-
   }
 
   private void showErrorAlert(String title, String content) {
@@ -104,7 +128,7 @@ public class AudioInputController {
 
   // Getter für selectedMixer, falls du ihn in den Tests benötigst
   public Mixer getSelectedMixer() {
-    return selectedMixer;
+    return audioInputService.getSelectedMixer();
   }
 
   // Getter für audioFormat, falls du ihn in den Tests benötigst

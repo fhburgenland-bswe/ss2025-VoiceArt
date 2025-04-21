@@ -15,7 +15,8 @@ public class TestController {
 
   @FXML private Label welcomeText;
 
-  private Stage stage;private Scene scene;
+  private Stage stage;
+  private Scene scene;
   private Parent root;
 
   @FXML
@@ -23,6 +24,12 @@ public class TestController {
     welcomeText.setText("Test");
   }
 
+  /**
+   * Switches the current scene to the "profile" view loaded from the "hello.fxml" file.
+   *
+   * @param event The {@link ActionEvent} that triggered the switch (e.g., a button click).
+   * @throws IOException If the "hello.fxml" file cannot be loaded.
+   */
   public void switchToProfile(ActionEvent event) throws IOException {
     root = FXMLLoader.load(getClass().getResource("./hello.fxml"));
     stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -30,7 +37,4 @@ public class TestController {
     stage.setScene(scene);
     stage.show();
   }
-
 }
-
-

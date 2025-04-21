@@ -1,7 +1,7 @@
 package at.fh.burgenland;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import at.fh.burgenland.audioinput.AudioInputController;
 import javafx.fxml.FXMLLoader;
@@ -46,8 +46,8 @@ public class AudioInputTest {
   }
 
   @Test
-  void testDropdownIsVisibleInitially(FxRobot robot) {
-    assertTrue(robot.lookup("#audioInputComboBox").queryComboBox().isVisible());
+  void testDropdownIsNotVisibleInitially(FxRobot robot) {
+    assertFalse(robot.lookup("#audioInputComboBox").queryComboBox().isVisible());
   }
 
   @Test
@@ -58,7 +58,7 @@ public class AudioInputTest {
   }
 
   @Test
-  void testDopdownHasItems(FxRobot robot) {
+  void testDropdownHasItems(FxRobot robot) {
     assertNotNull(robot.lookup("#audioInputComboBox").queryComboBox().getItems());
   }
 }

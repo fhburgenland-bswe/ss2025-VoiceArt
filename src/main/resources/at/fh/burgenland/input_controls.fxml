@@ -17,7 +17,7 @@
       </image>
     </ImageView>
   </HBox>
-  <ComboBox fx:id="audioInputComboBox" prefWidth="150.0" promptText="(Mikrophonauswahl)"/>
+  <ComboBox fx:id="audioInputComboBox" prefWidth="150.0" promptText="(Mikrophonauswahl)" visible="false" managed="false"/>
 </VBox>
 
 
