@@ -18,7 +18,7 @@ public class FrequenzDbOutput {
 
     public static void main(String[] args) throws LineUnavailableException {
         int sampleRate = 44100;
-        int bufferSize = 2048;
+        int bufferSize = 4096;
         int overlap = 0;
 
         Mixer.Info selectedMixer = AudioSystem.getMixerInfo()[0];
