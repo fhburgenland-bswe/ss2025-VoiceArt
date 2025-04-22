@@ -194,6 +194,9 @@ public class FrequenzDbOutput {
 
   private static AudioDispatcher fromMixer(Mixer mixer, int sampleRate, int bufferSize, int overlap)
       throws LineUnavailableException {
+    if (mixer == null) {
+      return AudioDispatcherFactory.fromDefaultMicrophone(sampleRate, bufferSize, overlap);
+    }
     AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, false);
     DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, format);
 
