@@ -1,4 +1,4 @@
-package at.fh.burgenland;
+package at.fh.burgenland.coordinatesystem;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
