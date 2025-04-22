@@ -15,33 +15,4 @@ public class HelloController {
   protected void onHelloButtonClick() {
     welcomeText.setText("Welcome to JavaFX Application!");
   }
-
-  private FrequenzDbOutput recorder = new FrequenzDbOutput();
-
-  @FXML
-  private Label pitchLabel;
-
-  @FXML
-  private Label dbLabel;
-
-  @FXML
-  public void initialize() {
-    recorder.setListener((pitch, db) -> {
-      // This must run on the JavaFX Application Thread
-      Platform.runLater(() -> {
-        pitchLabel.setText(String.format("%.2f Hz", pitch));
-        dbLabel.setText(String.format("%.2f dB", db));
-      });
-    });
-  }
-
-  @FXML
-  public void onStartRecording() throws LineUnavailableException {
-    recorder.start();
-  }
-
-  @FXML
-  public void onStopRecording() {
-    recorder.stop();
-  }
 }

@@ -29,7 +29,7 @@ public class FrequenzDbOutput {
         if (running) return;
 
         int sampleRate = 44100;
-        int bufferSize = 2048;
+        int bufferSize = 4096;
         int overlap = 0;
 
         dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(sampleRate, bufferSize, overlap);
