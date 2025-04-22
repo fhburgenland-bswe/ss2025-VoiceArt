@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+
+<VBox fx:controller="at.fh.burgenland.audioinput.AudioInputController"
+  xmlns="http://javafx.com/javafx/17.0.12"
+  xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_RIGHT" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+  <HBox spacing="10.0" alignment="CENTER_RIGHT">
+    <ImageView fx:id="microphoneIcon" fitHeight="24.0" fitWidth="24.0">
+      <image>
+        <Image url="@/icons/microphone.png"/>
+      </image>
+    </ImageView>
+  </HBox>
+  <ComboBox fx:id="audioInputComboBox" prefWidth="150.0" promptText="(Mikrophonauswahl)" visible="false" managed="false"/>
+</VBox>
+
+
+

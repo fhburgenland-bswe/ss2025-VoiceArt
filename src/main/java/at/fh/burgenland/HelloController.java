@@ -9,6 +9,7 @@ import javax.sound.sampled.LineUnavailableException;
 
 /** JavaFX example using for pipeline test. */
 public class HelloController {
+
   @FXML private Label welcomeText;
 
   @FXML
