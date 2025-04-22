@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 
 /** JavaFX example using for pipeline test. */
 public class HelloController {
+
   @FXML private Label welcomeText;
 
   @FXML
