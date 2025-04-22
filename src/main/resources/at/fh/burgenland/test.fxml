@@ -17,5 +17,7 @@
 
   <Button layoutX="44.0" layoutY="177.0" mnemonicParsing="false" onAction="#switchToProfile" text="To the profile">   <font> </font></Button>
 
+  <Button onAction="#showCoordinateSystem" text="Show Coordinate System" />
+
 
 </VBox>
