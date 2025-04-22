@@ -35,7 +35,6 @@ public class HelloController {
                 dbLabel.setText(String.format("%.2f dB", db));
               });
         });
-    System.out.println(audioInputService.getSelectedMixer().toString());
   }
 
   /**
