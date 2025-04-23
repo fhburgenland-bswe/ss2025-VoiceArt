@@ -15,5 +15,10 @@
   <Label fx:id="welcomeText"/>
   <Button onAction="#onHelloButtonClick" text="Hello!"/>
 
+  <Label fx:id="dbLabel" text="db" />
+  <Label fx:id="pitchLabel" text="pitch" />
+
+  <Button mnemonicParsing="false" onAction="#onStartRecording" text="start" />
+  <Button mnemonicParsing="false" onAction="#onStopRecording" text="stop" />
 
 </VBox>
