@@ -3,10 +3,14 @@ package at.fh.burgenland.fft;
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
+import be.tarsos.dsp.filters.HighPass;
+import be.tarsos.dsp.filters.LowPassFS;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
+import be.tarsos.dsp.util.fft.FFT;
+
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
@@ -40,6 +44,10 @@ public class FrequenzDbOutput {
 
   private FrequencyDbListener listener;
 
+  private double noiseGateThresholdDb = -60.0;
+  private boolean isGateOpen = true;
+
+
   /**
    * Constructor for the FrequenzDbOutput class with MIC input option. This constructor sets default
    * values for other parameters.
@@ -71,6 +79,17 @@ public class FrequenzDbOutput {
     this.bufferSize = bufferSize;
     this.overlap = overlap;
   }
+
+  /**
+   * Sets the noise gate threshold in dB. Audio below this threshold will be treated as silence.
+   *
+   * @param thresholdDb The noise gate threshold in decibels.
+   */
+  public void setNoiseGateThresholdDb(double thresholdDb) {
+    this.noiseGateThresholdDb = thresholdDb;
+  }
+
+
 
   /**
    * Sets a FrequencyDbListener to receive data updates with pitch and dB values.
@@ -118,6 +137,37 @@ public class FrequenzDbOutput {
       throw new RuntimeException("Error reading audio file: " + e.getMessage(), e);
     }
 
+    // the noise gate processor
+    dispatcher.addAudioProcessor(
+        new AudioProcessor() {
+          @Override
+          public boolean process(AudioEvent audioEvent) {
+            float[] buffer = audioEvent.getFloatBuffer();
+            double rms = 0.0;
+            for (float sample : buffer) {
+              rms += sample * sample;
+            }
+            rms = Math.sqrt(rms / buffer.length);
+            double currentBlockDb = 20.0 * Math.log10(rms + 1e-10); // Avoid log10(0)
+
+            if (currentBlockDb < noiseGateThresholdDb) {
+              // Mute the buffer
+              for (int i = 0; i < buffer.length; i++) {
+                buffer[i] = 0;
+              }
+              isGateOpen = false;
+            } else {
+              isGateOpen = true;
+            }
+            return true;
+          }
+
+          @Override
+          public void processingFinished() {}
+        });
+
+
+
     dispatcher.addAudioProcessor(
         new PitchProcessor(
             PitchProcessor.PitchEstimationAlgorithm.YIN,
@@ -143,8 +193,12 @@ public class FrequenzDbOutput {
             rms = Math.sqrt(rms / buffer.length);
             double newDb = 20.0 * Math.log10(rms);
 
-            if (!Double.isInfinite(newDb) && Math.abs(newDb - currentDb) > 0.5) {
+            // Only update dB if the gate is open (optional, depends on desired behavior)
+            if (isGateOpen && !Double.isInfinite(newDb) && Math.abs(newDb - currentDb) > 0.5) {
               currentDb = newDb;
+              maybeNotify();
+            } else if (!isGateOpen) {
+              currentDb = Double.NEGATIVE_INFINITY; // Or some other silent value
               maybeNotify();
             }
             return true;
