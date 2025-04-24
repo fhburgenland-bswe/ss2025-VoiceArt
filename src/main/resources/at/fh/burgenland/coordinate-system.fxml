@@ -21,6 +21,8 @@
     <HBox spacing="20" alignment="CENTER">
         <Button fx:id="backButton" text="Zurück" onAction="#switchToStartScene" />
         <Button fx:id="exportButton" text="Zeichnung exportieren" />
+        <Button text="Start Recording" onAction="#startRecording" />
+        <Button text="Stop Recording" onAction="#stopRecording" />  
     </HBox>
 
 </VBox>
