@@ -19,7 +19,7 @@
     <Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" />
 
     <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="backButton" text="Zurück" />
+        <Button fx:id="backButton" text="Zurück" onAction="#switchToStartScene" />
         <Button fx:id="exportButton" text="Zeichnung exportieren" />
     </HBox>
 
