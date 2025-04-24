@@ -13,7 +13,7 @@
   <HBox spacing="10.0" alignment="CENTER_RIGHT">
     <ImageView fx:id="microphoneIcon" fitHeight="24.0" fitWidth="24.0">
       <image>
-        <Image url="@/icons/microphone.png"/>
+        <Image url="@icons/microphone.png"/>
       </image>
     </ImageView>
   </HBox>

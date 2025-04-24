@@ -12,7 +12,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,14 +29,17 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Create Fat JAR
-        run: ./gradlew shadowJar
+      - name: Create Image
+        run: ./gradlew jpackageImage
+
+      - name: Zip jpackage output
+        run: powershell Compress-Archive -Path build/jpackage/app/* -DestinationPath voiceart-windows.zip
 
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: voiceart.jar
-          path: build/libs/*.jar
+          name: voiceart-windows
+          path: voiceart-windows.zip
 
   deploy:
     needs: build
@@ -45,14 +48,14 @@ jobs:
       - name: Download JAR Artifact
         uses: actions/download-artifact@v4
         with:
-          name: voiceart.jar
+          name: voiceart-windows
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.run_number }}  # Creates a tag like v123
+          tag_name: v${{ github.run_number }}
           name: Release ${{ github.run_number }}
-          files: '*.jar'
+          files: voiceart-windows.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

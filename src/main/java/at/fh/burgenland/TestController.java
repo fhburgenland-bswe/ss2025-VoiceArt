@@ -31,7 +31,7 @@ public class TestController {
    * @throws IOException If the "hello.fxml" file cannot be loaded.
    */
   public void switchToProfile(ActionEvent event) throws IOException {
-    root = FXMLLoader.load(getClass().getResource("./hello.fxml"));
+    root = FXMLLoader.load(getClass().getResource("hello.fxml"));
     stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     scene = new Scene(root);
     stage.setScene(scene);
