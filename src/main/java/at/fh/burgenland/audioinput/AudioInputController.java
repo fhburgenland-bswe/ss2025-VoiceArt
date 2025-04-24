@@ -27,7 +27,7 @@ public class AudioInputController {
   private AudioFormat audioFormat =
       new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 2, 4, 48000, false);
 
-  // private static Mixer selectedMixer; // Speichert den ausgewählten Mixer
+  // Speichert den ausgewählten Mixer
   private ObservableList<Mixer.Info> mixerInfos;
   private final AudioInputService audioInputService = AudioInputService.getInstance();
 
@@ -54,7 +54,6 @@ public class AudioInputController {
 
     microphoneIcon.setOnMouseClicked(this::handleMicrophoneIconClick);
 
-    // TODO: Mixer wählen und speichern, keine TargetDataline
     audioInputComboBox.setOnAction(
         event -> {
           int selectedIndex = audioInputComboBox.getSelectionModel().getSelectedIndex();

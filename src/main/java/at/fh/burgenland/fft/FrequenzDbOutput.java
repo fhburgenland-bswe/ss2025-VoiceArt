@@ -1,5 +1,6 @@
 package at.fh.burgenland.fft;
 
+import at.fh.burgenland.audioinput.AudioInputController;
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
@@ -31,7 +32,8 @@ public class FrequenzDbOutput {
   private final int overlap;
 
   private final InputSourceType sourceType;
-  private final Mixer mixer;
+  // private final Mixer mixer;
+  private Mixer mixer;
   private final File audioFile;
 
   private volatile float currentPitch = -1f;
@@ -39,6 +41,11 @@ public class FrequenzDbOutput {
   private volatile boolean running = false;
 
   private FrequencyDbListener listener;
+
+  private double noiseGateThresholdDb = -60.0;
+  private boolean isGateOpen = true;
+
+  private AudioInputController audioInputController = new AudioInputController();
 
   /**
    * Constructor for the FrequenzDbOutput class with MIC input option. This constructor sets default
@@ -73,6 +80,15 @@ public class FrequenzDbOutput {
   }
 
   /**
+   * Sets the noise gate threshold in dB. Audio below this threshold will be treated as silence.
+   *
+   * @param thresholdDb The noise gate threshold in decibels.
+   */
+  public void setNoiseGateThresholdDb(double thresholdDb) {
+    this.noiseGateThresholdDb = thresholdDb;
+  }
+
+  /**
    * Sets a FrequencyDbListener to receive data updates with pitch and dB values.
    *
    * @param listener The FrequencyDbListener to set for data updates
@@ -91,6 +107,15 @@ public class FrequenzDbOutput {
   }
 
   /**
+   * Gibt zurück, ob das Noise Gate gerade geöffnet ist.
+   *
+   * @return true, wenn das Noise Gate geöffnet ist, false andernfalls.
+   */
+  public boolean isGateOpen() {
+    return isGateOpen;
+  }
+
+  /**
    * Starts the audio processing and analysis based on the given input source type. Throws
    * LineUnavailableException, IOException, and UnsupportedAudioFileException if initialization
    * fails. The method sets up an audio dispatcher with specified processors for pitch estimation
@@ -103,6 +128,7 @@ public class FrequenzDbOutput {
     try {
       switch (sourceType) {
         case MICROPHONE -> {
+          mixer = audioInputController.getSelectedMixer();
           dispatcher = fromMixer(mixer, sampleRate, bufferSize, overlap);
         }
         case FILE -> {
@@ -117,6 +143,39 @@ public class FrequenzDbOutput {
     } catch (IOException | UnsupportedAudioFileException e) {
       throw new RuntimeException("Error reading audio file: " + e.getMessage(), e);
     }
+
+    // the noise gate processor
+    dispatcher.addAudioProcessor(
+        new AudioProcessor() {
+          @Override
+          public boolean process(AudioEvent audioEvent) {
+            float[] buffer = audioEvent.getFloatBuffer();
+            double rms = 0.0;
+            for (float sample : buffer) {
+              rms += sample * sample;
+            }
+            rms = Math.sqrt(rms / buffer.length);
+            double currentBlockDb = 20.0 * Math.log10(rms + 1e-10); // Avoid log10(0)
+
+            System.out.println("RMS: " + rms);
+            System.out.println("dB: " + currentBlockDb);
+            System.out.println("Threshold: " + noiseGateThresholdDb);
+
+            if (currentBlockDb < noiseGateThresholdDb) {
+              // Mute the buffer
+              for (int i = 0; i < buffer.length; i++) {
+                buffer[i] = 0;
+              }
+              isGateOpen = false;
+            } else {
+              isGateOpen = true;
+            }
+            return true;
+          }
+
+          @Override
+          public void processingFinished() {}
+        });
 
     dispatcher.addAudioProcessor(
         new PitchProcessor(
@@ -187,6 +246,7 @@ public class FrequenzDbOutput {
   }
 
   private synchronized void maybeNotify() {
+
     if (listener != null && currentPitch > 0 && !Double.isInfinite(currentDb)) {
       listener.onData(currentPitch, currentDb);
     }
