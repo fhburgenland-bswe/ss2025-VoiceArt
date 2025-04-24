@@ -51,7 +51,7 @@ public class FrequenzDbOutput {
    */
   // Constructor for MIC input
   public FrequenzDbOutput(Mixer mixer) {
-    this(mixer, null, InputSourceType.MICROPHONE, 44100, 2048, 0);
+    this(mixer, null, InputSourceType.MICROPHONE, 44100, 16000, 0);
   }
 
   /**

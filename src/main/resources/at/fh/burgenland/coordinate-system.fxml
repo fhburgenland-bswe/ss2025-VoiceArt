@@ -14,6 +14,8 @@
         </Label>
     </HBox>
 
+    <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
+
     <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Toben Sie sich kreativ aus und lassen Sie Ihre Stimme zeichnen." />
 
     <Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" />
