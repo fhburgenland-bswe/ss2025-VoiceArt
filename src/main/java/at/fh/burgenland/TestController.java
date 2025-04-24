@@ -39,23 +39,16 @@ public class TestController {
   }
 
   /**
-   * Opens a new window displaying the coordinate system view defined in coordinate-system.fxml.
-   * This method is triggered by a button click and loads the corresponding FXML file.
+   * Opens the coordinate system view defined in coordinate-system.fxml. This method is triggered by
+   * a button click and loads the corresponding FXML file.
    *
    * @param event The {@link ActionEvent} that triggers the method (button click)
    */
-  @FXML
-  public void showCoordinateSystem(ActionEvent event) {
-    try {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("coordinate-system.fxml"));
-      Parent root = loader.load();
-
-      Stage stage = new Stage(); // new window
-      stage.setTitle("Koordinatensystem");
-      stage.setScene(new Scene(root, 820, 700));
-      stage.show();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  public void showCoordinateSystem(ActionEvent event) throws IOException {
+    root = FXMLLoader.load(getClass().getResource("coordinate-system.fxml"));
+    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
   }
 }

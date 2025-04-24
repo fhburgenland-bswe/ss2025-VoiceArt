@@ -14,13 +14,17 @@
         </Label>
     </HBox>
 
+    <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
+
     <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Toben Sie sich kreativ aus und lassen Sie Ihre Stimme zeichnen." />
 
     <Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" />
 
     <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="backButton" text="Zurück" />
+        <Button fx:id="backButton" text="Zurück" onAction="#switchToStartScene" />
         <Button fx:id="exportButton" text="Zeichnung exportieren" />
+        <Button text="Start Recording" onAction="#startRecording" />
+        <Button text="Stop Recording" onAction="#stopRecording" />  
     </HBox>
 
 </VBox>

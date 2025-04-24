@@ -55,7 +55,7 @@ public class FrequenzDbOutput {
    */
   // Constructor for MIC input
   public FrequenzDbOutput(Mixer mixer) {
-    this(mixer, null, InputSourceType.MICROPHONE, 44100, 4096, 0);
+    this(mixer, null, InputSourceType.MICROPHONE, 44100, 16000, 0);
   }
 
   /**
@@ -65,7 +65,7 @@ public class FrequenzDbOutput {
    */
   // Constructor for FILE input
   public FrequenzDbOutput(File file) {
-    this(null, file, InputSourceType.FILE, 44100, 4096, 0);
+    this(null, file, InputSourceType.FILE, 44100, 2048, 0);
   }
 
   // Internal constructor
@@ -157,9 +157,9 @@ public class FrequenzDbOutput {
             rms = Math.sqrt(rms / buffer.length);
             double currentBlockDb = 20.0 * Math.log10(rms + 1e-10); // Avoid log10(0)
 
-            System.out.println("RMS: " + rms);
-            System.out.println("dB: " + currentBlockDb);
-            System.out.println("Threshold: " + noiseGateThresholdDb);
+            // System.out.println("RMS: " + rms);
+            // System.out.println("dB: " + currentBlockDb);
+            // System.out.println("Threshold: " + noiseGateThresholdDb);
 
             if (currentBlockDb < noiseGateThresholdDb) {
               // Mute the buffer

@@ -10,6 +10,14 @@ import javafx.scene.text.Font;
  */
 public class CoordinateSystemDrawer {
 
+  // padding - has to be done here, because it is exactly for the canvas (coordinate system) and
+  // not for the general scene
+  // also used for the drawLiveLine method
+  public static final double PADDING_LEFT = 70;
+  public static final double PADDING_TOP = 60;
+  public static final double PADDING_RIGHT = 30;
+  public static final double PADDING_BOTTOM = 60;
+
   /**
    * The method drawAxes() draws a coordinate system with labled axes for frequency (Hz) and volume
    * (dB). The canvas is padded to allow spacing for lables and axis titles.
@@ -21,15 +29,8 @@ public class CoordinateSystemDrawer {
 
     System.out.println("Canvasgroesse: " + width + " x " + height);
 
-    // padding - has to be done here, because it is exactly for the canvas (coordinate system) and
-    // not for the general scene
-    double paddingLeft = 70;
-    double paddingTop = 60;
-    double paddingRight = 30;
-    double paddingBottom = 60;
-
-    double plotWidth = width - paddingLeft - paddingRight;
-    double plotHeight = height - paddingTop - paddingBottom;
+    double plotWidth = width - PADDING_LEFT - PADDING_RIGHT;
+    double plotHeight = height - PADDING_TOP - PADDING_BOTTOM;
 
     // background of the coordinate system
     g.setFill(Color.WHITE);
@@ -45,31 +46,31 @@ public class CoordinateSystemDrawer {
     String title = "Stimmfrequenz (Hz) vs. Lautstärke (dB)";
     Font titleFont = Font.font(16);
     g.setFont(titleFont);
-    g.fillText(title, (width - title.length() * 7) / 2, paddingTop - 20);
+    g.fillText(title, (width - title.length() * 7) / 2, PADDING_TOP - 20);
 
     g.setFont(Font.font(10));
 
     // horizontal lines (dB)
     for (int db = minDb; db <= maxDb; db += 10) {
-      double y = paddingTop + ((maxDb - db) / (double) (maxDb - minDb)) * plotHeight;
-      g.strokeLine(paddingLeft, y, width - paddingRight, y);
-      g.fillText(db + " dB", paddingLeft - 50, y + 4);
+      double y = PADDING_TOP + ((maxDb - db) / (double) (maxDb - minDb)) * plotHeight;
+      g.strokeLine(PADDING_LEFT, y, width - PADDING_RIGHT, y);
+      g.fillText(db + " dB", PADDING_LEFT - 50, y + 4);
     }
 
     // vertical lines (Hz)
     for (int hz = 100; hz <= maxFreq; hz += 300) {
-      double x = paddingLeft + ((hz - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
-      g.strokeLine(x, paddingTop, x, height - paddingBottom);
-      g.fillText(hz + " Hz", x - 20, height - paddingBottom + 20);
+      double x = PADDING_LEFT + ((hz - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
+      g.strokeLine(x, PADDING_TOP, x, height - PADDING_BOTTOM);
+      g.fillText(hz + " Hz", x - 20, height - PADDING_BOTTOM + 20);
     }
 
     // x-axis title
     g.setFont(Font.font(12));
-    g.fillText("Frequenz (Hz)", paddingLeft + plotWidth / 2 - 40, height - paddingBottom + 40);
+    g.fillText("Frequenz (Hz)", PADDING_LEFT + plotWidth / 2 - 40, height - PADDING_BOTTOM + 40);
 
     // y-axis title
     g.save();
-    g.translate(paddingLeft - 60, paddingTop + plotHeight / 2);
+    g.translate(PADDING_LEFT - 60, PADDING_TOP + plotHeight / 2);
     g.rotate(-90);
     g.fillText("Lautstärke (dB)", 0, 0);
     g.restore();
