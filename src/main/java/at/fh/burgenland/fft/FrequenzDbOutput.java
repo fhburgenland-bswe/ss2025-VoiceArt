@@ -1,5 +1,6 @@
 package at.fh.burgenland.fft;
 
+import at.fh.burgenland.audioinput.AudioInputController;
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
@@ -31,7 +32,8 @@ public class FrequenzDbOutput {
   private final int overlap;
 
   private final InputSourceType sourceType;
-  private final Mixer mixer;
+  // private final Mixer mixer;
+  private Mixer mixer;
   private final File audioFile;
 
   private volatile float currentPitch = -1f;
@@ -42,6 +44,8 @@ public class FrequenzDbOutput {
 
   private double noiseGateThresholdDb = -60.0;
   private boolean isGateOpen = true;
+
+  private AudioInputController audioInputController = new AudioInputController();
 
   /**
    * Constructor for the FrequenzDbOutput class with MIC input option. This constructor sets default
@@ -124,6 +128,7 @@ public class FrequenzDbOutput {
     try {
       switch (sourceType) {
         case MICROPHONE -> {
+          mixer = audioInputController.getSelectedMixer();
           dispatcher = fromMixer(mixer, sampleRate, bufferSize, overlap);
         }
         case FILE -> {
