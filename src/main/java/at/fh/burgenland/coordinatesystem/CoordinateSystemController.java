@@ -3,6 +3,8 @@ package at.fh.burgenland.coordinatesystem;
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.fft.FrequenzDbOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,6 +53,22 @@ public class CoordinateSystemController {
   // while a value closer to 0 gives more weight to previous values (more smoothing).
   private final float smoothingFactor = 0.3f;
 
+  /**
+   * Represents a single data point of voice input containing pitch (Hz) and loudness (dB). Used to
+   * store and redraw smoothed voice data for responsive canvas updates.
+   */
+  private static class VoicePoint {
+    float pitch;
+    double db;
+
+    VoicePoint(float pitch, double db) {
+      this.pitch = pitch;
+      this.db = db;
+    }
+  }
+
+  private final List<VoicePoint> recordedPoints = new ArrayList<>();
+
   private final AudioInputService audioInputService = AudioInputService.getInstance();
   private final FrequenzDbOutput recorder =
       new FrequenzDbOutput(audioInputService.getSelectedMixer());
@@ -96,6 +114,24 @@ public class CoordinateSystemController {
    */
   private void drawCoordinateSystemStructure() {
     CoordinateSystemDrawer.drawAxes(coordinateSystemCanvas, minFreq, maxFreq, minDb, maxDb);
+
+    // reset last coordinates
+    lastX[0] = -1;
+    lastY[0] = -1;
+
+    // draw all existing points new
+    for (VoicePoint point : recordedPoints) {
+      LiveDrawer.drawLiveLine(
+          coordinateSystemCanvas,
+          point.pitch,
+          point.db,
+          minFreq,
+          maxFreq,
+          minDb,
+          maxDb,
+          lastX,
+          lastY);
+    }
   }
 
   /**
@@ -116,6 +152,8 @@ public class CoordinateSystemController {
             // Use the utility class for smoothing
             smoothedPitch = ExponentialSmoother.smooth(smoothedPitch, pitch, smoothingFactor);
             smoothedDb = ExponentialSmoother.smooth(smoothedDb, db, smoothingFactor);
+
+            recordedPoints.add(new VoicePoint(smoothedPitch, smoothedDb));
 
             // Draw on canvas with smoothed values
             Platform.runLater(
