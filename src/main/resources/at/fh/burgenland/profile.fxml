@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="180.0" prefWidth="320.0" spacing="20"
+  style="-fx-padding: 10 30 30 30;" xmlns="http://javafx.com/javafx/17.0.12"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.profiles.ProfileController">
+
+  <Label text="Bestehendes Profil wählen"/>
+
+  <ComboBox prefHeight="25.0" prefWidth="220.0" promptText="(wählen Sie ein Profil)"/>
+  <Button text="Neues Profil erstellen"/>
+
+</VBox>

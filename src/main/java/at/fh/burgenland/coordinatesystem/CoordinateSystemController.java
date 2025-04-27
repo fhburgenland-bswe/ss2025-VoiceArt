@@ -36,7 +36,7 @@ public class CoordinateSystemController {
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private final int minFreq = 50;
-  private final int maxFreq = 2000;
+  private final int maxFreq = 1100;
   private final int minDb = -60;
   private final int maxDb = 0;
 
@@ -58,6 +58,7 @@ public class CoordinateSystemController {
    * store and redraw smoothed voice data for responsive canvas updates.
    */
   private static class VoicePoint {
+
     float pitch;
     double db;
 
@@ -189,15 +190,15 @@ public class CoordinateSystemController {
   }
 
   /**
-   * Handles switching from the coordinatesystem scene to the 'start-scene' - test.fxml. This event
-   * is triggered by an UI-event, typically a button click.
+   * Handles switching from the coordinatesystem scene to the 'start-scene' - landing.fxml. This
+   * event is triggered by an UI-event, typically a button click.
    *
    * @param event The {@link javafx.event.ActionEvent} that triggers the scene switch
    * @throws IOException If the FXML file for the start scene cannot be loaded.
    */
   @FXML
   public void switchToStartScene(ActionEvent event) throws IOException {
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/test.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     Scene scene = new Scene(root);
     stage.setScene(scene);
