@@ -13,6 +13,8 @@ module at.fh.burgenland {
       javafx.fxml;
   opens at.fh.burgenland.coordinatesystem to
       javafx.fxml;
+  opens at.fh.burgenland.profiles to
+      javafx.fxml;
 
   exports at.fh.burgenland;
 }

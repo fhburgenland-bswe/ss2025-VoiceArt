@@ -11,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 /** JavaFX example using for pipeline test. */
-public class TestController {
+public class LandingController {
 
   @FXML private Label welcomeText;
 
@@ -30,7 +30,7 @@ public class TestController {
    * @param event The {@link ActionEvent} that triggered the switch (e.g., a button click).
    * @throws IOException If the "hello.fxml" file cannot be loaded.
    */
-  public void switchToProfile(ActionEvent event) throws IOException {
+  public void switchToDebug(ActionEvent event) throws IOException {
     root = FXMLLoader.load(getClass().getResource("hello.fxml"));
     stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     scene = new Scene(root);
