@@ -10,14 +10,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-/** Controller for everything profile related. */
+/**
+ * Controller for everything profile related.
+ */
 public class ProfileController {
 
   @FXML
   private Button newProfileCreateButton;
 
   @FXML
-  protected void showProfileCreationScreen(ActionEvent event) throws IOException{
+  protected void showProfileCreationScreen(ActionEvent event) throws IOException {
     Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/create_profile.fxml"));
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     Scene scene = new Scene(root);

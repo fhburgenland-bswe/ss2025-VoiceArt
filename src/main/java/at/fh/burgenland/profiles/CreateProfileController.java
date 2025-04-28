@@ -37,7 +37,7 @@ public class CreateProfileController {
   private Button letsGoButton;
 
   @FXML
-  protected void backtoLanding(ActionEvent event) throws IOException{
+  protected void backtoLanding(ActionEvent event) throws IOException {
     Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     Scene scene = new Scene(root);
@@ -46,14 +46,14 @@ public class CreateProfileController {
   }
 
   @FXML
-  protected void createNewProfile(ActionEvent event){
+  protected void createNewProfile(ActionEvent event) {
     String username = usernameField.getText();
     String voiceprofile = ((RadioButton) voiceProfileGroup.getSelectedToggle()).getText();
-    System.out.println("Neues Profile erstellt: Benutzername= " + username + ", Stimmprofil: " + voiceprofile);
+    System.out.println(
+        "Neues Profile erstellt: Benutzername= " + username + ", Stimmprofil: " + voiceprofile);
 
     //TODO: Hier Logik zum Speichern des Profils eventuell(?)
   }
-
 
 
 }
