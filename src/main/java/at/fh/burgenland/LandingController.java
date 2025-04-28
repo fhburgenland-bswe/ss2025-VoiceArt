@@ -10,13 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-/**
- * JavaFX example using for pipeline test.
- */
+/** JavaFX example using for pipeline test. */
 public class LandingController {
 
-  @FXML
-  private Label welcomeText;
+  @FXML private Label welcomeText;
 
   private Stage stage;
   private Scene scene;

@@ -13,7 +13,8 @@
   <fx:include fx:id="inputControlsPane" source="input_controls.fxml"/>
   <Label text="Neues Profil erstellen" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
   <VBox spacing="10.0" alignment="CENTER_LEFT">
-    <Label text="Geben Sie Ihren Benutzernamen ein"/>
+    <Label text="Username"/>
+    <Label fx:id="usernameErrorLabel" style="-fx-text-fill: green;" visible="false" managed="false"/>
     <TextField fx:id="usernameField" promptText="Tragen Sie hier Ihren Namen ein..."
       prefWidth="300.0"/>
   </VBox>
@@ -21,7 +22,8 @@
     <fx:define>
       <ToggleGroup fx:id="voiceProfileGroup"/>
     </fx:define>
-    <Label text="Wählen Sie ein Stimmprofil"/>
+    <Label text="Stimmprofil"/>
+    <Label fx:id="voiceProfileErrorLabel" style="-fx-text-fill: green;" visible="false" managed="false"/>
     <RadioButton fx:id="femaleProfile" text="Weiblich" toggleGroup="$voiceProfileGroup"/>
     <RadioButton fx:id="maleProfile" text="Männlich" toggleGroup="$voiceProfileGroup"/>
     <RadioButton fx:id="childProfile" text="Kind" toggleGroup="$voiceProfileGroup"/>

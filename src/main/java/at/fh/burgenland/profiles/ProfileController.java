@@ -10,13 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-/**
- * Controller for everything profile related.
- */
+/** Controller for everything profile related. */
 public class ProfileController {
 
-  @FXML
-  private Button newProfileCreateButton;
+  @FXML private Button newProfileCreateButton;
 
   @FXML
   protected void showProfileCreationScreen(ActionEvent event) throws IOException {
@@ -26,6 +23,4 @@ public class ProfileController {
     stage.setScene(scene);
     stage.show();
   }
-
-
 }
