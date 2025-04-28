@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.profiles.CreateProfileController">
+  <padding>
+    <Insets bottom="20.0" left="50.0" right="50.0" top="30.0" />
+  </padding>
+  <fx:include fx:id="inputControlsPane" source="input_controls.fxml"/>
+  <Label text="Neues Profil erstellen" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+  <VBox spacing="10.0" alignment="CENTER_LEFT">
+    <Label text="Geben Sie Ihren Benutzernamen ein" />
+    <TextField fx:id="usernameField" promptText="Tragen Sie hier Ihren Namen ein..." prefWidth="300.0" />
+  </VBox>
+  <VBox spacing="10.0" alignment="CENTER_LEFT">
+    <fx:define>
+      <ToggleGroup fx:id="voiceProfileGroup" />
+    </fx:define>
+    <Label text="Wählen Sie ein Stimmprofil" />
+    <RadioButton fx:id="femaleProfile" text="Weiblich" toggleGroup="$voiceProfileGroup" />
+    <RadioButton fx:id="maleProfile" text="Männlich" toggleGroup="$voiceProfileGroup" />
+    <RadioButton fx:id="childProfile" text="Kind" toggleGroup="$voiceProfileGroup" />
+  </VBox>
+  <HBox spacing="20.0" alignment="BOTTOM_RIGHT">
+    <Button fx:id="backButton" text="Zurück" onAction="#backtoLanding" />
+    <Button fx:id="letsGoButton" text="Los geht's" onAction="#createNewProfile" />
+  </HBox>
+  </VBox>
