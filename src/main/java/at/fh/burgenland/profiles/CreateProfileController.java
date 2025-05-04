@@ -123,9 +123,28 @@ public class CreateProfileController {
   @FXML
   protected void createNewProfile(ActionEvent event) {
     String username = usernameField.getText();
-    String voiceprofile = ((RadioButton) voiceProfileGroup.getSelectedToggle()).getText();
+    String selectedText = ((RadioButton) voiceProfileGroup.getSelectedToggle()).getText();
+
+    VoiceProfile voiceProfile = null;
+    switch (selectedText.toLowerCase()) {
+      case "männlich":
+        voiceProfile = VoiceProfile.MAENNLICH;
+        break;
+      case "weiblich":
+        voiceProfile = VoiceProfile.WEIBLICH;
+        break;
+      default:
+        break;
+    }
+
+    UserProfile userProfile = new UserProfile(username, voiceProfile);
+    ProfileManager.setCurrentProfile(userProfile);
+
     System.out.println(
-        "Neues Profile erstellt: Benutzername= " + username + ", Stimmprofil: " + voiceprofile);
+        "Neues Profile erstellt: Benutzername= "
+            + userProfile.getUserName()
+            + ", Stimmprofil: "
+            + userProfile.getVoiceProfile());
 
     // TODO: Hier Logik zum Speichern des Profils eventuell(?)
     // TODO: Change Screen zur SpieleAuswahl
