@@ -8,6 +8,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /** JavaFX example using for pipeline test. */
@@ -18,6 +20,19 @@ public class LandingController {
   private Stage stage;
   private Scene scene;
   private Parent root;
+
+
+
+  @FXML
+  private HBox debugContainer; // Referenz zum Debug-Container
+
+  public void initialize() {
+    // Debug-Buttons immer sichtbar machen
+    if (debugContainer != null) {
+      debugContainer.setVisible(true);
+      debugContainer.setManaged(true);
+    }
+  }
 
   @FXML
   protected void onHelloButtonClick() {

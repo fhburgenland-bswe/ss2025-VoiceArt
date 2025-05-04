@@ -4,6 +4,7 @@ module at.fh.burgenland {
   requires java.desktop;
   requires TarsosDSP.core;
   requires TarsosDSP.jvm;
+  requires org.kordamp.bootstrapfx.core;
 
   opens at.fh.burgenland to
       javafx.fxml;

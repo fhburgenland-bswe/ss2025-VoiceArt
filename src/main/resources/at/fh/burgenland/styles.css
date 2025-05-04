@@ -1,0 +1,174 @@
+/* styles.css */
+.root {
+  /* Definiere Basisfarben als Variablen */
+  -fx-base-blue: #0d6e9e;
+  -fx-light-blue: #bbdaeb;
+  -fx-dark-blue: #0a5475;
+  -fx-text-base-color: #333333;
+  -fx-light-gray: #f2f2f2;
+  -fx-gray: #d9d9d9;
+}
+
+/* Hauptcontainer Styling */
+.main-container {
+  -fx-background-color: white;
+}
+
+/* Styling für den Hintergrund mit den geschwungenen Formen */
+.background-pane {
+  -fx-background-color: transparent;
+}
+
+.blue-circle {
+  -fx-fill: -fx-light-blue;
+  -fx-opacity: 0.8;
+}
+
+.gray-circle {
+  -fx-fill: -fx-gray;
+  -fx-opacity: 0.5;
+}
+
+/* Content-Container */
+.content-container {
+  -fx-background-color: transparent;
+}
+
+/* Titelstile */
+.h1 {
+  -fx-text-fill: -fx-base-blue;
+  -fx-font-size: 60px;
+  -fx-font-weight: bold;
+  -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.lead {
+  -fx-text-fill: #666666;
+  -fx-font-size: 24px;
+  -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* ComboBox Styling */
+.combo-box {
+  -fx-background-color: white;
+  -fx-border-color: #CCCCCC;
+  -fx-border-radius: 5px;
+  -fx-background-radius: 5px;
+  -fx-pref-width: 400px;
+  -fx-pref-height: 40px;
+}
+
+.combo-box:hover {
+  -fx-border-color: #AAAAAA;
+}
+
+.combo-box:focused {
+  -fx-border-color: -fx-base-blue;
+}
+
+.combo-box .list-cell {
+  -fx-text-fill: -fx-text-base-color;
+  -fx-font-size: 14px;
+  -fx-padding: 8px 12px;
+}
+
+.combo-box .list-view {
+  -fx-background-color: white;
+  -fx-border-color: -fx-gray;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.combo-box .arrow-button {
+  -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+  -fx-background-color: -fx-base-blue;
+}
+
+/* Button Styling */
+.btn {
+  -fx-background-radius: 5px;
+  -fx-font-size: 14px;
+  -fx-padding: 10px 20px;
+  -fx-cursor: hand;
+}
+
+.btn-primary {
+  -fx-background-color: -fx-base-blue;
+  -fx-text-fill: white;
+}
+
+.btn-primary:hover {
+  -fx-background-color: -fx-dark-blue;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.btn-secondary {
+  -fx-background-color: -fx-light-gray;
+  -fx-text-fill: -fx-text-base-color;
+}
+
+.btn-secondary:hover {
+  -fx-background-color: -fx-gray;
+}
+
+/* Profil Button - großer blauer Button */
+.btn-profil {
+  -fx-background-color: -fx-base-blue;
+  -fx-text-fill: white;
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-padding: 12px 25px;
+  -fx-background-radius: 3px;
+  -fx-pref-width: 400px;
+  -fx-cursor: hand;
+}
+
+.btn-profil:hover {
+  -fx-background-color: -fx-dark-blue;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+/* Navigation Buttons */
+.btn-nav {
+  -fx-background-color: #333333;
+  -fx-text-fill: white;
+  -fx-font-size: 16px;
+  -fx-min-width: 40px;
+  -fx-min-height: 40px;
+  -fx-background-radius: 20px;
+  -fx-padding: 5px;
+  -fx-cursor: hand;
+}
+
+.btn-nav:hover {
+  -fx-background-color: #555555;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 3, 0, 0, 1);
+}
+
+/* Label für "Bestehendes Profil wählen" */
+.profile-label {
+  -fx-text-fill: #666666;
+  -fx-font-size: 16px;
+  -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Debug Container - kann ausgeblendet werden */
+.debug-container {
+  -fx-opacity: 0.7;
+  -fx-padding: 10px;
+  -fx-background-color: rgba(255, 255, 255, 0.8);
+  -fx-border-color: -fx-light-gray;
+  -fx-border-radius: 5px;
+}
+
+/* Mikrofon Icon Styling */
+.microphone-icon {
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 2, 0, 0, 1);
+  -fx-cursor: hand;
+}
+
+.microphone-icon:hover {
+  -fx-opacity: 0.8;
+}

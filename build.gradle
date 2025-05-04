@@ -19,7 +19,7 @@ repositories {
 
 ext {
   junitVersion = '5.10.2'
-  javaFxVersion = '17.0.6'
+  javaFxVersion = '17.0.12'
 }
 
 java {
@@ -37,13 +37,14 @@ application {
 }
 
 javafx {
-  version = '17.0.6'
+  version = '17.0.12'
   modules = ['javafx.controls', 'javafx.fxml']
 }
 
 dependencies {
   implementation 'be.tarsos.dsp:core:2.5'
   implementation 'be.tarsos.dsp:jvm:2.5'
+  implementation 'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
   //implementation files('libs/core-2.5.jar')
   //implementation files('libs/jvm-2.5.jar')
   testImplementation 'org.hamcrest:hamcrest:3.0'
