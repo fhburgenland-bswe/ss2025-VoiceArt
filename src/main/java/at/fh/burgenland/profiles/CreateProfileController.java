@@ -1,6 +1,11 @@
 package at.fh.burgenland.profiles;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -121,7 +126,7 @@ public class CreateProfileController {
   }
 
   @FXML
-  protected void createNewProfile(ActionEvent event) {
+  protected void createNewProfile(ActionEvent event) throws IOException {
     String username = usernameField.getText();
     String selectedText = ((RadioButton) voiceProfileGroup.getSelectedToggle()).getText();
 
@@ -138,6 +143,10 @@ public class CreateProfileController {
     }
 
     UserProfile userProfile = new UserProfile(username, voiceProfile);
+
+    saveUser(userProfile);
+
+    //ProfileManager.addProfile(userProfile);
     ProfileManager.setCurrentProfile(userProfile);
 
     System.out.println(
@@ -146,7 +155,43 @@ public class CreateProfileController {
             + ", Stimmprofil: "
             + userProfile.getVoiceProfile());
 
-    // TODO: Hier Logik zum Speichern des Profils eventuell(?)
-    // TODO: Change Screen zur SpieleAuswahl
+    Parent root = FXMLLoader.load(getClass().getResource("./game_selection.fxml"));
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  private void saveUser(UserProfile userProfile) throws IOException {
+    if(ProfileManager.getUserProfiles() !=null && ProfileManager.getUserProfiles().contains(userProfile)) {
+      usernameErrorLabel.setText("Benutzername bereits vergeben.");
+      return;
+    }
+    ProfileManager.addProfile(userProfile);
+    ObjectMapper mapper = new ObjectMapper();
+
+    File file = new File("profiles.json");
+
+    List<UserProfile> profiles;
+
+    if (file.exists()){
+      try {
+        if(ProfileManager.getUserProfiles().isEmpty()){
+          profiles = new ArrayList<>();
+        } else {
+          profiles = mapper.readValue(file, mapper.getTypeFactory().constructCollectionType(List.class, UserProfile.class));
+        }
+        profiles.add(userProfile);
+        mapper.writeValue(file, profiles);
+      } catch (Exception e) {
+          throw new RuntimeException(e);
+      }
+    } else {
+      file.createNewFile();
+      profiles = new ArrayList<>();
+
+      profiles.add(userProfile);
+      mapper.writeValue(file, profiles);
+    }
   }
 }

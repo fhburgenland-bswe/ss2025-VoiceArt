@@ -4,8 +4,9 @@ module at.fh.burgenland {
   requires java.desktop;
   requires TarsosDSP.core;
   requires TarsosDSP.jvm;
+    requires com.fasterxml.jackson.databind;
 
-  opens at.fh.burgenland to
+    opens at.fh.burgenland to
       javafx.fxml;
   opens at.fh.burgenland.audioinput to
       javafx.fxml;
