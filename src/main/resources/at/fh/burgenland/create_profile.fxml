@@ -26,7 +26,6 @@
     <Label fx:id="voiceProfileErrorLabel" style="-fx-text-fill: green;" visible="false" managed="false"/>
     <RadioButton fx:id="femaleProfile" text="Weiblich" toggleGroup="$voiceProfileGroup"/>
     <RadioButton fx:id="maleProfile" text="Männlich" toggleGroup="$voiceProfileGroup"/>
-    <RadioButton fx:id="childProfile" text="Kind" toggleGroup="$voiceProfileGroup"/>
   </VBox>
   <HBox spacing="20.0" alignment="BOTTOM_RIGHT">
     <Button fx:id="backButton" text="Zurück" onAction="#backtoLanding"/>
