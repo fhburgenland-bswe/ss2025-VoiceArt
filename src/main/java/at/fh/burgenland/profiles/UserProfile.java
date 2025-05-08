@@ -1,14 +1,19 @@
 package at.fh.burgenland.profiles;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Represents a user profile including the username and the selected voice profile. Used to apply
  * the correct coordinate system scaling depending on the user's voice.
  */
+@Data
+@NoArgsConstructor
 public class UserProfile {
 
   // neccessary fields
-  private final String userName;
-  private final VoiceProfile voiceProfile;
+  private String userName;
+  private VoiceProfile voiceProfile;
 
   // Constructor
   public UserProfile(String userName, VoiceProfile voiceProfile) {
@@ -16,12 +21,8 @@ public class UserProfile {
     this.voiceProfile = voiceProfile;
   }
 
-  // Getter
-  public String getUserName() {
-    return userName;
-  }
-
-  public VoiceProfile getVoiceProfile() {
-    return voiceProfile;
+  @Override
+  public String toString() {
+    return this.userName;
   }
 }

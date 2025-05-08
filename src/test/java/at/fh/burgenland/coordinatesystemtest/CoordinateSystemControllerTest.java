@@ -48,6 +48,7 @@ public class CoordinateSystemControllerTest {
 
     verify(mockRecorder, times(1)).start();
     verify(mockRecorder, times(1)).setListener(any());
+    controller.stopRecording();
   }
 
   /**

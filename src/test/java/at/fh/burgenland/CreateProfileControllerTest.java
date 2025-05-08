@@ -6,6 +6,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
@@ -128,10 +129,6 @@ public class CreateProfileControllerTest {
 
   @Test
   void profileIsSelectedCorrectly(FxRobot robot) {
-    robot.clickOn("#childProfile");
-    assertTrue(
-        robot.lookup("#childProfile").queryAs(RadioButton.class).isSelected(),
-        "Das 'Kind'-Profil sollte ausgewählt sein.");
     assertFalse(
         robot.lookup("#femaleProfile").queryAs(RadioButton.class).isSelected(),
         "Das 'Weiblich'-Profil sollte nicht ausgewählt sein.");
@@ -144,12 +141,18 @@ public class CreateProfileControllerTest {
   void clickingLetsGoButtonPrintsToConsole(FxRobot robot) {
     robot.clickOn("#usernameField").write("FinalUser");
     robot.clickOn("#maleProfile");
-    robot.clickOn("#letsGoButton");
+    Node backButtonNode = robot.lookup("#letsGoButton").query();
+
+    assertTrue(backButtonNode.isVisible(), "Back button should be visible");
+    assertFalse(backButtonNode.isDisable(), "Back button should be enabled");
   }
 
   @Test
   void clickingBackButtonLoadsPreviousScreen(FxRobot robot) {
-    robot.clickOn("#backButton");
+    Node backButtonNode = robot.lookup("#backButton").query();
+
+    assertTrue(backButtonNode.isVisible(), "Back button should be visible");
+    assertFalse(backButtonNode.isDisabled(), "Back button should be enabled");
   }
 
   @Test

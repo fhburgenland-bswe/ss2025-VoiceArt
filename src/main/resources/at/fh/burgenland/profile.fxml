@@ -9,7 +9,7 @@
 
   <Label text="Bestehendes Profil wählen"/>
 
-  <ComboBox prefHeight="25.0" prefWidth="220.0" promptText="(wählen Sie ein Profil)"/>
+  <ComboBox fx:id="profiles" prefHeight="25.0" prefWidth="220.0" promptText="(wählen Sie ein Profil)"/>
   <Button fx:id="newProfileCreateButton" text="Neues Profil erstellen" onAction="#showProfileCreationScreen"/>
 
 </VBox>

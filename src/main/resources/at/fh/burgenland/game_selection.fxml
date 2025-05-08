@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="at.fh.burgenland.GameSelection"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.GameSelectionController">
+   <top>
+      <AnchorPane>
+         <Label layoutX="242.0" text="VoiceArt" textFill="#1d3e9a">
+            <font>
+               <Font size="31.0" />
+            </font>
+         </Label>
+         <Label fx:id="weclomeText" layoutX="209.0" layoutY="38.0" />
+         <fx:include fx:id="inputControlsPane" alignment="TOP_RIGHT" source="input_controls.fxml" />
 
-</AnchorPane>
+      </AnchorPane>
+   </top>
+   <center>
+      <FlowPane fx:id="cardContainer" alignment="CENTER" hgap="20" vgap="20" />
+   </center>
+   <bottom>
+      <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 20 20 20 20;" BorderPane.alignment="CENTER">
+         <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Zurück zum Hauptmenü" />
+      </HBox>
+   </bottom>
+</BorderPane>
