@@ -16,7 +16,7 @@ public class HelloApplication extends Application {
     Scene scene = new Scene(fxmlLoader.load());
 
     // CSS einbinden
-    scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+    scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
     scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 
 
