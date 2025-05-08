@@ -63,7 +63,7 @@ public class LandingPageTest {
   public void testLandingPage() {
     robot.clickOn("#profiles");
     verifyThat("Anna", NodeMatchers.isVisible());
-    robot.moveTo("Anna").clickOn();
+    robot.clickOn("Anna");
     assertEquals("Anna", ProfileManager.getCurrentProfile().getUserName());
 
     verifyThat("#weclomeText", isVisible());
