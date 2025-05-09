@@ -2,6 +2,9 @@ package at.fh.burgenland.coordinatesystem;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.fft.FrequenzDbOutput;
+import at.fh.burgenland.profiles.ProfileManager;
+import at.fh.burgenland.profiles.UserProfile;
+import at.fh.burgenland.profiles.VoiceProfile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,8 @@ import javafx.stage.Stage;
  * smoothed voice data (frequency and loudness). -Responding to user actions like starting/stopping
  * recording and switching scenes.
  *
+ * <p>Reads the current user's voice profile and configures the canvas drawing range accordingly.
+ *
  * <p>It uses the {@link FrequenzDbOutput} class to receive audio data and the {@link LiveDrawer}
  * utility to draw smooth lines on the canvas.
  */
@@ -35,10 +40,10 @@ public class CoordinateSystemController {
   @FXML private Button exportButton;
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
-  private final int minFreq = 50;
-  private final int maxFreq = 1100;
-  private final int minDb = -60;
-  private final int maxDb = 0;
+  private int minFreq;
+  private int maxFreq;
+  private int minDb;
+  private int maxDb;
 
   // Holds the exponentially smoothed pitch value (Hz).
   // Initialized with -1 to indicate "no valid pitch received yet".
@@ -86,6 +91,20 @@ public class CoordinateSystemController {
    */
   @FXML
   public void initialize() {
+
+    UserProfile userProfile = ProfileManager.getCurrentProfile();
+    if (userProfile != null) {
+      VoiceProfile voiceProfile = userProfile.getVoiceProfile();
+      minFreq = voiceProfile.getMinFreq();
+      maxFreq = voiceProfile.getMaxFreq();
+      minDb = voiceProfile.getMinDb();
+      maxDb = voiceProfile.getMaxDb();
+    } else {
+      minFreq = 50;
+      maxFreq = 1100;
+      minDb = -60;
+      maxDb = 0;
+    }
 
     Platform.runLater(
         () -> {

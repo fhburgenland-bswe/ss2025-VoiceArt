@@ -6,6 +6,8 @@ module at.fh.burgenland {
   requires TarsosDSP.jvm;
   requires org.kordamp.bootstrapfx.core;
   requires jdk.jdi;
+  requires com.fasterxml.jackson.databind;
+  requires static lombok;
 
   opens at.fh.burgenland to
       javafx.fxml;
@@ -16,6 +18,9 @@ module at.fh.burgenland {
   opens at.fh.burgenland.coordinatesystem to
       javafx.fxml;
   opens at.fh.burgenland.profiles to
+      javafx.fxml,
+      com.fasterxml.jackson.databind;
+  opens at.fh.burgenland.card to
       javafx.fxml;
 
   exports at.fh.burgenland;

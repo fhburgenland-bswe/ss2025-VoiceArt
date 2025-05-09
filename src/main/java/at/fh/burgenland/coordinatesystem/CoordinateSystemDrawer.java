@@ -58,7 +58,20 @@ public class CoordinateSystemDrawer {
     }
 
     // vertical lines (Hz)
-    for (int hz = 100; hz <= maxFreq; hz += 300) {
+    /*for (int hz = 100; hz <= maxFreq; hz += 300) {
+      double x = PADDING_LEFT + ((hz - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
+      g.strokeLine(x, PADDING_TOP, x, height - PADDING_BOTTOM);
+      g.fillText(hz + " Hz", x - 20, height - PADDING_BOTTOM + 20);
+    }*/
+
+    // vertical lines (Hz)
+    // dynamically rendering based on a given frequency and volume range
+    int stepHz = (maxFreq - minFreq) / 6; // 6 Lables
+    if (stepHz < 1) {
+      stepHz = 1;
+    }
+
+    for (int hz = minFreq; hz <= maxFreq; hz += stepHz) {
       double x = PADDING_LEFT + ((hz - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
       g.strokeLine(x, PADDING_TOP, x, height - PADDING_BOTTOM);
       g.fillText(hz + " Hz", x - 20, height - PADDING_BOTTOM + 20);

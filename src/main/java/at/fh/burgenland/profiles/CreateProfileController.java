@@ -28,8 +28,6 @@ public class CreateProfileController {
 
   @FXML private RadioButton maleProfile;
 
-  @FXML private RadioButton childProfile;
-
   @FXML private Label voiceProfileErrorLabel;
 
   @FXML private ToggleGroup voiceProfileGroup;
@@ -102,15 +100,6 @@ public class CreateProfileController {
     }
   }
 
-  /*
-  private void updateLetsGoButtonState() {
-    boolean usernameEntered = !usernameField.getText().trim().isEmpty();
-    boolean profileSelected = voiceProfileGroup.getSelectedToggle() != null;
-    letsGoButton.setDisable(!(usernameEntered && profileSelected));
-  }
-
-   */
-
   @FXML
   protected void backtoLanding(ActionEvent event) throws IOException {
     Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
@@ -123,13 +112,45 @@ public class CreateProfileController {
   }
 
   @FXML
-  protected void createNewProfile(ActionEvent event) {
+  protected void createNewProfile(ActionEvent event) throws IOException {
     String username = usernameField.getText();
-    String voiceprofile = ((RadioButton) voiceProfileGroup.getSelectedToggle()).getText();
-    System.out.println(
-        "Neues Profile erstellt: Benutzername= " + username + ", Stimmprofil: " + voiceprofile);
+    String selectedText = ((RadioButton) voiceProfileGroup.getSelectedToggle()).getText();
 
-    // TODO: Hier Logik zum Speichern des Profils eventuell(?)
-    // TODO: Change Screen zur SpieleAuswahl
+    VoiceProfile voiceProfile = null;
+    switch (selectedText.toLowerCase()) {
+      case "männlich":
+        voiceProfile = VoiceProfile.MAENNLICH;
+        break;
+      case "weiblich":
+        voiceProfile = VoiceProfile.WEIBLICH;
+        break;
+      default:
+        break;
+    }
+
+    UserProfile userProfile = new UserProfile(username, voiceProfile);
+
+    saveUser(userProfile);
+    ProfileManager.setCurrentProfile(userProfile);
+
+    System.out.println(
+        "Neues Profile erstellt: Benutzername= "
+            + userProfile.getUserName()
+            + ", Stimmprofil: "
+            + userProfile.getVoiceProfile());
+
+    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  private void saveUser(UserProfile userProfile) {
+    if (ProfileManager.getUserProfiles().contains(userProfile)) {
+      usernameErrorLabel.setText("Benutzername bereits vergeben.");
+      return;
+    }
+    ProfileManager.addProfile(userProfile);
   }
 }

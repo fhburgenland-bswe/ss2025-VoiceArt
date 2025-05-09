@@ -9,7 +9,7 @@
 
   <Label text="Bestehendes Profil wählen" styleClass="profile-label"/>
 
-  <ComboBox fx:id="profileComboBox" prefHeight="30.0" prefWidth="400.0" promptText="(wählen Sie ein Profil)" styleClass="combo-box"/>
+  <ComboBox fx:id="profiles" prefHeight="30.0" prefWidth="400.0" promptText="(wählen Sie ein Profil)" styleClass="combo-box"/>
 
   <Button fx:id="newProfileCreateButton" text="Neues Profil erstellen"
     onAction="#showProfileCreationScreen" styleClass="btn-profil"/>

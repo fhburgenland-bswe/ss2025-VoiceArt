@@ -1,5 +1,6 @@
 package at.fh.burgenland;
 
+import at.fh.burgenland.profiles.ProfileManager;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +32,19 @@ public class HelloApplication extends Application {
     stage.show();
   }
 
+  /**
+   * Loads user profiles from a JSON file and prints the number of profiles loaded. Launches the
+   * application after loading profiles.
+   *
+   * @param args The command line arguments
+   */
   public static void main(String[] args) {
+    try {
+      ProfileManager.loadProfilesFromJson("profiles.json");
+      System.out.println("Profiles loaded: " + ProfileManager.getUserProfiles().size());
+    } catch (IOException e) {
+      System.err.println("Failed to load profiles: " + e.getMessage());
+    }
     launch();
   }
 }

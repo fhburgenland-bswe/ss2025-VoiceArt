@@ -226,7 +226,7 @@ public class FrequenzDbOutput {
     if (!running) {
       return;
     }
-    dispatcher.stop();
+    audioThread.interrupt();
     running = false;
   }
 
@@ -243,6 +243,7 @@ public class FrequenzDbOutput {
         Thread.currentThread().interrupt();
       }
     }
+    dispatcher = null;
   }
 
   private synchronized void maybeNotify() {
