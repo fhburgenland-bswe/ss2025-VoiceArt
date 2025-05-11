@@ -13,16 +13,20 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
-/** Controller class for handling game selection functionality. */
+/**
+ * Controller class for handling game selection functionality.
+ */
 public class GameSelectionController {
 
   private Stage stage;
   private Scene scene;
   private Parent root;
 
-  @FXML private Label weclomeText;
+  @FXML
+  private Label weclomeText;
 
-  @FXML private FlowPane cardContainer;
+  @FXML
+  private FlowPane cardContainer;
 
   /**
    * Initializes the game selection menu by setting the welcome text and adding card items for each
@@ -35,13 +39,14 @@ public class GameSelectionController {
             + ProfileManager.getCurrentProfile().getUserName()
             + ", wählen Sie ein Spiel aus:");
 
-    final String[] games = {"Draw Game", "Redraw Game"};
+    final String[] games = {"Draw Game", "Redraw Game", "Treasure Hunt"};
     final String[] descriptions = {
-      "Draw a line on the canvas using your voice pitch and volume.",
-      "Redraw the line you just drew using your voice pitch and volume."
+        "Draw a line on the canvas using your voice pitch and volume.",
+        "Redraw the line you just drew using your voice pitch and volume.",
+        "Find the Treasure using your voice."
     };
     final String[] fxmlTargets = {
-      "/at/fh/burgenland/landing.fxml", "/at/fh/burgenland/coordinate-system.fxml"
+        "/at/fh/burgenland/landing.fxml", "/at/fh/burgenland/coordinate-system.fxml", "/at/fh/burgenland/treasurehunt.fxml"
     };
 
     for (int i = 0; i < games.length; i++) {
