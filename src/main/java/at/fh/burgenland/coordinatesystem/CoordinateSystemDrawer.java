@@ -27,7 +27,7 @@ public class CoordinateSystemDrawer {
     double width = canvas.getWidth();
     double height = canvas.getHeight();
 
-    System.out.println("Canvasgroesse: " + width + " x " + height);
+    //System.out.println("Canvasgroesse: " + width + " x " + height);
 
     double plotWidth = width - PADDING_LEFT - PADDING_RIGHT;
     double plotHeight = height - PADDING_TOP - PADDING_BOTTOM;

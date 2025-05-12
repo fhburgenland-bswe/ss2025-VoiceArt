@@ -88,6 +88,10 @@ public class FrequenzDbOutput {
     this.noiseGateThresholdDb = thresholdDb;
   }
 
+  public double getNoiseGateThresholdDb() {
+    return noiseGateThresholdDb;
+  }
+
   /**
    * Sets a FrequencyDbListener to receive data updates with pitch and dB values.
    *
