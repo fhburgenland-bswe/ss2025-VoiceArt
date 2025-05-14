@@ -59,6 +59,8 @@ public class LiveDrawer {
     g.setStroke(javafx.scene.paint.Color.BLUE);
     g.setLineWidth(2);
 
+
+
     if (lastX[0] >= 0 && lastY[0] >= 0) {
       g.strokeLine(lastX[0], lastY[0], x, y);
     }

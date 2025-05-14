@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.StackPane?>
+<VBox alignment="CENTER" prefHeight="700" prefWidth="820" spacing="20" style="-fx-padding: 10 30 30 30;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.treasurehunt.TreasureHuntController">
+
+   <HBox alignment="TOP_LEFT">
+      <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceArt" textFill="#1d3e9a">
+      </Label>
+   </HBox>
+
+   <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
+
+   <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Toben Sie sich kreativ aus und lassen Sie Ihre Stimme zeichnen." />
+
+
+   <StackPane>
+      <Canvas fx:id="baseCanvas" />
+      <Canvas fx:id="overlapCanvas" />
+   </StackPane>
+
+   <HBox spacing="20" alignment="CENTER">
+      <Button fx:id="backButton" text="Zurück" onAction="#switchToStartScene" />
+      <Button fx:id="exportButton" text="Zeichnung exportieren" />
+      <Button text="Start Recording" onAction="#startRecording" />
+      <Button text="Stop Recording" onAction="#stopRecording" />
+      <Button text="Reset" onAction="#resetTreasureHunt" />
+   </HBox>
+
+</VBox>
+
+
+
+
+
