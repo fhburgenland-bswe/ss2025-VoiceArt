@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="at.fh.burgenland.games.CoordinateVoiceZoneController"
+      prefHeight="700" prefWidth="820"
+      alignment="CENTER" spacing="20" style="-fx-padding: 10 30 30 30;">
+
+     <HBox alignment="TOP_LEFT">
+        <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceArt" textFill="#1d3e9a">
+        </Label>
+    </HBox>
+    
+    <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
+
+    <Label fx:id="logoLabel" text="VoiceZone – Stimmbereichstraining" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <Label fx:id="textLabel" text="Halte deine Stimme im Zielbereich." />
+
+    <Canvas fx:id="coordinateSystemCanvas" width="800" height="400" VBox.vgrow="ALWAYS" />
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button fx:id="backButton" text="Zurück" onAction="#switchToStartScene" />
+        <Button fx:id="exportButton" text="Zeichnung exportieren" />
+        <Button text="Start" onAction="#startRecording" />
+        <Button text="Stop" onAction="#stopRecording" />
+    </HBox>
+
+</VBox>
