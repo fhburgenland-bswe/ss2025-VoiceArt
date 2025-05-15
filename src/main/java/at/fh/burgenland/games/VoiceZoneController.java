@@ -3,6 +3,7 @@ package at.fh.burgenland.games;
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
+import at.fh.burgenland.coordinatesystem.LiveDrawer;
 import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
@@ -18,6 +19,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 /**
@@ -31,15 +34,21 @@ import javafx.stage.Stage;
  * <p>It uses the {@link FrequenzDbOutput} class to receive audio data and the {@link LiveDrawer}
  * utility to draw smooth lines on the canvas.
  */
-public class CoordinateVoiceZoneController {
+public class VoiceZoneController {
 
   CoordinateSystemDrawer coordinateSystemDrawer = new CoordinateSystemDrawer();
+  private VoiceZoneTrainingMode trainingMode = VoiceZoneTrainingMode.FREQUENCY; //Standardmäßig ist es die Frequenz
 
   @FXML private Canvas coordinateSystemCanvas;
   @FXML private Label logoLabel;
   @FXML private Label textLabel;
+  @FXML private Label titleLabel;
   @FXML private Button backButton;
   @FXML private Button exportButton;
+  @FXML private RadioButton freqButton;
+  @FXML private RadioButton volumeButton;
+
+
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private int minFreq;
@@ -58,6 +67,10 @@ public class CoordinateVoiceZoneController {
    */
   @FXML
   public void initialize() {
+
+    ToggleGroup group = new ToggleGroup();
+    freqButton.setToggleGroup(group);
+    volumeButton.setToggleGroup(group);
 
     UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (userProfile != null) {
@@ -151,5 +164,21 @@ public class CoordinateVoiceZoneController {
     Scene scene = new Scene(root);
     stage.setScene(scene);
     stage.show();
+  }
+
+  @FXML
+  public void setFrequencyMode() {
+      if (freqButton.isSelected()) {
+          trainingMode = VoiceZoneTrainingMode.FREQUENCY;
+          System.out.println("🎯 Modus: FREQUENZ");
+      }
+  }
+
+  @FXML
+  public void setVolumeMode() {
+      if (volumeButton.isSelected()) {
+          trainingMode = VoiceZoneTrainingMode.VOLUME;
+          System.out.println("🎯 Modus: LAUTSTÄRKE");
+      }
   }
 }

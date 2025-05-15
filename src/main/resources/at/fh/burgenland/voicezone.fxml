@@ -5,7 +5,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="at.fh.burgenland.games.CoordinateVoiceZoneController"
+      fx:controller="at.fh.burgenland.games.VoiceZoneController"
       prefHeight="700" prefWidth="820"
       alignment="CENTER" spacing="20" style="-fx-padding: 10 30 30 30;">
 
@@ -16,8 +16,19 @@
     
     <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
 
-    <Label fx:id="logoLabel" text="VoiceZone – Stimmbereichstraining" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <Label fx:id="titleLabel" text="VoiceZone – Stimmbereichstraining" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
     <Label fx:id="textLabel" text="Halte deine Stimme im Zielbereich." />
+
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Trainingsmodus:" />
+        <RadioButton fx:id="freqButton"
+                    text="Frequenz"
+                    onAction="#setFrequencyMode"
+                    selected="true"/>
+        <RadioButton fx:id="volumeButton"
+                    text="Lautstärke"
+                    onAction="#setVolumeMode"/>
+    </HBox>
 
     <Canvas fx:id="coordinateSystemCanvas" width="800" height="400" VBox.vgrow="ALWAYS" />
 
@@ -29,3 +40,5 @@
     </HBox>
 
 </VBox>
+
+
