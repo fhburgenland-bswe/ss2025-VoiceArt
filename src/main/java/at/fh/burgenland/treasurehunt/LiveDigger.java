@@ -54,10 +54,6 @@ public class LiveDigger {
 
     GraphicsContext g = coordinateSystemCanvas.getGraphicsContext2D();
 
-    g.setGlobalBlendMode(BlendMode.SRC_OVER);
-
-    //semi-transparent eraser
-    g.setFill(new Color(1, 1, 1, 0.8));  // White with 80% opacity as eraser
     double eraserSize = 10.0;
 
 
@@ -73,17 +69,17 @@ public class LiveDigger {
           double t = (double) i / steps;
           double ix = lastX[0] + t * dx;
           double iy = lastY[0] + t * dy;
-          g.fillOval(ix - eraserSize / 2, iy - eraserSize / 2, eraserSize, eraserSize);
+          g.clearRect(ix - eraserSize / 2, iy - eraserSize / 2, eraserSize, eraserSize);
         }
       }else{
         // For very close points, just draw a single eraser mark
-        g.fillOval(x - eraserSize/2, y - eraserSize/2, eraserSize, eraserSize);
+        g.clearRect(x - eraserSize/2, y - eraserSize/2, eraserSize, eraserSize);
       }
     }else {
       // First point - just draw a circle
-      g.fillOval(x - eraserSize/2, y - eraserSize/2, eraserSize, eraserSize);
+      g.clearRect(x - eraserSize/2, y - eraserSize/2, eraserSize, eraserSize);
     }
-     g.setGlobalBlendMode(BlendMode.SRC_OVER);
+     //g.setGlobalBlendMode(BlendMode.SRC_OVER);
 
     lastX[0] = x;
     lastY[0] = y;
