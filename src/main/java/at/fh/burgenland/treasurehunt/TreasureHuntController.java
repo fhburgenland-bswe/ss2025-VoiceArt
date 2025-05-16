@@ -2,7 +2,6 @@ package at.fh.burgenland.treasurehunt;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 
-import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
 import at.fh.burgenland.coordinatesystem.LiveDrawer;
 import at.fh.burgenland.fft.FrequenzDbOutput;
@@ -22,7 +21,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class TreasureHuntController {
@@ -46,6 +44,18 @@ public class TreasureHuntController {
   private int maxFreq;
   private int minDb;
   private int maxDb;
+
+  private double treasureX = 300;
+  private double treasureY = 300;
+  private double treasureRadius = 50;
+  private boolean treasureFound = false;
+
+  // Getter für Schatz-Koordinaten
+  public double getTreasureX() { return treasureX; }
+  public double getTreasureY() { return treasureY; }
+  public double getTreasureRadius() { return treasureRadius; }
+
+
 
   // Holds the exponentially smoothed pitch value (Hz).
   // Initialized with -1 to indicate "no valid pitch received yet".
@@ -140,10 +150,14 @@ public class TreasureHuntController {
    * whenever the window is resized.
    */
   private void drawCoordinateSystemStructure() {
-    BaseCanvasDrawer.drawAxes(baseCanvas, minFreq, maxFreq, minDb, maxDb);
+    TopCanvasDrawer.drawAxes(overlapCanvas, minFreq, maxFreq, minDb, maxDb);
     //OverlapCanvasDrawer.drawAxes(baseCanvas, minFreq, maxFreq, minDb, maxDb);
 
-    OverlapCanvasDrawer.drawCoveringLayer(overlapCanvas);
+    BottomCanvasDrawer.drawCoveringLayer(baseCanvas);
+
+    BottomCanvasDrawer.drawTreasure(
+        baseCanvas.getGraphicsContext2D(),
+        treasureX, treasureY, treasureRadius);
 
     // reset last coordinates
     lastX[0] = -1;
@@ -200,6 +214,25 @@ public class TreasureHuntController {
                         lastY));
 
             System.out.println("Pitch: " + pitch + " | dB: " + db);
+            double width = overlapCanvas.getWidth();
+            double height = overlapCanvas.getHeight();
+            double plotWidth = width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
+            double plotHeight = height - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
+
+            double x = TopCanvasDrawer.PADDING_LEFT + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
+            double y = TopCanvasDrawer.PADDING_TOP + ((maxDb - smoothedDb) / (double) (maxDb - minDb)) * plotHeight;
+
+            double dx = x - treasureX;
+            double dy = y - treasureY;
+            double distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (!treasureFound && distance < treasureRadius + 5) { // 5 = halbe Radiergröße
+              treasureFound = true;
+              javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                  javafx.scene.control.Alert.AlertType.INFORMATION, "Schatz gefunden!");
+              alert.showAndWait();
+              // Optional: weitere Eingaben deaktivieren
+            }
           }
         });
 

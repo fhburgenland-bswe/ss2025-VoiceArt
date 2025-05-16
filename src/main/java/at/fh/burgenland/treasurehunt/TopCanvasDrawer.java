@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class BaseCanvasDrawer {
+public class TopCanvasDrawer {
 
 
   // padding - has to be done here, because it is exactly for the canvas (coordinate system) and
@@ -31,7 +31,7 @@ public class BaseCanvasDrawer {
     double plotHeight = height - PADDING_TOP - PADDING_BOTTOM;
 
     // background of the coordinate system
-    g.setFill(Color.YELLOW);
+    g.setFill(Color.BROWN);
     g.fillRect(0, 0, width, height);
 
     // axis style

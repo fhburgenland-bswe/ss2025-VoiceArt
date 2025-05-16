@@ -1,10 +1,7 @@
 package at.fh.burgenland.treasurehunt;
 
-import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.paint.Color;
 
 public class LiveDigger {
 
@@ -41,16 +38,16 @@ public class LiveDigger {
     double height = coordinateSystemCanvas.getHeight();
 
     double plotWidth =
-        width - BaseCanvasDrawer.PADDING_LEFT - BaseCanvasDrawer.PADDING_RIGHT;
+        width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
     double plotHeight =
-        height - BaseCanvasDrawer.PADDING_TOP - BaseCanvasDrawer.PADDING_BOTTOM;
+        height - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
 
     // converting Hz & dB to coordinates
     double x =
-        BaseCanvasDrawer.PADDING_LEFT
+        TopCanvasDrawer.PADDING_LEFT
             + ((pitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
     double y =
-        BaseCanvasDrawer.PADDING_TOP + ((maxDb - db) / (double) (maxDb - minDb)) * plotHeight;
+        TopCanvasDrawer.PADDING_TOP + ((maxDb - db) / (double) (maxDb - minDb)) * plotHeight;
 
     GraphicsContext g = coordinateSystemCanvas.getGraphicsContext2D();
 

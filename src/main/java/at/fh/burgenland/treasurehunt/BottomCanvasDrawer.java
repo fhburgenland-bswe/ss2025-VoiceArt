@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class OverlapCanvasDrawer {
+public class BottomCanvasDrawer {
 
 
   // padding - has to be done here, because it is exactly for the canvas (coordinate system) and
@@ -31,7 +31,7 @@ public class OverlapCanvasDrawer {
     double plotHeight = height - PADDING_TOP - PADDING_BOTTOM;
 
     // background of the coordinate system
-    g.setFill(Color.BROWN);
+    g.setFill(Color.YELLOW);
     g.fillRect(0, 0, width, height);
 
     String hintText = "Singen oder sprechen Sie, um zu graben!";
@@ -118,6 +118,22 @@ public class OverlapCanvasDrawer {
     // Reset line dashes
     g.setLineDashes(null);
   }
+
+
+  public static void drawTreasure(GraphicsContext g, double x, double y, double radius) {
+    g.setFill(Color.GOLD);
+    g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+    g.setStroke(Color.DARKGOLDENROD);
+    g.setLineWidth(3);
+    g.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
+    // Optional: Ein "€" oder "$" Symbol in die Mitte
+    g.setFill(Color.BROWN);
+    g.setFont(Font.font(18));
+    g.fillText("★", x - 8, y + 7);
+  }
+
+
+
 
 
 }
