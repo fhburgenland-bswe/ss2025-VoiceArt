@@ -17,6 +17,11 @@
    <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
 
    <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Toben Sie sich kreativ aus und lassen Sie Ihre Stimme zeichnen." />
+   <HBox>
+      <Label fx:id="levelLabel" text="Level: 1"/>
+      <Label fx:id="usernameLabel" text="Benutzer: "/>
+      <Label fx:id="profileLabel" text="Stimmprofil: "/>
+   </HBox>
 
 
    <StackPane>

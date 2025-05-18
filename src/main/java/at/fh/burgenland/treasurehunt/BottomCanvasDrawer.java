@@ -120,12 +120,20 @@ public class BottomCanvasDrawer {
   }
 
 
-  public static void drawTreasure(GraphicsContext g, double x, double y, double radius) {
+  public static void drawTreasure(GraphicsContext g, double x, double y, double radiusInner, double radiusOuter) {
+    //outer radius
+    g.setFill(Color.LIGHTGOLDENRODYELLOW);
+    g.fillOval(x - radiusOuter, y - radiusOuter, radiusOuter * 2, radiusOuter * 2);
+    g.setStroke(Color.GOLDENROD);
+    g.setLineWidth(2);
+    g.strokeOval(x - radiusOuter, y - radiusOuter, radiusOuter * 2, radiusOuter * 2);
+
+    //Inner Radius
     g.setFill(Color.GOLD);
-    g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+  g.fillOval(x - radiusInner, y - radiusInner, radiusInner * 2, radiusInner * 2);
     g.setStroke(Color.DARKGOLDENROD);
     g.setLineWidth(3);
-    g.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
+    g.strokeOval(x - radiusInner, y - radiusInner, radiusInner * 2, radiusInner * 2);
     // Optional: Ein "€" oder "$" Symbol in die Mitte
     g.setFill(Color.BROWN);
     g.setFont(Font.font(18));

@@ -78,6 +78,11 @@ public class LiveDigger {
     }
      //g.setGlobalBlendMode(BlendMode.SRC_OVER);
 
+    // Grünen Punkt an aktueller Position zeichnen
+    double pointRadius = 5.0;
+    g.setFill(javafx.scene.paint.Color.LIMEGREEN);
+    g.fillOval(x - pointRadius, y - pointRadius, pointRadius * 2, pointRadius * 2);
+
     lastX[0] = x;
     lastY[0] = y;
   }

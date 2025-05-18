@@ -11,6 +11,7 @@ import at.fh.burgenland.profiles.VoiceProfile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,6 +39,12 @@ public class TreasureHuntController {
   private Button backButton;
   @FXML
   private Button exportButton;
+  @FXML
+  private Label levelLabel;
+  @FXML
+  private Label usernameLabel;
+  @FXML
+  private Label profileLabel;
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private int minFreq;
@@ -47,15 +54,19 @@ public class TreasureHuntController {
 
   private double treasureX = 300;
   private double treasureY = 300;
-  private double treasureRadius = 50;
+  private double treasureRadiusInner = 50;
+  private double treasureRadiusOuter = 100;
   private boolean treasureFound = false;
+  private int level = 1;
+  private final int MAX_LEVEL = 10;
 
   // Getter für Schatz-Koordinaten
   public double getTreasureX() { return treasureX; }
   public double getTreasureY() { return treasureY; }
-  public double getTreasureRadius() { return treasureRadius; }
-
-
+  public double getTreasureRadius() { return treasureRadiusInner; }
+  public double getTreasureRadiusOuter() {
+    return treasureRadiusOuter;
+  }
 
   // Holds the exponentially smoothed pitch value (Hz).
   // Initialized with -1 to indicate "no valid pitch received yet".
@@ -96,12 +107,29 @@ public class TreasureHuntController {
   // Last Y coordinate used in drawing, stored in a single element array for mutable access.
   private final double[] lastY = {-1};
 
+  private void updateTreasureRadii(){
+    treasureRadiusInner = Math.max(10, 50 - (level - 1) * 5);
+    treasureRadiusOuter = Math.max(20, 100 - (level - 1) * 10);
+  }
+
+  private void updateLevelLabel(){
+    if(levelLabel != null){
+      levelLabel.setText("Level: " + level);
+    }
+  }
+
+  public void setUserInfo(String username, String profileName) {
+    if(usernameLabel!= null) usernameLabel.setText("Benutzer: " + username);
+    if(profileLabel != null) profileLabel.setText("Stimmprofil: " + profileName);
+  }
+
 
   public void initialize() {
 
     UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (userProfile != null) {
       VoiceProfile voiceProfile = userProfile.getVoiceProfile();
+      setUserInfo(userProfile.getUserName(), userProfile.getVoiceProfile().toString());
       minFreq = voiceProfile.getMinFreq();
       maxFreq = voiceProfile.getMaxFreq();
       minDb = voiceProfile.getMinDb();
@@ -157,7 +185,7 @@ public class TreasureHuntController {
 
     BottomCanvasDrawer.drawTreasure(
         baseCanvas.getGraphicsContext2D(),
-        treasureX, treasureY, treasureRadius);
+        treasureX, treasureY, treasureRadiusInner, treasureRadiusOuter);
 
     // reset last coordinates
     lastX[0] = -1;
@@ -226,12 +254,20 @@ public class TreasureHuntController {
             double dy = y - treasureY;
             double distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (!treasureFound && distance < treasureRadius + 5) { // 5 = halbe Radiergröße
+            if (!treasureFound && distance < treasureRadiusInner + 5) { // 5 = halbe Radiergröße
               treasureFound = true;
-              javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
-                  javafx.scene.control.Alert.AlertType.INFORMATION, "Schatz gefunden!");
-              alert.showAndWait();
-              // Optional: weitere Eingaben deaktivieren
+              Platform.runLater(() -> {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                    javafx.scene.control.Alert.AlertType.INFORMATION, "Schatz gefunden!");
+                alert.showAndWait();
+                if (level < MAX_LEVEL) {
+                  level++;
+                  updateTreasureRadii();
+                  updateLevelLabel();
+                }
+                overlapCanvas.setVisible(false);
+                updateLevelLabel();
+              });
             }
           }
         });
@@ -259,6 +295,27 @@ public class TreasureHuntController {
     recordedPoints.clear();
     lastX[0] = -1;
     lastY[0] = -1;
+    treasureFound = false;
+    overlapCanvas.setVisible(true);
+
+    updateTreasureRadii();
+    updateLevelLabel();
+
+
+    // Bereich berechnen, in dem der Schatz platziert werden darf
+    double width = baseCanvas.getWidth();
+    double height = baseCanvas.getHeight();
+    double minX = TopCanvasDrawer.PADDING_LEFT + treasureRadiusOuter;
+    double maxX = width - TopCanvasDrawer.PADDING_RIGHT - treasureRadiusOuter;
+    double minY = TopCanvasDrawer.PADDING_TOP + treasureRadiusOuter;
+    double maxY = height - TopCanvasDrawer.PADDING_BOTTOM - treasureRadiusOuter;
+
+    // Neue zufällige Koordinaten setzen
+    treasureX = ThreadLocalRandom.current().nextDouble(minX, maxX);
+    treasureY = ThreadLocalRandom.current().nextDouble(minY, maxY);
+
+
+
     drawCoordinateSystemStructure();
   }
 
