@@ -19,8 +19,8 @@
    <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Toben Sie sich kreativ aus und lassen Sie Ihre Stimme zeichnen." />
    <HBox>
       <Label fx:id="levelLabel" text="Level: 1"/>
-      <Label fx:id="usernameLabel" text="Benutzer: "/>
-      <Label fx:id="profileLabel" text="Stimmprofil: "/>
+      <Label fx:id="usernameLabel" text=" Benutzer: "/>
+      <Label fx:id="profileLabel" text=" Stimmprofil: "/>
    </HBox>
 
 
@@ -30,11 +30,12 @@
    </StackPane>
 
    <HBox spacing="20" alignment="CENTER">
-      <Button fx:id="backButton" text="Zurück" onAction="#switchToStartScene" />
+      <Button fx:id="backButton" text="Zurück zum Start" onAction="#switchToStartScene" />
+      <Button fx:id="gameSelectionButton" text="Zur Spielauswahl" onAction="#switchToGameSelection" />
       <Button fx:id="exportButton" text="Zeichnung exportieren" />
       <Button text="Start Recording" onAction="#startRecording" />
       <Button text="Stop Recording" onAction="#stopRecording" />
-      <Button text="Reset" onAction="#resetTreasureHunt" />
+      <Button text="Restart Level" onAction="#resetTreasureHunt" />
    </HBox>
 
 </VBox>

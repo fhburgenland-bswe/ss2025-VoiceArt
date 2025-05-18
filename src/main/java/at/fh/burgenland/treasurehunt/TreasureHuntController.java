@@ -54,6 +54,8 @@ public class TreasureHuntController {
 
   private double treasureX = 300;
   private double treasureY = 300;
+  private double treasureRelX = 0.5; // 0.0 bis 1.0
+  private double treasureRelY = 0.5;
   private double treasureRadiusInner = 50;
   private double treasureRadiusOuter = 100;
   private boolean treasureFound = false;
@@ -61,9 +63,18 @@ public class TreasureHuntController {
   private final int MAX_LEVEL = 10;
 
   // Getter für Schatz-Koordinaten
-  public double getTreasureX() { return treasureX; }
-  public double getTreasureY() { return treasureY; }
-  public double getTreasureRadius() { return treasureRadiusInner; }
+  public double getTreasureX() {
+    return treasureX;
+  }
+
+  public double getTreasureY() {
+    return treasureY;
+  }
+
+  public double getTreasureRadius() {
+    return treasureRadiusInner;
+  }
+
   public double getTreasureRadiusOuter() {
     return treasureRadiusOuter;
   }
@@ -99,28 +110,39 @@ public class TreasureHuntController {
   private final List<TreasureHuntController.VoicePoint> recordedPoints = new ArrayList<>();
 
   private final AudioInputService audioInputService = AudioInputService.getInstance();
-  private final FrequenzDbOutput recorder =
-      new FrequenzDbOutput(audioInputService.getSelectedMixer());
+  private  FrequenzDbOutput recorder;
 
   // Last X coordinate used in drawing, stored in a single element array for mutable access.
   private final double[] lastX = {-1};
   // Last Y coordinate used in drawing, stored in a single element array for mutable access.
   private final double[] lastY = {-1};
 
-  private void updateTreasureRadii(){
-    treasureRadiusInner = Math.max(10, 50 - (level - 1) * 5);
-    treasureRadiusOuter = Math.max(20, 100 - (level - 1) * 10);
+  private void updateTreasureRadii() {
+    double width = baseCanvas.getWidth();
+    double height = baseCanvas.getHeight();
+    double minSide = Math.min(width, height);
+
+    // Beispiel: Start bei 20%/10%, pro Level -2%/-1%
+    double outerPercent = Math.max(0.05, 0.20 - (level - 1) * 0.02);
+    double innerPercent = Math.max(0.02, 0.10 - (level - 1) * 0.01);
+
+    treasureRadiusOuter = minSide * outerPercent;
+    treasureRadiusInner = minSide * innerPercent;
   }
 
-  private void updateLevelLabel(){
-    if(levelLabel != null){
+  private void updateLevelLabel() {
+    if (levelLabel != null) {
       levelLabel.setText("Level: " + level);
     }
   }
 
   public void setUserInfo(String username, String profileName) {
-    if(usernameLabel!= null) usernameLabel.setText("Benutzer: " + username);
-    if(profileLabel != null) profileLabel.setText("Stimmprofil: " + profileName);
+    if (usernameLabel != null) {
+      usernameLabel.setText("  Benutzer: " + username);
+    }
+    if (profileLabel != null) {
+      profileLabel.setText("  Stimmprofil: " + profileName);
+    }
   }
 
 
@@ -178,10 +200,22 @@ public class TreasureHuntController {
    * whenever the window is resized.
    */
   private void drawCoordinateSystemStructure() {
+    updateTreasureRadii();
+
     TopCanvasDrawer.drawAxes(overlapCanvas, minFreq, maxFreq, minDb, maxDb);
     //OverlapCanvasDrawer.drawAxes(baseCanvas, minFreq, maxFreq, minDb, maxDb);
 
     BottomCanvasDrawer.drawCoveringLayer(baseCanvas);
+
+    double width = baseCanvas.getWidth();
+    double height = baseCanvas.getHeight();
+    double minX = TopCanvasDrawer.PADDING_LEFT + treasureRadiusOuter;
+    double maxX = width - TopCanvasDrawer.PADDING_RIGHT - treasureRadiusOuter;
+    double minY = TopCanvasDrawer.PADDING_TOP + treasureRadiusOuter;
+    double maxY = height - TopCanvasDrawer.PADDING_BOTTOM - treasureRadiusOuter;
+
+    treasureX = minX + treasureRelX * (maxX - minX);
+    treasureY = minY + treasureRelY * (maxY - minY);
 
     BottomCanvasDrawer.drawTreasure(
         baseCanvas.getGraphicsContext2D(),
@@ -216,63 +250,71 @@ public class TreasureHuntController {
   @FXML
   public void startRecording() {
 
-    // Set up the listener to receive live frequency (Hz) and loudness (dB) data
-    recorder.setListener(
-        (pitch, db) -> {
-          if (pitch > 0 && !Double.isInfinite(db)) {
+    if (recorder == null) {
+      recorder = new FrequenzDbOutput(audioInputService.getSelectedMixer());
 
-            // Use the utility class for smoothing
-            smoothedPitch = ExponentialSmoother.smooth(smoothedPitch, pitch, smoothingFactor);
-            smoothedDb = ExponentialSmoother.smooth(smoothedDb, db, smoothingFactor);
+      // Set up the listener to receive live frequency (Hz) and loudness (dB) data
+      recorder.setListener(
+          (pitch, db) -> {
+            if (pitch > 0 && !Double.isInfinite(db)) {
 
-            recordedPoints.add(new TreasureHuntController.VoicePoint(smoothedPitch, smoothedDb));
+              // Use the utility class for smoothing
+              smoothedPitch = ExponentialSmoother.smooth(smoothedPitch, pitch, smoothingFactor);
+              smoothedDb = ExponentialSmoother.smooth(smoothedDb, db, smoothingFactor);
 
-            // Draw on canvas with smoothed values
-            Platform.runLater(
-                () ->
-                    LiveDigger.drawLiveLine(
-                        overlapCanvas,
-                        smoothedPitch,
-                        smoothedDb,
-                        minFreq,
-                        maxFreq,
-                        minDb,
-                        maxDb,
-                        lastX,
-                        lastY));
+              recordedPoints.add(new TreasureHuntController.VoicePoint(smoothedPitch, smoothedDb));
 
-            System.out.println("Pitch: " + pitch + " | dB: " + db);
-            double width = overlapCanvas.getWidth();
-            double height = overlapCanvas.getHeight();
-            double plotWidth = width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
-            double plotHeight = height - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
+              // Draw on canvas with smoothed values
+              Platform.runLater(
+                  () ->
+                      LiveDigger.drawLiveLine(
+                          overlapCanvas,
+                          smoothedPitch,
+                          smoothedDb,
+                          minFreq,
+                          maxFreq,
+                          minDb,
+                          maxDb,
+                          lastX,
+                          lastY));
 
-            double x = TopCanvasDrawer.PADDING_LEFT + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
-            double y = TopCanvasDrawer.PADDING_TOP + ((maxDb - smoothedDb) / (double) (maxDb - minDb)) * plotHeight;
+              System.out.println("Pitch: " + pitch + " | dB: " + db);
+              double width = overlapCanvas.getWidth();
+              double height = overlapCanvas.getHeight();
+              double plotWidth =
+                  width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
+              double plotHeight =
+                  height - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
 
-            double dx = x - treasureX;
-            double dy = y - treasureY;
-            double distance = Math.sqrt(dx * dx + dy * dy);
+              double x = TopCanvasDrawer.PADDING_LEFT
+                  + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
+              double y = TopCanvasDrawer.PADDING_TOP
+                  + ((maxDb - smoothedDb) / (double) (maxDb - minDb)) * plotHeight;
 
-            if (!treasureFound && distance < treasureRadiusInner + 5) { // 5 = halbe Radiergröße
-              treasureFound = true;
-              Platform.runLater(() -> {
-                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
-                    javafx.scene.control.Alert.AlertType.INFORMATION, "Schatz gefunden!");
-                alert.showAndWait();
-                if (level < MAX_LEVEL) {
-                  level++;
-                  updateTreasureRadii();
+              double dx = x - treasureX;
+              double dy = y - treasureY;
+              double distance = Math.sqrt(dx * dx + dy * dy);
+
+              if (!treasureFound && distance < treasureRadiusInner + 5) { // 5 = halbe Radiergröße
+                treasureFound = true;
+                Platform.runLater(() -> {
+                  javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                      javafx.scene.control.Alert.AlertType.INFORMATION, "Schatz gefunden!");
+                  alert.showAndWait();
+                  if (level < MAX_LEVEL) {
+                    level++;
+                    updateTreasureRadii();
+                    updateLevelLabel();
+                  }
+                  overlapCanvas.setVisible(false);
                   updateLevelLabel();
-                }
-                overlapCanvas.setVisible(false);
-                updateLevelLabel();
-              });
+                });
+              }
             }
-          }
-        });
+          });
 
-    recorder.start();
+      recorder.start();
+    }
   }
 
   /**
@@ -283,8 +325,11 @@ public class TreasureHuntController {
    */
   @FXML
   public void stopRecording() {
-    recorder.setListener(null); // stop drawing
-    recorder.stop();
+    if (recorder != null) {
+      recorder.setListener(null);
+      recorder.stop();
+      recorder = null;
+    }
   }
 
   /**
@@ -301,7 +346,6 @@ public class TreasureHuntController {
     updateTreasureRadii();
     updateLevelLabel();
 
-
     // Bereich berechnen, in dem der Schatz platziert werden darf
     double width = baseCanvas.getWidth();
     double height = baseCanvas.getHeight();
@@ -314,7 +358,9 @@ public class TreasureHuntController {
     treasureX = ThreadLocalRandom.current().nextDouble(minX, maxX);
     treasureY = ThreadLocalRandom.current().nextDouble(minY, maxY);
 
-
+    // Relative Position speichern
+    treasureRelX = (treasureX - minX) / (maxX - minX);
+    treasureRelY = (treasureY - minY) / (maxY - minY);
 
     drawCoordinateSystemStructure();
   }
@@ -328,7 +374,18 @@ public class TreasureHuntController {
    */
   @FXML
   public void switchToStartScene(ActionEvent event) throws IOException {
+    stopRecording();
     Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  @FXML
+  public void switchToGameSelection(ActionEvent event) throws IOException {
+    stopRecording();
+    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     Scene scene = new Scene(root);
     stage.setScene(scene);
