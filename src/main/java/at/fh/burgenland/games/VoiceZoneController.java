@@ -99,11 +99,11 @@ public class VoiceZoneController {
               .bind(coordinateSystemCanvas.getScene().heightProperty().subtract(250));
           coordinateSystemCanvas
               .widthProperty()
-              .addListener((obs, oldVal, newVal) -> drawCoordinateSystem());
+              .addListener((obs, oldVal, newVal) -> drawCoordinateSystemAndTargetBar());
           coordinateSystemCanvas
               .heightProperty()
-              .addListener((obs, oldVal, newVal) -> drawCoordinateSystem());
-          drawCoordinateSystem();
+              .addListener((obs, oldVal, newVal) -> drawCoordinateSystemAndTargetBar());
+          drawCoordinateSystemAndTargetBar();
           generateNewTarget(); // first target value is generated and shown
         });
   }
@@ -129,8 +129,9 @@ public class VoiceZoneController {
   }
 
   /** Draws the background axes and labels. */
-  private void drawCoordinateSystem() {
+  private void drawCoordinateSystemAndTargetBar() {
     CoordinateSystemDrawer.drawAxes(coordinateSystemCanvas, minFreq, maxFreq, minDb, maxDb);
+    drawTargetBar(targetValue); 
   }
 
   /**
@@ -144,7 +145,6 @@ public class VoiceZoneController {
     double width = coordinateSystemCanvas.getWidth();
     double height = coordinateSystemCanvas.getHeight();
 
-    drawCoordinateSystem();
     gc.setFill(
         showGreen ? javafx.scene.paint.Color.LIGHTGREEN : javafx.scene.paint.Color.LIGHTGRAY);
 
@@ -172,7 +172,7 @@ public class VoiceZoneController {
       double effTol = Math.min(currentTolerance, maxTol - 1);
       targetValue = minDb + effTol + Math.random() * ((maxDb - minDb) - 2 * effTol);
     }
-    drawTargetBar(targetValue);
+    drawCoordinateSystemAndTargetBar();
     updateTargetInfo();
   }
 
@@ -219,7 +219,7 @@ public class VoiceZoneController {
 
                   if (isInTarget) {
                     showGreen = true;
-                    drawTargetBar(targetValue);
+                    drawCoordinateSystemAndTargetBar();
 
                     outOfTargetSince = -1;
                     if (!currentlyInTarget) {
