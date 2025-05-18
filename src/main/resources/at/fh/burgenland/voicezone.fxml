@@ -14,10 +14,8 @@
         </Label>
     </HBox>
     
-    <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
-
     <Label fx:id="titleLabel" text="VoiceZone – Stimmbereichstraining" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-    <Label fx:id="textLabel" text="Halte deine Stimme im Zielbereich." />
+    <!--Label fx:id="textLabel" text="Halte deine Stimme im Zielbereich." /-->
 
     <HBox spacing="10" alignment="CENTER">
         <Label text="Trainingsmodus:" />
@@ -30,9 +28,13 @@
                     onAction="#setVolumeMode"/>
     </HBox>
 
-    <Canvas fx:id="coordinateSystemCanvas" width="800" height="400" VBox.vgrow="ALWAYS" />
+    <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
+
+    <Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" />
 
     <HBox spacing="10" alignment="CENTER">
+        <Label text="Level:" />
+        <Label fx:id="levelLabel" />
         <Label text="Zielwert:" />
         <Label fx:id="targetLabel" />
         <Label text="Toleranz:" />
@@ -40,7 +42,7 @@
     </HBox>
 
     <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="backButton" text="Zurück" onAction="#switchToStartScene" />
+        <Button fx:id="backButton" text="Zurück" onAction="#switchToGameSelectionScene" />
         <Button fx:id="exportButton" text="Zeichnung exportieren" />
         <Button text="Start" onAction="#startRecording" />
         <Button text="Stop" onAction="#stopRecording" />

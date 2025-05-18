@@ -32,9 +32,16 @@ public class VoiceZoneController {
 
   // All necessary UI-elements from the fxml
   @FXML private Canvas coordinateSystemCanvas;
-  @FXML private Label logoLabel, textLabel, titleLabel, targetLabel, toleranceLabel;
-  @FXML private Button backButton, exportButton;
-  @FXML private RadioButton freqButton, volumeButton;
+  @FXML private Label logoLabel;
+  @FXML private Label textLabel;
+  @FXML private Label titleLabel;
+  @FXML private Label targetLabel;
+  @FXML private Label toleranceLabel;
+  @FXML private Label levelLabel;
+  @FXML private Button backButton;
+  @FXML private Button exportButton;
+  @FXML private RadioButton freqButton;
+  @FXML private RadioButton volumeButton;
 
   // Audio is recorded from the choosen microphone und in dB and Hz converted
   private final AudioInputService audioInputService = AudioInputService.getInstance();
@@ -42,7 +49,14 @@ public class VoiceZoneController {
       new FrequenzDbOutput(audioInputService.getSelectedMixer());
 
   // Range values based on the voice profile
-  private int minFreq, maxFreq, minDb, maxDb;
+  private int minFreq;
+  private int maxFreq;
+  private int minDb;
+  private int maxDb;
+
+  // Level organisation
+  private int level = 1;
+  private final int maxLevel = 5;
 
   // Training configurations
   private final double toleranceFreq =
@@ -96,7 +110,7 @@ public class VoiceZoneController {
               .bind(coordinateSystemCanvas.getScene().widthProperty().subtract(60));
           coordinateSystemCanvas
               .heightProperty()
-              .bind(coordinateSystemCanvas.getScene().heightProperty().subtract(250));
+              .bind(coordinateSystemCanvas.getScene().heightProperty().subtract(300));
           coordinateSystemCanvas
               .widthProperty()
               .addListener((obs, oldVal, newVal) -> drawCoordinateSystemAndTargetBar());
@@ -105,6 +119,7 @@ public class VoiceZoneController {
               .addListener((obs, oldVal, newVal) -> drawCoordinateSystemAndTargetBar());
           drawCoordinateSystemAndTargetBar();
           generateNewTarget(); // first target value is generated and shown
+          updateLevelInfo();
         });
   }
 
@@ -131,7 +146,7 @@ public class VoiceZoneController {
   /** Draws the background axes and labels. */
   private void drawCoordinateSystemAndTargetBar() {
     CoordinateSystemDrawer.drawAxes(coordinateSystemCanvas, minFreq, maxFreq, minDb, maxDb);
-    drawTargetBar(targetValue); 
+    drawTargetBar(targetValue);
   }
 
   /**
@@ -145,17 +160,47 @@ public class VoiceZoneController {
     double width = coordinateSystemCanvas.getWidth();
     double height = coordinateSystemCanvas.getHeight();
 
-    gc.setFill(
-        showGreen ? javafx.scene.paint.Color.LIGHTGREEN : javafx.scene.paint.Color.LIGHTGRAY);
+    // gc.setFill(
+    // showGreen ? javafx.scene.paint.Color.LIGHTGREEN : javafx.scene.paint.Color.LIGHTGRAY);
+
+    gc.setFill(showGreen ? javafx.scene.paint.Color.LIGHTGREEN : getBarColor());
 
     double thickness = 40.0;
     if (trainingMode == VoiceZoneTrainingMode.FREQUENCY) {
-      double x1 = map(targetValue - currentTolerance, minFreq, maxFreq, 0, width);
-      double x2 = map(targetValue + currentTolerance, minFreq, maxFreq, 0, width);
+      double plotWidth =
+          width - CoordinateSystemDrawer.PADDING_LEFT - CoordinateSystemDrawer.PADDING_RIGHT;
+      double x1 =
+          map(
+              targetValue - currentTolerance,
+              minFreq,
+              maxFreq,
+              CoordinateSystemDrawer.PADDING_LEFT,
+              CoordinateSystemDrawer.PADDING_LEFT + plotWidth);
+      double x2 =
+          map(
+              targetValue + currentTolerance,
+              minFreq,
+              maxFreq,
+              CoordinateSystemDrawer.PADDING_LEFT,
+              CoordinateSystemDrawer.PADDING_LEFT + plotWidth);
       gc.fillRect(Math.min(x1, x2), (height - thickness) / 2, Math.abs(x2 - x1), thickness);
     } else {
-      double top = map(Math.min(targetValue + currentTolerance, maxDb), maxDb, minDb, 0, height);
-      double bottom = map(Math.max(targetValue - currentTolerance, minDb), maxDb, minDb, 0, height);
+      double plotHeight =
+          height - CoordinateSystemDrawer.PADDING_TOP - CoordinateSystemDrawer.PADDING_BOTTOM;
+      double top =
+          map(
+              Math.min(targetValue + currentTolerance, maxDb),
+              maxDb,
+              minDb,
+              CoordinateSystemDrawer.PADDING_TOP,
+              CoordinateSystemDrawer.PADDING_TOP + plotHeight);
+      double bottom =
+          map(
+              Math.max(targetValue - currentTolerance, minDb),
+              maxDb,
+              minDb,
+              CoordinateSystemDrawer.PADDING_TOP,
+              CoordinateSystemDrawer.PADDING_TOP + plotHeight);
       gc.fillRect(
           (width - thickness) / 2, Math.min(top, bottom), thickness, Math.abs(bottom - top));
     }
@@ -183,8 +228,11 @@ public class VoiceZoneController {
   private void updateTargetInfo() {
     Platform.runLater(
         () -> {
-          targetLabel.setText(String.format("%.2f", targetValue));
-          toleranceLabel.setText(String.format("%.2f", currentTolerance));
+          double lowerBound = targetValue - currentTolerance;
+          double upperBound = targetValue + currentTolerance;
+
+          targetLabel.setText(String.format("%.0f", targetValue));
+          toleranceLabel.setText(String.format("[%.0f – %.0f]", lowerBound, upperBound));
         });
   }
 
@@ -197,59 +245,78 @@ public class VoiceZoneController {
   public void startRecording() {
     recorder.setListener(
         (pitch, db) -> {
-          if ((trainingMode == VoiceZoneTrainingMode.FREQUENCY && pitch > 0)
-              || (trainingMode == VoiceZoneTrainingMode.VOLUME && !Double.isInfinite(db))) {
+          boolean isSilent =
+              (trainingMode == VoiceZoneTrainingMode.FREQUENCY
+                      && (pitch <= 0 || Double.isNaN(pitch)))
+                  || (trainingMode == VoiceZoneTrainingMode.VOLUME
+                      && (Double.isInfinite(db) || Double.isNaN(db)));
 
-            Platform.runLater(
-                () -> {
-                  double value = (trainingMode == VoiceZoneTrainingMode.FREQUENCY) ? pitch : db;
-                  boolean isInTarget = Math.abs(value - targetValue) <= currentTolerance;
-                  long now = System.currentTimeMillis();
+          Platform.runLater(
+              () -> {
+                if (isSilent) {
+                  // Stille -> zurücksetzen
+                  showGreen = false;
+                  currentlyInTarget = false;
+                  hitStartTime = -1;
+                  drawCoordinateSystemAndTargetBar();
+                  return;
+                }
+                // Platform.runLater(
+                // () -> {
+                double value = (trainingMode == VoiceZoneTrainingMode.FREQUENCY) ? pitch : db;
+                boolean isInTarget = Math.abs(value - targetValue) <= currentTolerance;
+                long now = System.currentTimeMillis();
 
-                  System.out.printf(
-                      "DEBUG | Modus: %s | Pitch: %.2f | dB: %.2f | Wert: %.2f | Ziel: %.2f | Bereich: [%.2f - %.2f] | Status: %s%n",
-                      trainingMode,
-                      pitch,
-                      db,
-                      value,
-                      targetValue,
-                      targetValue - currentTolerance,
-                      targetValue + currentTolerance,
-                      isInTarget ? "IM ZIELBEREICH" : "daneben");
+                System.out.printf(
+                    "|Modus: %s | Wert: %.2f | Ziel: %.2f | Bereich: [%.2f - %.2f] | Status: %s%n",
+                    trainingMode,
+                    pitch,
+                    db,
+                    value,
+                    targetValue,
+                    targetValue - currentTolerance,
+                    targetValue + currentTolerance,
+                    isInTarget ? "IM ZIELBEREICH" : "daneben");
 
-                  if (isInTarget) {
-                    showGreen = true;
+                if (isInTarget) {
+                  showGreen = true;
+                  drawCoordinateSystemAndTargetBar();
+
+                  outOfTargetSince = -1;
+                  if (!currentlyInTarget) {
+                    if (now - lastSuccessTime < minDelayBetweenSuccesses) {
+                      return;
+                    }
+                    hitStartTime = now;
+                    currentlyInTarget = true;
+                  } else if (now - hitStartTime >= requiredHoldTimeMs) {
+                    successfulHitsInLevel++;
+                    lastSuccessTime = now;
+                    hitStartTime = -1;
+                    currentlyInTarget = false;
+                    showGreen = false;
+
+                    if (successfulHitsInLevel >= requiredHitsPerLevel && level < maxLevel) {
+                      currentTolerance *= 0.9;
+                      level++;
+                      successfulHitsInLevel = 0;
+                      updateLevelInfo();
+                    }
+                    generateNewTarget();
+                    updateTargetInfo();
                     drawCoordinateSystemAndTargetBar();
-
-                    outOfTargetSince = -1;
-                    if (!currentlyInTarget) {
-                      if (now - lastSuccessTime < minDelayBetweenSuccesses) return;
-                      hitStartTime = now;
-                      currentlyInTarget = true;
-                    } else if (now - hitStartTime >= requiredHoldTimeMs) {
-                      successfulHitsInLevel++;
-                      lastSuccessTime = now;
-                      hitStartTime = -1;
-                      currentlyInTarget = false;
-
-                      if (successfulHitsInLevel >= requiredHitsPerLevel) {
-                        currentTolerance *= 0.9;
-                        successfulHitsInLevel = 0;
-                      }
-                      generateNewTarget();
-                      updateTargetInfo();
-                    }
-                  } else if (currentlyInTarget) {
-                    if (outOfTargetSince == -1) outOfTargetSince = now;
-                    else if (now - outOfTargetSince > maxOutOfTargetGracePeriod) {
-                      currentlyInTarget = false;
-                      hitStartTime = -1;
-                      showGreen = false;
-                      drawTargetBar(targetValue);
-                    }
                   }
-                });
-          }
+                } else if (currentlyInTarget) {
+                  if (outOfTargetSince == -1) {
+                    outOfTargetSince = now;
+                  } else if (now - outOfTargetSince > maxOutOfTargetGracePeriod) {
+                    currentlyInTarget = false;
+                    hitStartTime = -1;
+                    showGreen = false;
+                    drawCoordinateSystemAndTargetBar();
+                  }
+                }
+              });
         });
 
     recorder.start();
@@ -262,14 +329,18 @@ public class VoiceZoneController {
     recorder.stop();
   }
 
+  private void updateLevelInfo() {
+    Platform.runLater(() -> levelLabel.setText("Nr. " + level));
+  }
+
   /**
    * Returns to landing page.
    *
    * @param event the action triggering the scene switch
    */
   @FXML
-  public void switchToStartScene(ActionEvent event) throws IOException {
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
+  public void switchToGameSelectionScene(ActionEvent event) throws IOException {
+    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(new Scene(root));
     stage.show();
@@ -280,7 +351,7 @@ public class VoiceZoneController {
   public void setFrequencyMode() {
     if (freqButton.isSelected()) {
       trainingMode = VoiceZoneTrainingMode.FREQUENCY;
-      currentTolerance = toleranceFreq;
+      resetTrainingProgress();
       generateNewTarget();
     }
   }
@@ -290,9 +361,17 @@ public class VoiceZoneController {
   public void setVolumeMode() {
     if (volumeButton.isSelected()) {
       trainingMode = VoiceZoneTrainingMode.VOLUME;
-      currentTolerance = toleranceVol;
+      resetTrainingProgress();
       generateNewTarget();
     }
+  }
+
+  private void resetTrainingProgress() {
+    level = 1;
+    successfulHitsInLevel = 0;
+    currentTolerance =
+        (trainingMode == VoiceZoneTrainingMode.FREQUENCY) ? toleranceFreq : toleranceVol;
+    updateLevelInfo();
   }
 
   /**
@@ -307,5 +386,12 @@ public class VoiceZoneController {
    */
   private double map(double value, double inMin, double inMax, double outMin, double outMax) {
     return (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
+  }
+
+  private javafx.scene.paint.Color getBarColor() {
+    int cappedLevel = Math.min(level, maxLevel);
+    double brightness = 0.8 - (cappedLevel - 1) * 0.2;
+    brightness = Math.max(0, brightness);
+    return javafx.scene.paint.Color.gray(brightness);
   }
 }
