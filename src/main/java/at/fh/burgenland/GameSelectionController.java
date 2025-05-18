@@ -42,7 +42,9 @@ public class GameSelectionController {
       "Hold your Voice in the given box."
     };
     final String[] fxmlTargets = {
-      "/at/fh/burgenland/landing.fxml", "/at/fh/burgenland/coordinate-system.fxml", "/at/fh/burgenland/voicezone.fxml"
+      "/at/fh/burgenland/landing.fxml",
+      "/at/fh/burgenland/coordinate-system.fxml",
+      "/at/fh/burgenland/voicezone.fxml"
     };
 
     for (int i = 0; i < games.length; i++) {

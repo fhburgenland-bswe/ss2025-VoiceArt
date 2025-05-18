@@ -37,9 +37,8 @@ public class ProfileManagerTest {
   }
 
   /**
-   * Performs cleanup after each test method is executed. Deletes the temporary file
-   * if it exists. This ensures that the test environment is in a clean state after
-   * each test execution.
+   * Performs cleanup after each test method is executed. Deletes the temporary file if it exists.
+   * This ensures that the test environment is in a clean state after each test execution.
    */
   @AfterEach
   public void tearDown() {

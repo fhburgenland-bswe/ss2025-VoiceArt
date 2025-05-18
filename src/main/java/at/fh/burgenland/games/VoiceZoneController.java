@@ -2,8 +2,6 @@ package at.fh.burgenland.games;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
-import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
-import at.fh.burgenland.coordinatesystem.LiveDrawer;
 import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
@@ -24,54 +22,97 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 /**
- * Controller class for the coordinate system view. This controller is responsible for:
- * -Initializing and dynamically resizing the canvas for drawing. -Handling the real-time drawing of
- * smoothed voice data (frequency and loudness). -Responding to user actions like starting/stopping
- * recording and switching scenes.
- *
- * <p>Reads the current user's voice profile and configures the canvas drawing range accordingly.
- *
- * <p>It uses the {@link FrequenzDbOutput} class to receive audio data and the {@link LiveDrawer}
- * utility to draw smooth lines on the canvas.
+ * This controller handles real-time training with voice data (frequency or volume). It visualizes a
+ * target zone on a canvas, compares live input values with the target and checks if the target has
+ * been hit within a tolerance window and for a minimum hold time.
  */
 public class VoiceZoneController {
 
-  CoordinateSystemDrawer coordinateSystemDrawer = new CoordinateSystemDrawer();
-  private VoiceZoneTrainingMode trainingMode = VoiceZoneTrainingMode.FREQUENCY; //Standardmäßig ist es die Frequenz
+  private VoiceZoneTrainingMode trainingMode = VoiceZoneTrainingMode.FREQUENCY; // Default mode
 
+  // All necessary UI-elements from the fxml
   @FXML private Canvas coordinateSystemCanvas;
-  @FXML private Label logoLabel;
-  @FXML private Label textLabel;
-  @FXML private Label titleLabel;
-  @FXML private Button backButton;
-  @FXML private Button exportButton;
-  @FXML private RadioButton freqButton;
-  @FXML private RadioButton volumeButton;
+  @FXML private Label logoLabel, textLabel, titleLabel, targetLabel, toleranceLabel;
+  @FXML private Button backButton, exportButton;
+  @FXML private RadioButton freqButton, volumeButton;
 
-
-
-  // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
-  private int minFreq;
-  private int maxFreq;
-  private int minDb;
-  private int maxDb;
-
+  // Audio is recorded from the choosen microphone und in dB and Hz converted
   private final AudioInputService audioInputService = AudioInputService.getInstance();
   private final FrequenzDbOutput recorder =
       new FrequenzDbOutput(audioInputService.getSelectedMixer());
 
-  /**
-   * Initializes the UI and draws the coordinate system. This method binds the canvas size to the
-   * window size, ensuring a responsive layout. It also triggers the initial drawing and sets up
-   * listeners to redraw the coordinate system when the window is resized.
-   */
+  // Range values based on the voice profile
+  private int minFreq, maxFreq, minDb, maxDb;
+
+  // Training configurations
+  private final double toleranceFreq =
+      30.0; // Start-Tolerance Range for Frequenz (target = 200, tolerance = [170-230])
+  private final double toleranceVol =
+      5.0; // Start-Tolerance Range for Volume (target = 10, tolerance = [5-15])
+  private double currentTolerance = toleranceFreq;
+  private double targetValue; // Random generated target Value to be reached
+  private int successfulHitsInLevel = 0; // Counter of successful hits
+  private final int requiredHitsPerLevel =
+      3; // 3 hits are required in one Level -> after that it will be more difficult
+
+  // Timing and state tracking
+  private final long requiredHoldTimeMs =
+      1500; // required time to be hold in the bar -> bar is successful if we hold the value for
+  // min. 1,5 sec
+  private final long maxOutOfTargetGracePeriod =
+      500; // if you leave the target area for a short time, you have 0,5 sec grace period. You can
+  // still return within this time without the attempt being cancelled
+  private final long minDelayBetweenSuccesses =
+      2000; // after you have successfully hit the target for 1,5 sec, you must pause for 2 sec
+  // before the new hit can be counted. This prevents you from accidentally getting
+  // several hits in succession without changing the target.
+  private long hitStartTime =
+      -1; // saves the first time you enter the target area (is used to calculate if the
+  // requiredHoldTime is reached)
+  private long outOfTargetSince =
+      -1; // time is saved when you leave the target area (is used to check if you are out of the
+  // grace period)
+  private long lastSuccessTime =
+      -1; // saved when you have successfully held the value (is used to check if the
+  // minDelayBetweenSuccesses has already ended)
+  private boolean currentlyInTarget = false; // defines if you are already in the target area or not
+  private boolean showGreen =
+      false; // defines if the bar should be green (when you are in the target area) or not
+
+  /** Initialies UI elements and bind canvas dimensions to window size. */
   @FXML
   public void initialize() {
-
-    ToggleGroup group = new ToggleGroup();
+    ToggleGroup group = new ToggleGroup(); // only one play mode can be chosen (frequncy or volume)
     freqButton.setToggleGroup(group);
     volumeButton.setToggleGroup(group);
 
+    loadVoiceProfile(); // values from the active voice profile are chosen
+
+    // draw canvas and bind it to the window size
+    Platform.runLater(
+        () -> {
+          coordinateSystemCanvas
+              .widthProperty()
+              .bind(coordinateSystemCanvas.getScene().widthProperty().subtract(60));
+          coordinateSystemCanvas
+              .heightProperty()
+              .bind(coordinateSystemCanvas.getScene().heightProperty().subtract(250));
+          coordinateSystemCanvas
+              .widthProperty()
+              .addListener((obs, oldVal, newVal) -> drawCoordinateSystem());
+          coordinateSystemCanvas
+              .heightProperty()
+              .addListener((obs, oldVal, newVal) -> drawCoordinateSystem());
+          drawCoordinateSystem();
+          generateNewTarget(); // first target value is generated and shown
+        });
+  }
+
+  /**
+   * The method loadVoiceProfile uses values from the active userprofile. If there is no active
+   * profile, default values are used.
+   */
+  private void loadVoiceProfile() {
     UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (userProfile != null) {
       VoiceProfile voiceProfile = userProfile.getVoiceProfile();
@@ -85,100 +126,186 @@ public class VoiceZoneController {
       minDb = -60;
       maxDb = 0;
     }
+  }
 
+  /** Draws the background axes and labels. */
+  private void drawCoordinateSystem() {
+    CoordinateSystemDrawer.drawAxes(coordinateSystemCanvas, minFreq, maxFreq, minDb, maxDb);
+  }
+
+  /**
+   * Draws the target bar on the canvas depending on training mode. If the training mode equals
+   * frequency, the bar is horizontal. If the training mode equals volume, the bar is vertical.
+   *
+   * @param targetValue the current target frequency or volume
+   */
+  private void drawTargetBar(double targetValue) {
+    var gc = coordinateSystemCanvas.getGraphicsContext2D();
+    double width = coordinateSystemCanvas.getWidth();
+    double height = coordinateSystemCanvas.getHeight();
+
+    drawCoordinateSystem();
+    gc.setFill(
+        showGreen ? javafx.scene.paint.Color.LIGHTGREEN : javafx.scene.paint.Color.LIGHTGRAY);
+
+    double thickness = 40.0;
+    if (trainingMode == VoiceZoneTrainingMode.FREQUENCY) {
+      double x1 = map(targetValue - currentTolerance, minFreq, maxFreq, 0, width);
+      double x2 = map(targetValue + currentTolerance, minFreq, maxFreq, 0, width);
+      gc.fillRect(Math.min(x1, x2), (height - thickness) / 2, Math.abs(x2 - x1), thickness);
+    } else {
+      double top = map(Math.min(targetValue + currentTolerance, maxDb), maxDb, minDb, 0, height);
+      double bottom = map(Math.max(targetValue - currentTolerance, minDb), maxDb, minDb, 0, height);
+      gc.fillRect(
+          (width - thickness) / 2, Math.min(top, bottom), thickness, Math.abs(bottom - top));
+    }
+  }
+
+  /** Generates a new random target and updates canvas and labels. */
+  private void generateNewTarget() {
+    showGreen = false;
+
+    if (trainingMode == VoiceZoneTrainingMode.FREQUENCY) {
+      targetValue = minFreq + Math.random() * (maxFreq - minFreq);
+    } else {
+      double maxTol = (maxDb - minDb) / 2.0;
+      double effTol = Math.min(currentTolerance, maxTol - 1);
+      targetValue = minDb + effTol + Math.random() * ((maxDb - minDb) - 2 * effTol);
+    }
+    drawTargetBar(targetValue);
+    updateTargetInfo();
+  }
+
+  /**
+   * Updates the label values for current target and tolerance. Shows the target value and tolerance
+   * on the UI.
+   */
+  private void updateTargetInfo() {
     Platform.runLater(
         () -> {
-          // dynamic bounding, canvas grows with the full window
-          coordinateSystemCanvas
-              .widthProperty()
-              .bind(coordinateSystemCanvas.getScene().widthProperty().subtract(60));
-          coordinateSystemCanvas
-              .heightProperty()
-              .bind(coordinateSystemCanvas.getScene().heightProperty().subtract(250));
-
-          drawCoordinateSystemStructure();
-
-          // draw at every size change
-          coordinateSystemCanvas
-              .widthProperty()
-              .addListener((obs, oldVal, newVal) -> drawCoordinateSystemStructure());
-          coordinateSystemCanvas
-              .heightProperty()
-              .addListener((obs, oldVal, newVal) -> drawCoordinateSystemStructure());
+          targetLabel.setText(String.format("%.2f", targetValue));
+          toleranceLabel.setText(String.format("%.2f", currentTolerance));
         });
   }
 
   /**
-   * Redraws the background structure of the coordinate system (axes, labels). This method is called
-   * whenever the window is resized.
-   */
-  private void drawCoordinateSystemStructure() {
-    CoordinateSystemDrawer.drawAxes(coordinateSystemCanvas, minFreq, maxFreq, minDb, maxDb);
-
-  }
-
-  /**
-   * Starts the audio recording and analysis process.
-   *
-   * <p>This method sets a listener for incoming pitch and dB values, applies exponential smoothing
-   * using the {@link ExponentialSmoother}, and draws the resulting smoothed line in real-time using
-   * the {@link LiveDrawer}.
+   * Starts real-time audio analysis and evaluation. Checks if the voice is in the target area, how
+   * long is the voice in the target area, if the voice is min. 1,5 sec in the target area and if
+   * the level should be increased. the bar gets green, if the target area is reached.
    */
   @FXML
   public void startRecording() {
-
-    // Set up the listener to receive live frequency (Hz) and loudness (dB) data
     recorder.setListener(
         (pitch, db) -> {
-          if (pitch > 0 && !Double.isInfinite(db)) {
-            System.out.println("Pitch: " + pitch + " | dB: " + db);
+          if ((trainingMode == VoiceZoneTrainingMode.FREQUENCY && pitch > 0)
+              || (trainingMode == VoiceZoneTrainingMode.VOLUME && !Double.isInfinite(db))) {
+
+            Platform.runLater(
+                () -> {
+                  double value = (trainingMode == VoiceZoneTrainingMode.FREQUENCY) ? pitch : db;
+                  boolean isInTarget = Math.abs(value - targetValue) <= currentTolerance;
+                  long now = System.currentTimeMillis();
+
+                  System.out.printf(
+                      "DEBUG | Modus: %s | Pitch: %.2f | dB: %.2f | Wert: %.2f | Ziel: %.2f | Bereich: [%.2f - %.2f] | Status: %s%n",
+                      trainingMode,
+                      pitch,
+                      db,
+                      value,
+                      targetValue,
+                      targetValue - currentTolerance,
+                      targetValue + currentTolerance,
+                      isInTarget ? "IM ZIELBEREICH" : "daneben");
+
+                  if (isInTarget) {
+                    showGreen = true;
+                    drawTargetBar(targetValue);
+
+                    outOfTargetSince = -1;
+                    if (!currentlyInTarget) {
+                      if (now - lastSuccessTime < minDelayBetweenSuccesses) return;
+                      hitStartTime = now;
+                      currentlyInTarget = true;
+                    } else if (now - hitStartTime >= requiredHoldTimeMs) {
+                      successfulHitsInLevel++;
+                      lastSuccessTime = now;
+                      hitStartTime = -1;
+                      currentlyInTarget = false;
+
+                      if (successfulHitsInLevel >= requiredHitsPerLevel) {
+                        currentTolerance *= 0.9;
+                        successfulHitsInLevel = 0;
+                      }
+                      generateNewTarget();
+                      updateTargetInfo();
+                    }
+                  } else if (currentlyInTarget) {
+                    if (outOfTargetSince == -1) outOfTargetSince = now;
+                    else if (now - outOfTargetSince > maxOutOfTargetGracePeriod) {
+                      currentlyInTarget = false;
+                      hitStartTime = -1;
+                      showGreen = false;
+                      drawTargetBar(targetValue);
+                    }
+                  }
+                });
           }
         });
 
     recorder.start();
   }
 
-  /**
-   * Stops the audio recording and drawing process.
-   *
-   * <p>Unregisters the audio listener and halts the processing thread from {@link
-   * FrequenzDbOutput}.
-   */
+  /** Stops the ongoing recording and analysis. */
   @FXML
   public void stopRecording() {
-    recorder.setListener(null); // stop drawing
+    recorder.setListener(null);
     recorder.stop();
   }
 
   /**
-   * Handles switching from the coordinatesystem scene to the 'start-scene' - landing.fxml. This
-   * event is triggered by an UI-event, typically a button click.
+   * Returns to landing page.
    *
-   * @param event The {@link javafx.event.ActionEvent} that triggers the scene switch
-   * @throws IOException If the FXML file for the start scene cannot be loaded.
+   * @param event the action triggering the scene switch
    */
   @FXML
   public void switchToStartScene(ActionEvent event) throws IOException {
     Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
+    stage.setScene(new Scene(root));
     stage.show();
   }
 
+  /** Switches training mode to FREQUENCY. */
   @FXML
   public void setFrequencyMode() {
-      if (freqButton.isSelected()) {
-          trainingMode = VoiceZoneTrainingMode.FREQUENCY;
-          System.out.println("🎯 Modus: FREQUENZ");
-      }
+    if (freqButton.isSelected()) {
+      trainingMode = VoiceZoneTrainingMode.FREQUENCY;
+      currentTolerance = toleranceFreq;
+      generateNewTarget();
+    }
   }
 
+  /** Switches training mode to VOLUME. */
   @FXML
   public void setVolumeMode() {
-      if (volumeButton.isSelected()) {
-          trainingMode = VoiceZoneTrainingMode.VOLUME;
-          System.out.println("🎯 Modus: LAUTSTÄRKE");
-      }
+    if (volumeButton.isSelected()) {
+      trainingMode = VoiceZoneTrainingMode.VOLUME;
+      currentTolerance = toleranceVol;
+      generateNewTarget();
+    }
+  }
+
+  /**
+   * Maps a value from one range to another.
+   *
+   * @param value input value
+   * @param inMin source min
+   * @param inMax source max
+   * @param outMin target min
+   * @param outMax target max
+   * @return mapped value
+   */
+  private double map(double value, double inMin, double inMax, double outMin, double outMax) {
+    return (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
   }
 }

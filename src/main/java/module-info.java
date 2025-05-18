@@ -21,7 +21,7 @@ module at.fh.burgenland {
       com.fasterxml.jackson.databind;
   opens at.fh.burgenland.card to
       javafx.fxml;
-  opens at.fh.burgenland.games to 
+  opens at.fh.burgenland.games to
       javafx.fxml;
 
   exports at.fh.burgenland;
