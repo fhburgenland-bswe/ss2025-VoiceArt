@@ -11,7 +11,9 @@ import at.fh.burgenland.profiles.VoiceProfile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,9 +22,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class TreasureHuntController {
 
@@ -279,12 +285,12 @@ public class TreasureHuntController {
                           lastY));
 
               System.out.println("Pitch: " + pitch + " | dB: " + db);
-              double width = overlapCanvas.getWidth();
-              double height = overlapCanvas.getHeight();
+              double width1 = overlapCanvas.getWidth();
+              double height1 = overlapCanvas.getHeight();
               double plotWidth =
-                  width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
+                  width1 - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
               double plotHeight =
-                  height - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
+                  height1 - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
 
               double x = TopCanvasDrawer.PADDING_LEFT
                   + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
@@ -295,6 +301,30 @@ public class TreasureHuntController {
               double dy = y - treasureY;
               double distance = Math.sqrt(dx * dx + dy * dy);
 
+
+              if (!treasureFound && distance < treasureRadiusInner + 5) {
+                treasureFound = true;
+                Platform.runLater(() -> {
+                  Alert alert = new Alert(AlertType.INFORMATION);
+                  alert.setTitle("Schatz gefunden!");
+                  alert.setHeaderText(null);
+                  alert.setContentText("Du hast den Schatz gefunden! Klicke auf 'Nächstes Level', um fortzufahren.");
+
+                  ButtonType nextLevelButton = new ButtonType("Nächstes Level");
+                  alert.getButtonTypes().setAll(nextLevelButton);
+
+                  Optional<ButtonType> result = alert.showAndWait();
+                  if (result.isPresent() && result.get() == nextLevelButton) {
+                    overlapCanvas.setVisible(false);
+                    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                    pause.setOnFinished(e -> resetLevelAndTreasure(true));
+                    pause.play();
+                  }
+                });
+              }
+
+
+/*
               if (!treasureFound && distance < treasureRadiusInner + 5) { // 5 = halbe Radiergröße
                 treasureFound = true;
                 Platform.runLater(() -> {
@@ -310,6 +340,7 @@ public class TreasureHuntController {
                   updateLevelLabel();
                 });
               }
+              */
             }
           });
 
@@ -337,32 +368,10 @@ public class TreasureHuntController {
    */
   @FXML
   public void resetTreasureHunt() {
-    recordedPoints.clear();
-    lastX[0] = -1;
-    lastY[0] = -1;
-    treasureFound = false;
-    overlapCanvas.setVisible(true);
-
-    updateTreasureRadii();
-    updateLevelLabel();
-
-    // Bereich berechnen, in dem der Schatz platziert werden darf
-    double width = baseCanvas.getWidth();
-    double height = baseCanvas.getHeight();
-    double minX = TopCanvasDrawer.PADDING_LEFT + treasureRadiusOuter;
-    double maxX = width - TopCanvasDrawer.PADDING_RIGHT - treasureRadiusOuter;
-    double minY = TopCanvasDrawer.PADDING_TOP + treasureRadiusOuter;
-    double maxY = height - TopCanvasDrawer.PADDING_BOTTOM - treasureRadiusOuter;
-
-    // Neue zufällige Koordinaten setzen
-    treasureX = ThreadLocalRandom.current().nextDouble(minX, maxX);
-    treasureY = ThreadLocalRandom.current().nextDouble(minY, maxY);
-
-    // Relative Position speichern
-    treasureRelX = (treasureX - minX) / (maxX - minX);
-    treasureRelY = (treasureY - minY) / (maxY - minY);
-
-    drawCoordinateSystemStructure();
+    overlapCanvas.setVisible(false);
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+    pause.setOnFinished(e -> resetLevelAndTreasure(false));
+    pause.play();
   }
 
   /**
@@ -375,6 +384,18 @@ public class TreasureHuntController {
   @FXML
   public void switchToStartScene(ActionEvent event) throws IOException {
     stopRecording();
+
+    // Pop-Up mit Userdaten und Level
+    String username = usernameLabel != null ? usernameLabel.getText() : "";
+    String profile = profileLabel != null ? profileLabel.getText() : "";
+    String message = username + profile + "  -> erreichtes Level: " + level;
+
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle("Spiel beendet");
+    alert.setHeaderText("Hier dein Ergebnis:");
+    alert.setContentText(message);
+    alert.showAndWait();
+
     Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     Scene scene = new Scene(root);
@@ -390,6 +411,37 @@ public class TreasureHuntController {
     Scene scene = new Scene(root);
     stage.setScene(scene);
     stage.show();
+  }
+
+  private void resetLevelAndTreasure(boolean increaseLevel){
+
+    if(increaseLevel && level < MAX_LEVEL){
+      level++;
+      updateTreasureRadii();
+      updateLevelLabel();
+    }
+
+    recordedPoints.clear();
+    lastX[0] = -1;
+    lastY[0] = -1;
+    treasureFound = false;
+    overlapCanvas.setVisible(true);
+
+    double width = baseCanvas.getWidth();
+    double height = baseCanvas.getHeight();
+    double minX = TopCanvasDrawer.PADDING_LEFT + treasureRadiusOuter;
+    double maxX = width - TopCanvasDrawer.PADDING_RIGHT - treasureRadiusOuter;
+    double minY = TopCanvasDrawer.PADDING_TOP + treasureRadiusOuter;
+    double maxY = height - TopCanvasDrawer.PADDING_BOTTOM - treasureRadiusOuter;
+
+    treasureX = ThreadLocalRandom.current().nextDouble(minX, maxX);
+    treasureY = ThreadLocalRandom.current().nextDouble(minY, maxY);
+
+    treasureRelX = (treasureX - minX) / (maxX - minX);
+    treasureRelY = (treasureY - minY) / (maxY - minY);
+
+    drawCoordinateSystemStructure();
+
   }
 
 

@@ -30,7 +30,7 @@
    </StackPane>
 
    <HBox spacing="20" alignment="CENTER">
-      <Button fx:id="backButton" text="Zurück zum Start" onAction="#switchToStartScene" />
+      <Button fx:id="backButton" text="Spiel beenden" onAction="#switchToStartScene" />
       <Button fx:id="gameSelectionButton" text="Zur Spielauswahl" onAction="#switchToGameSelection" />
       <Button fx:id="exportButton" text="Zeichnung exportieren" />
       <Button text="Start Recording" onAction="#startRecording" />
