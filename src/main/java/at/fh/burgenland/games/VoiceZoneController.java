@@ -7,6 +7,8 @@ import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +17,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -42,6 +46,8 @@ public class VoiceZoneController {
   @FXML private Button exportButton;
   @FXML private RadioButton freqButton;
   @FXML private RadioButton volumeButton;
+  @FXML private Label usernameLabel;
+  @FXML private Label voiceProfileLabel;
 
   // Audio is recorded from the choosen microphone und in dB and Hz converted
   private final AudioInputService audioInputService = AudioInputService.getInstance();
@@ -62,7 +68,7 @@ public class VoiceZoneController {
   private final double toleranceFreq =
       30.0; // Start-Tolerance Range for Frequenz (target = 200, tolerance = [170-230])
   private final double toleranceVol =
-      5.0; // Start-Tolerance Range for Volume (target = 10, tolerance = [5-15])
+      5.0; // Start-Tolerance Range for Volume (target = 10, tolerance = [0-20])
   private double currentTolerance = toleranceFreq;
   private double targetValue; // Random generated target Value to be reached
   private int successfulHitsInLevel = 0; // Counter of successful hits
@@ -70,9 +76,10 @@ public class VoiceZoneController {
       3; // 3 hits are required in one Level -> after that it will be more difficult
 
   // Timing and state tracking
-  private final long requiredHoldTimeMs =
+  private final long requiredHoldFregTimeMs =
       1500; // required time to be hold in the bar -> bar is successful if we hold the value for
   // min. 1,5 sec
+  private final long requiredHoldVolTimeMs = 500;
   private final long maxOutOfTargetGracePeriod =
       500; // if you leave the target area for a short time, you have 0,5 sec grace period. You can
   // still return within this time without the attempt being cancelled
@@ -92,6 +99,17 @@ public class VoiceZoneController {
   private boolean currentlyInTarget = false; // defines if you are already in the target area or not
   private boolean showGreen =
       false; // defines if the bar should be green (when you are in the target area) or not
+
+  private final double minDeltaFreq = 30.0; // Minimum required frequency difference between targets
+  private final double minDeltaVol = 13.0; // Minimum required volume difference between targets
+  private Double lastTargetValue = null; // Stores the last generated target value
+
+  private final int smoothingWindowSize =
+      3; // Number of recent dB measurements used to smooth the volume input via moving average
+  private final Deque<Double> recentDbValues =
+      new ArrayDeque<>(); // sliding window of recent dB values for smoothing volume input to reduce
+
+  // noise fluctuations during live voice analysis
 
   /** Initialies UI elements and bind canvas dimensions to window size. */
   @FXML
@@ -121,6 +139,15 @@ public class VoiceZoneController {
           generateNewTarget(); // first target value is generated and shown
           updateLevelInfo();
         });
+
+    UserProfile userProfile = ProfileManager.getCurrentProfile();
+    if (userProfile != null) {
+      usernameLabel.setText(userProfile.getUserName());
+      voiceProfileLabel.setText(userProfile.getVoiceProfile().toString());
+    } else {
+      usernameLabel.setText("Benutzer: (nicht eingeloggt)");
+      voiceProfileLabel.setText("Profil: (kein Profil)");
+    }
   }
 
   /**
@@ -201,6 +228,7 @@ public class VoiceZoneController {
               minDb,
               CoordinateSystemDrawer.PADDING_TOP,
               CoordinateSystemDrawer.PADDING_TOP + plotHeight);
+
       gc.fillRect(
           (width - thickness) / 2, Math.min(top, bottom), thickness, Math.abs(bottom - top));
     }
@@ -209,14 +237,25 @@ public class VoiceZoneController {
   /** Generates a new random target and updates canvas and labels. */
   private void generateNewTarget() {
     showGreen = false;
+    recentDbValues.clear();
 
-    if (trainingMode == VoiceZoneTrainingMode.FREQUENCY) {
-      targetValue = minFreq + Math.random() * (maxFreq - minFreq);
-    } else {
-      double maxTol = (maxDb - minDb) / 2.0;
-      double effTol = Math.min(currentTolerance, maxTol - 1);
-      targetValue = minDb + effTol + Math.random() * ((maxDb - minDb) - 2 * effTol);
-    }
+    double newTarget;
+    double minDelta =
+        (trainingMode == VoiceZoneTrainingMode.FREQUENCY) ? minDeltaFreq : minDeltaVol;
+
+    do {
+      if (trainingMode == VoiceZoneTrainingMode.FREQUENCY) {
+        newTarget = minFreq + Math.random() * (maxFreq - minFreq);
+      } else {
+        double maxTol = (maxDb - minDb) / 2.0;
+        double effTol = Math.min(currentTolerance, maxTol - 1);
+        newTarget = minDb + effTol + Math.random() * ((maxDb - minDb) - 2 * effTol);
+      }
+    } while (lastTargetValue != null && Math.abs(newTarget - lastTargetValue) < minDelta);
+
+    targetValue = newTarget;
+    lastTargetValue = newTarget;
+
     drawCoordinateSystemAndTargetBar();
     updateTargetInfo();
   }
@@ -253,25 +292,51 @@ public class VoiceZoneController {
 
           Platform.runLater(
               () -> {
+                long requiredHoldTime =
+                    (trainingMode == VoiceZoneTrainingMode.FREQUENCY)
+                        ? requiredHoldFregTimeMs
+                        : requiredHoldVolTimeMs;
+
                 if (isSilent) {
-                  // Stille -> zurücksetzen
+
                   showGreen = false;
                   currentlyInTarget = false;
                   hitStartTime = -1;
+                  outOfTargetSince = -1;
+
+                  if (trainingMode == VoiceZoneTrainingMode.VOLUME) {
+                    recentDbValues.clear(); // << HIER löschen wir die Glättung bei Stille
+                  }
+
                   drawCoordinateSystemAndTargetBar();
                   return;
                 }
-                // Platform.runLater(
-                // () -> {
-                double value = (trainingMode == VoiceZoneTrainingMode.FREQUENCY) ? pitch : db;
-                boolean isInTarget = Math.abs(value - targetValue) <= currentTolerance;
+
+                double value;
+
+                if (trainingMode == VoiceZoneTrainingMode.FREQUENCY) {
+                  value = pitch;
+                } else {
+                  // Wert zur Liste hinzufügen
+                  recentDbValues.addLast(db);
+                  if (recentDbValues.size() > smoothingWindowSize) {
+                    recentDbValues.removeFirst();
+                  }
+                  // Mittelwert berechnen
+                  value =
+                      recentDbValues.stream().mapToDouble(Double::doubleValue).average().orElse(db);
+
+                  if (recentDbValues.size() < smoothingWindowSize) {
+                    return; // noch nicht bewerten, weil Datenbasis zu gering
+                  }
+                }
+
+                boolean isInTarget = isInTargetRange(value, targetValue, currentTolerance);
                 long now = System.currentTimeMillis();
 
                 System.out.printf(
                     "|Modus: %s | Wert: %.2f | Ziel: %.2f | Bereich: [%.2f - %.2f] | Status: %s%n",
                     trainingMode,
-                    pitch,
-                    db,
                     value,
                     targetValue,
                     targetValue - currentTolerance,
@@ -279,9 +344,10 @@ public class VoiceZoneController {
                     isInTarget ? "IM ZIELBEREICH" : "daneben");
 
                 if (isInTarget) {
-                  showGreen = true;
-                  drawCoordinateSystemAndTargetBar();
-
+                  if (!showGreen || !currentlyInTarget) {
+                    showGreen = true;
+                    drawCoordinateSystemAndTargetBar();
+                  }
                   outOfTargetSince = -1;
                   if (!currentlyInTarget) {
                     if (now - lastSuccessTime < minDelayBetweenSuccesses) {
@@ -289,15 +355,35 @@ public class VoiceZoneController {
                     }
                     hitStartTime = now;
                     currentlyInTarget = true;
-                  } else if (now - hitStartTime >= requiredHoldTimeMs) {
+
+                  } else if (now - hitStartTime >= requiredHoldTime) {
                     successfulHitsInLevel++;
                     lastSuccessTime = now;
                     hitStartTime = -1;
                     currentlyInTarget = false;
                     showGreen = false;
 
+                    if (level == maxLevel && successfulHitsInLevel >= requiredHitsPerLevel) {
+                      recorder.setListener(null);
+
+                      Alert alert = new Alert(AlertType.INFORMATION);
+                      alert.setTitle("Training abgeschlossen");
+                      alert.setHeaderText("Super gemacht!");
+                      alert.setContentText("Du hast alle 5 Level erfolgreich abgeschlossen!");
+
+                      alert.showAndWait();
+
+                      resetTrainingProgress();
+                      generateNewTarget();
+                      updateTargetInfo();
+                      drawCoordinateSystemAndTargetBar();
+
+                      recorder.start();
+                      return;
+                    }
+
                     if (successfulHitsInLevel >= requiredHitsPerLevel && level < maxLevel) {
-                      currentTolerance *= 0.9;
+                      currentTolerance *= 0.8;
                       level++;
                       successfulHitsInLevel = 0;
                       updateLevelInfo();
@@ -312,8 +398,10 @@ public class VoiceZoneController {
                   } else if (now - outOfTargetSince > maxOutOfTargetGracePeriod) {
                     currentlyInTarget = false;
                     hitStartTime = -1;
-                    showGreen = false;
-                    drawCoordinateSystemAndTargetBar();
+                    if (showGreen) {
+                      showGreen = false;
+                      drawCoordinateSystemAndTargetBar();
+                    }
                   }
                 }
               });
@@ -327,6 +415,7 @@ public class VoiceZoneController {
   public void stopRecording() {
     recorder.setListener(null);
     recorder.stop();
+    recentDbValues.clear();
   }
 
   private void updateLevelInfo() {
@@ -366,11 +455,17 @@ public class VoiceZoneController {
     }
   }
 
-  private void resetTrainingProgress() {
+  /**
+   * Resets the current training progress to its initial state. Sets the level back to 1, resets hit
+   * counters and applies the starting tolerance based on the selected training mode (frequency or
+   * volume).
+   */
+  public void resetTrainingProgress() {
     level = 1;
     successfulHitsInLevel = 0;
     currentTolerance =
         (trainingMode == VoiceZoneTrainingMode.FREQUENCY) ? toleranceFreq : toleranceVol;
+    recentDbValues.clear();
     updateLevelInfo();
   }
 
@@ -384,14 +479,59 @@ public class VoiceZoneController {
    * @param outMax target max
    * @return mapped value
    */
-  private double map(double value, double inMin, double inMax, double outMin, double outMax) {
+  public double map(double value, double inMin, double inMax, double outMin, double outMax) {
     return (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
   }
 
+  /**
+   * Determines the color of the target bar based on the current level. Darker shades are used as
+   * the level increases.
+   *
+   * @return a grayscale color representing the current training level
+   */
   private javafx.scene.paint.Color getBarColor() {
     int cappedLevel = Math.min(level, maxLevel);
     double brightness = 0.8 - (cappedLevel - 1) * 0.2;
     brightness = Math.max(0, brightness);
     return javafx.scene.paint.Color.gray(brightness);
+  }
+
+  /**
+   * Checks whether a value is within a specified tolerance range of a target value.
+   *
+   * @param value the actual value to check
+   * @param target the target value
+   * @param tolerance the allowed deviation from the target
+   * @return true if value is within the target ± tolerance, false otherwise
+   */
+  public boolean isInTargetRange(double value, double target, double tolerance) {
+    return Math.abs(value - target) <= tolerance;
+  }
+
+  /**
+   * Returns the current level of the training session.
+   *
+   * @return the training level, starting from 1
+   */
+  public int getLevel() {
+    return level;
+  }
+
+  /**
+   * Sets the training mode (FREQUENCY or VOLUME) for the current session.
+   *
+   * @param mode the selected VoiceZoneTrainingMode
+   */
+  public void setTrainingMode(VoiceZoneTrainingMode mode) {
+    this.trainingMode = mode;
+  }
+
+  /**
+   * Returns the current tolerance used for evaluating target hits.
+   *
+   * @return the active tolerance in Hz or dB, depending on the mode
+   */
+  public double getCurrentTolerance() {
+    return currentTolerance;
   }
 }
