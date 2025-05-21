@@ -48,6 +48,8 @@ public class VoiceZoneController {
   @FXML private RadioButton volumeButton;
   @FXML private Label usernameLabel;
   @FXML private Label voiceProfileLabel;
+  @FXML private Label overlayMessageLabel;
+
 
   // Audio is recorded from the choosen microphone und in dB and Hz converted
   private final AudioInputService audioInputService = AudioInputService.getInstance();
@@ -128,7 +130,7 @@ public class VoiceZoneController {
               .bind(coordinateSystemCanvas.getScene().widthProperty().subtract(60));
           coordinateSystemCanvas
               .heightProperty()
-              .bind(coordinateSystemCanvas.getScene().heightProperty().subtract(300));
+              .bind(coordinateSystemCanvas.getScene().heightProperty().subtract(320));
           coordinateSystemCanvas
               .widthProperty()
               .addListener((obs, oldVal, newVal) -> drawCoordinateSystemAndTargetBar());
@@ -275,6 +277,23 @@ public class VoiceZoneController {
         });
   }
 
+  private void showOverlayMessage(String message, int durationMillis) {
+  Platform.runLater(() -> {
+    overlayMessageLabel.setText(message);
+    overlayMessageLabel.setVisible(true);
+  });
+
+  new Thread(() -> {
+    try {
+      Thread.sleep(durationMillis);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    Platform.runLater(() -> overlayMessageLabel.setVisible(false));
+  }).start();
+}
+
+
   /**
    * Starts real-time audio analysis and evaluation. Checks if the voice is in the target area, how
    * long is the voice in the target area, if the voice is min. 1,5 sec in the target area and if
@@ -382,7 +401,8 @@ public class VoiceZoneController {
                       return;
                     }
 
-                    if (successfulHitsInLevel >= requiredHitsPerLevel && level < maxLevel) {
+                    //Test
+                    /*if (successfulHitsInLevel >= requiredHitsPerLevel && level < maxLevel) {
                       currentTolerance *= 0.8;
                       level++;
                       successfulHitsInLevel = 0;
@@ -390,7 +410,34 @@ public class VoiceZoneController {
                     }
                     generateNewTarget();
                     updateTargetInfo();
-                    drawCoordinateSystemAndTargetBar();
+                    drawCoordinateSystemAndTargetBar();*/
+                    
+                  
+
+                    // Erfolg anzeigen, danach pausieren und dann neues Target anzeigen
+                    showOverlayMessage("Toll gemacht!", 2000);
+
+                    new Thread(() -> {
+                      try {
+                        Thread.sleep(2000); // 2 Sekunden warten
+                      } catch (InterruptedException e) {
+                        e.printStackTrace();
+                      }
+                      Platform.runLater(() -> {
+
+                        if (successfulHitsInLevel >= requiredHitsPerLevel && level < maxLevel) {
+                      currentTolerance *= 0.8;
+                      level++;
+                      successfulHitsInLevel = 0;
+                      updateLevelInfo();
+                    }
+
+                        generateNewTarget();
+                        updateTargetInfo();
+                        drawCoordinateSystemAndTargetBar();
+                      });
+                    }).start();
+
                   }
                 } else if (currentlyInTarget) {
                   if (outOfTargetSince == -1) {

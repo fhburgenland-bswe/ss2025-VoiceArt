@@ -37,7 +37,20 @@
 
     <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
 
-    <Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" />
+    <!--Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" /-->
+
+    <StackPane VBox.vgrow="ALWAYS">
+    <Canvas fx:id="coordinateSystemCanvas" />
+
+    <Label fx:id="overlayMessageLabel"
+           text=""
+           style="-fx-font-size: 22px; -fx-text-fill: green; -fx-font-weight: bold;"
+           visible="false"
+           StackPane.alignment="TOP_LEFT"
+           translateX="75"
+           translateY="20" />
+    </StackPane>
+
 
     <HBox spacing="10" alignment="CENTER">
         <Label text="Level:" />
