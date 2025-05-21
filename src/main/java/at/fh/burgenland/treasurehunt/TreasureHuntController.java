@@ -45,7 +45,6 @@ public class TreasureHuntController {
   @FXML private Label usernameLabel;
   @FXML private Label profileLabel;
 
-
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private int minFreq;
   private int maxFreq;
@@ -196,6 +195,7 @@ public class TreasureHuntController {
     Platform.runLater(
         () -> {
           // dynamic bounding, canvas grows with the full window
+
           baseCanvas.widthProperty().bind(baseCanvas.getScene().widthProperty().subtract(60));
           baseCanvas.heightProperty().bind(baseCanvas.getScene().heightProperty().subtract(250));
 

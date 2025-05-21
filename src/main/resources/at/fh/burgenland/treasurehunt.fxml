@@ -24,9 +24,9 @@
    </HBox>
 
 
-   <StackPane>
-      <Canvas fx:id="baseCanvas" />
-      <Canvas fx:id="overlapCanvas" />
+   <StackPane fx:id="stackPane" VBox.vgrow="ALWAYS">
+      <Canvas fx:id="baseCanvas" width="800" height="400"/>
+      <Canvas fx:id="overlapCanvas" width="800" height="400"/>
    </StackPane>
 
    <HBox spacing="20" alignment="CENTER">
