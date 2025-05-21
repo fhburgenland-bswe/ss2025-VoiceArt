@@ -419,7 +419,12 @@ public class VoiceZoneController {
   }
 
   private void updateLevelInfo() {
-    Platform.runLater(() -> levelLabel.setText("Nr. " + level));
+    Platform.runLater(
+        () -> {
+          if (levelLabel != null) {
+            levelLabel.setText("Nr. " + level);
+          }
+        });
   }
 
   /**
