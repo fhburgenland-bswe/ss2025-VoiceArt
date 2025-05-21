@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 [{"userName":"TestMännlich","voiceProfile":"MAENNLICH"},{"userName":"TestWeiblich","voiceProfile":"WEIBLICH"}]
+=======
+[{"userName":"ee","voiceProfile":"MAENNLICH"},{"userName":"tester","voiceProfile":"MAENNLICH"}]
+>>>>>>> main
