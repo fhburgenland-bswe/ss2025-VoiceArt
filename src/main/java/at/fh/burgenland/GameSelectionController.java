@@ -39,10 +39,12 @@ public class GameSelectionController {
     final String[] descriptions = {
       "Draw a line on the canvas using your voice pitch and volume.",
       "Redraw the line you just drew using your voice pitch and volume.",
-        "Find the Treasure using your voice."
+      "Find the Treasure using your voice."
     };
     final String[] fxmlTargets = {
-      "/at/fh/burgenland/landing.fxml", "/at/fh/burgenland/coordinate-system.fxml", "/at/fh/burgenland/treasurehunt.fxml"
+      "/at/fh/burgenland/landing.fxml",
+      "/at/fh/burgenland/coordinate-system.fxml",
+      "/at/fh/burgenland/treasurehunt.fxml"
     };
 
     for (int i = 0; i < games.length; i++) {

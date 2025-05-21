@@ -16,7 +16,7 @@
 
    <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
 
-   <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Toben Sie sich kreativ aus und lassen Sie Ihre Stimme zeichnen." />
+   <Label fx:id="textLabel" style="-fx-font-size: 14px;" text="Graben Sie mit Ihrer Stimme nach dem Schatz!" />
    <HBox>
       <Label fx:id="levelLabel" text="Level: 1"/>
       <Label fx:id="usernameLabel" text=" Benutzer: "/>
@@ -32,10 +32,9 @@
    <HBox spacing="20" alignment="CENTER">
       <Button fx:id="backButton" text="Spiel beenden" onAction="#switchToStartScene" />
       <Button fx:id="gameSelectionButton" text="Zur Spielauswahl" onAction="#switchToGameSelection" />
-      <Button fx:id="exportButton" text="Zeichnung exportieren" />
-      <Button text="Start Recording" onAction="#startRecording" />
+      <Button fx:id="startRecordingButton" text="Start Recording" onAction="#startRecording" />
       <Button text="Stop Recording" onAction="#stopRecording" />
-      <Button text="Restart Level" onAction="#resetTreasureHunt" />
+      <Button fx:id="resetButton" text="Restart Level" onAction="#resetTreasureHunt" />
    </HBox>
 
 </VBox>
