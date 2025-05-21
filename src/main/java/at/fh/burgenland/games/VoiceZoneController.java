@@ -50,7 +50,6 @@ public class VoiceZoneController {
   @FXML private Label voiceProfileLabel;
   @FXML private Label overlayMessageLabel;
 
-
   // Audio is recorded from the choosen microphone und in dB and Hz converted
   private final AudioInputService audioInputService = AudioInputService.getInstance();
   private final FrequenzDbOutput recorder =
@@ -277,22 +276,32 @@ public class VoiceZoneController {
         });
   }
 
+  /**
+   * Displays a temporary message over the coordinate system canvas for a specified duration. The
+   * message is shown using the {@code overlayMessageLabel} and automatically hidden after the given
+   * number of milliseconds.
+   *
+   * @param message the text to display
+   * @param durationMillis the duration in milliseconds the message should remain visible
+   */
   private void showOverlayMessage(String message, int durationMillis) {
-  Platform.runLater(() -> {
-    overlayMessageLabel.setText(message);
-    overlayMessageLabel.setVisible(true);
-  });
+    Platform.runLater(
+        () -> {
+          overlayMessageLabel.setText(message);
+          overlayMessageLabel.setVisible(true);
+        });
 
-  new Thread(() -> {
-    try {
-      Thread.sleep(durationMillis);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    Platform.runLater(() -> overlayMessageLabel.setVisible(false));
-  }).start();
-}
-
+    new Thread(
+            () -> {
+              try {
+                Thread.sleep(durationMillis);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+              Platform.runLater(() -> overlayMessageLabel.setVisible(false));
+            })
+        .start();
+  }
 
   /**
    * Starts real-time audio analysis and evaluation. Checks if the voice is in the target area, how
@@ -401,7 +410,7 @@ public class VoiceZoneController {
                       return;
                     }
 
-                    //Test
+                    // Test
                     /*if (successfulHitsInLevel >= requiredHitsPerLevel && level < maxLevel) {
                       currentTolerance *= 0.8;
                       level++;
@@ -411,33 +420,33 @@ public class VoiceZoneController {
                     generateNewTarget();
                     updateTargetInfo();
                     drawCoordinateSystemAndTargetBar();*/
-                    
-                  
 
                     // Erfolg anzeigen, danach pausieren und dann neues Target anzeigen
                     showOverlayMessage("Toll gemacht!", 2000);
 
-                    new Thread(() -> {
-                      try {
-                        Thread.sleep(2000); // 2 Sekunden warten
-                      } catch (InterruptedException e) {
-                        e.printStackTrace();
-                      }
-                      Platform.runLater(() -> {
+                    new Thread(
+                            () -> {
+                              try {
+                                Thread.sleep(2000); // 2 Sekunden warten
+                              } catch (InterruptedException e) {
+                                e.printStackTrace();
+                              }
+                              Platform.runLater(
+                                  () -> {
+                                    if (successfulHitsInLevel >= requiredHitsPerLevel
+                                        && level < maxLevel) {
+                                      currentTolerance *= 0.8;
+                                      level++;
+                                      successfulHitsInLevel = 0;
+                                      updateLevelInfo();
+                                    }
 
-                        if (successfulHitsInLevel >= requiredHitsPerLevel && level < maxLevel) {
-                      currentTolerance *= 0.8;
-                      level++;
-                      successfulHitsInLevel = 0;
-                      updateLevelInfo();
-                    }
-
-                        generateNewTarget();
-                        updateTargetInfo();
-                        drawCoordinateSystemAndTargetBar();
-                      });
-                    }).start();
-
+                                    generateNewTarget();
+                                    updateTargetInfo();
+                                    drawCoordinateSystemAndTargetBar();
+                                  });
+                            })
+                        .start();
                   }
                 } else if (currentlyInTarget) {
                   if (outOfTargetSince == -1) {
