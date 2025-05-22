@@ -22,7 +22,7 @@ module at.fh.burgenland {
       javafx.fxml;
   opens at.fh.burgenland.treasurehunt to
       javafx.fxml;
-  opens at.fh.burgenland.game.hitthepoints to
+  opens at.fh.burgenland.games.hitthepoints to
       javafx.fxml;
 
   exports at.fh.burgenland;

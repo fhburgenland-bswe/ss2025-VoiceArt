@@ -1,4 +1,4 @@
-package at.fh.burgenland.game.hitthepoints;
+package at.fh.burgenland.games.hitthepoints;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

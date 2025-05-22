@@ -1,4 +1,4 @@
-package at.fh.burgenland.game.hitthepoints;
+package at.fh.burgenland.games.hitthepoints;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.CoordinateSystemController;
