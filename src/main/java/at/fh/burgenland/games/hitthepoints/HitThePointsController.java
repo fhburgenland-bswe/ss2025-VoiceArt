@@ -176,9 +176,8 @@ public class HitThePointsController {
                 recordedPoints.clear();
                 score++;
                 updateScoreLabel();
-                spawnNewCircle();
-
                 drawResultCircle(true);
+                spawnNewCircle();
               }
             }
           });
