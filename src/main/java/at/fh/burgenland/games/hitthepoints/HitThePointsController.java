@@ -325,6 +325,7 @@ public class HitThePointsController {
    */
   public void skipPoint(ActionEvent event) {
     drawResultCircle(false);
+    recordedPoints.clear();
     spawnNewCircle();
   }
 
