@@ -31,11 +31,11 @@
                   </Label>
             </HBox>
             <HBox alignment="TOP_CENTER">
-               <Label fx:id="usernameLabel" text=" Benutzer: ">
+               <Label fx:id="usernameLabel" text="Benutzer: ">
                   <padding>
                      <Insets right="20.0" />
                   </padding></Label>
-               <Label fx:id="profileLabel" text=" Stimmprofil: " />
+               <Label fx:id="profileLabel" text="Stimmprofil: " />
                <padding>
                   <Insets top="30.0" />
                </padding>
@@ -48,7 +48,7 @@
       <center>
 
          <StackPane fx:id="stackPane" BorderPane.alignment="CENTER">
-            <Canvas fx:id="gameCanvas" height="400" onMouseClicked="#handleCanvasClick" width="800" />
+            <Canvas fx:id="gameCanvas" height="400" width="800" />
             <Canvas fx:id="resultCanvas" height="400" visible="false" width="800" />
 
          </StackPane>
@@ -61,7 +61,7 @@
             <Button fx:id="gameSelectionButton" onAction="#switchToGameSelection" text="Zur Spielauswahl" />
             <Button onAction="#switchToResultScreen" text="Spiel beenden" />
             <Button fx:id="startRecordingButton" onAction="#startRecording" text="Start Recording" />
-            <Button onAction="#stopRecording" text="Stop Recording" />
+            <Button fx:id="stopRecording" onAction="#stopRecording" text="Stop Recording" />
          </HBox>
       </bottom></BorderPane>
 

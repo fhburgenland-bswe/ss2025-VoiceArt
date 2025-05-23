@@ -252,10 +252,10 @@ public class HitThePointsController {
      */
     public void setUserInfo(String username, String profileName) {
         if (usernameLabel != null) {
-            usernameLabel.setText("  Benutzer: " + username);
+            usernameLabel.setText("Benutzer: " + username);
         }
         if (profileLabel != null) {
-            profileLabel.setText("  Stimmprofil: " + profileName);
+            profileLabel.setText("Stimmprofil: " + profileName);
         }
     }
 
@@ -273,24 +273,6 @@ public class HitThePointsController {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(resultRoot));
         stage.show();
-    }
-
-    @FXML
-    private void handleCanvasClick(MouseEvent event) {
-        double clickX = event.getX();
-        double clickY = event.getY();
-
-        double dx = clickX - circleX;
-        double dy = clickY - circleY;
-        double distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance <= INITIAL_CIRCLE_RADIUS) {
-            score++;
-            updateScoreLabel();
-            spawnNewCircle();
-
-            drawResultCircle(true);
-        }
     }
 
     private void spawnNewCircle() {
