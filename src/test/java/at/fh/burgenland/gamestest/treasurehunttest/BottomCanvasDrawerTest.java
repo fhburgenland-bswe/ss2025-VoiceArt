@@ -1,4 +1,4 @@
-package at.fh.burgenland.treasurehunttest;
+package at.fh.burgenland.gamestest.treasurehunttest;
 
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.contains;
@@ -7,16 +7,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import at.fh.burgenland.treasurehunt.BottomCanvasDrawer;
+import at.fh.burgenland.games.treasurehunt.BottomCanvasDrawer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit tests for the {@link at.fh.burgenland.treasurehunt.BottomCanvasDrawer} utility class.
- * Verifies that the drawing methods interact correctly with the {@link GraphicsContext} by checking
- * calls to drawing operations such as fillRect, fillText, strokeLine, and strokeOval.
+ * Unit tests for the {@link BottomCanvasDrawer} utility class. Verifies that the drawing methods
+ * interact correctly with the {@link GraphicsContext} by checking calls to drawing operations such
+ * as fillRect, fillText, strokeLine, and strokeOval.
  */
 public class BottomCanvasDrawerTest {
 

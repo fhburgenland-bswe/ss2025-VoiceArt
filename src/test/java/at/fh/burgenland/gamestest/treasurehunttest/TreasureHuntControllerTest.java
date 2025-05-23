@@ -1,7 +1,8 @@
-package at.fh.burgenland.treasurehunttest;
+package at.fh.burgenland.gamestest.treasurehunttest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import at.fh.burgenland.games.treasurehunt.TreasureHuntController;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,10 +17,9 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 /**
- * Unit tests for the {@link at.fh.burgenland.treasurehunt.TreasureHuntController} class. Verifies
- * that the UI elements in the treasure hunt view are initialized correctly and that button actions
- * (such as reset) update the UI as expected. Uses TestFX to interact with and assert the state of
- * JavaFX components.
+ * Unit tests for the {@link TreasureHuntController} class. Verifies that the UI elements in the
+ * treasure hunt view are initialized correctly and that button actions (such as reset) update the
+ * UI as expected. Uses TestFX to interact with and assert the state of JavaFX components.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TreasureHuntControllerTest {
