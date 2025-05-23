@@ -1,8 +1,7 @@
-package at.fh.burgenland.gamestest.treasurehunttest;
+package at.fh.burgenland.games.treasurehunt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import at.fh.burgenland.games.treasurehunt.TreasureHuntController;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

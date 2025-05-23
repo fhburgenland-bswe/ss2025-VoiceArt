@@ -1,4 +1,4 @@
-package at.fh.burgenland.gamestest.hitthepointstest;
+package at.fh.burgenland.games.hitthepoints;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

@@ -1,4 +1,4 @@
-package at.fh.burgenland.gamestest.treasurehunttest;
+package at.fh.burgenland.games.treasurehunt;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
@@ -8,7 +8,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import at.fh.burgenland.games.treasurehunt.LiveDigger;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import org.junit.jupiter.api.BeforeEach;

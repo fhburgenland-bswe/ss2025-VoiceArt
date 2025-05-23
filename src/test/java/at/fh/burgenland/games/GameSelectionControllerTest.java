@@ -1,4 +1,4 @@
-package at.fh.burgenland.gamestest;
+package at.fh.burgenland.games;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

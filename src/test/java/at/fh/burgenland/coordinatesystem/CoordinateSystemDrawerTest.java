@@ -1,9 +1,8 @@
-package at.fh.burgenland.coordinatesystemtest;
+package at.fh.burgenland.coordinatesystem;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import javafx.scene.canvas.Canvas;
 import org.junit.jupiter.api.Test;
 
