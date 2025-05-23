@@ -68,15 +68,12 @@ public class GameSelectionControllerTest {
         "#weclomeText", LabeledMatchers.hasText("Willkommen TestUser, wählen Sie ein Spiel aus:"));
   }
 
-  // Müssen wir überarbeiten
-
-  /*
   @Test
   void twoGameCardsAreLoaded(FxRobot robot) {
     FlowPane container = robot.lookup("#cardContainer").queryAs(FlowPane.class);
-    assertEquals(2, container.getChildren().size(), "There should be 2 game cards loaded.");
+    assertEquals(4, container.getChildren().size(), "There should be 2 game cards loaded.");
   }
-  */
+
   @Test
   void backButtonExistsAndIsClickable(FxRobot robot) {
     verifyThat("#backButton", NodeMatchers.isVisible());
@@ -96,6 +93,15 @@ public class GameSelectionControllerTest {
 
     VBox secondCard = (VBox) container.getChildren().get(1);
     Label secondTitle = (Label) secondCard.lookup("#titleLabel");
-    assertEquals("Redraw Game", secondTitle.getText(), "Second card should be 'Redraw Game'");
+    assertEquals(
+        "Hit the Points!", secondTitle.getText(), "Second card should be 'Hit the Points!'");
+
+    VBox thirdCard = (VBox) container.getChildren().get(2);
+    Label thirdTitle = (Label) thirdCard.lookup("#titleLabel");
+    assertEquals("VoiceZone", thirdTitle.getText(), "Third card should be 'VoiceZone'");
+
+    VBox fourthCard = (VBox) container.getChildren().get(3);
+    Label fourthTitle = (Label) fourthCard.lookup("#titleLabel");
+    assertEquals("Treasure Hunt", fourthTitle.getText(), "Fourth card should be 'Treasure Hunt'");
   }
 }
