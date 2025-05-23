@@ -68,6 +68,8 @@ public class GameSelectionControllerTest {
         "#weclomeText", LabeledMatchers.hasText("Willkommen TestUser, wählen Sie ein Spiel aus:"));
   }
 
+  // Müssen wir überarbeiten
+
   /*
   @Test
   void twoGameCardsAreLoaded(FxRobot robot) {
@@ -75,7 +77,6 @@ public class GameSelectionControllerTest {
     assertEquals(2, container.getChildren().size(), "There should be 2 game cards loaded.");
   }
   */
-
   @Test
   void backButtonExistsAndIsClickable(FxRobot robot) {
     verifyThat("#backButton", NodeMatchers.isVisible());

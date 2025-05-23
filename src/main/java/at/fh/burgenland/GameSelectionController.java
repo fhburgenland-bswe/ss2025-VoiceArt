@@ -35,15 +35,17 @@ public class GameSelectionController {
             + ProfileManager.getCurrentProfile().getUserName()
             + ", wählen Sie ein Spiel aus:");
 
-    final String[] games = {"Draw Game", "Hit the Points!", "Treasure Hunt"};
+    final String[] games = {"Draw Game", "Hit the Points!", "VoiceZone", "Treasure Hunt"};
     final String[] descriptions = {
       "Draw a line on the canvas using your voice pitch and volume.",
       "In this game you have to hit the points with the frequency and db",
+      "Hold your Voice in the given box.",
       "Find the Treasure using your voice."
     };
     final String[] fxmlTargets = {
-      "/at/fh/burgenland/landing.fxml",
+      "/at/fh/burgenland/coordinate-system.fxml",
       "/at/fh/burgenland/hitpoints.fxml",
+      "/at/fh/burgenland/voicezone.fxml",
       "/at/fh/burgenland/treasurehunt.fxml"
     };
 

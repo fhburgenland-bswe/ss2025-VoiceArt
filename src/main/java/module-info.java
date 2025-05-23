@@ -6,6 +6,7 @@ module at.fh.burgenland {
   requires TarsosDSP.jvm;
   requires com.fasterxml.jackson.databind;
   requires static lombok;
+  requires javafx.graphics;
 
   opens at.fh.burgenland to
       javafx.fxml;
@@ -19,6 +20,8 @@ module at.fh.burgenland {
       javafx.fxml,
       com.fasterxml.jackson.databind;
   opens at.fh.burgenland.card to
+      javafx.fxml;
+  opens at.fh.burgenland.games to
       javafx.fxml;
   opens at.fh.burgenland.treasurehunt to
       javafx.fxml;
