@@ -68,7 +68,6 @@ public class GameSelectionControllerTest {
         "#weclomeText", LabeledMatchers.hasText("Willkommen TestUser, wählen Sie ein Spiel aus:"));
   }
 
-
   @Test
   void twoGameCardsAreLoaded(FxRobot robot) {
     FlowPane container = robot.lookup("#cardContainer").queryAs(FlowPane.class);
@@ -94,7 +93,8 @@ public class GameSelectionControllerTest {
 
     VBox secondCard = (VBox) container.getChildren().get(1);
     Label secondTitle = (Label) secondCard.lookup("#titleLabel");
-    assertEquals("Hit the Points!", secondTitle.getText(), "Second card should be 'Hit the Points!'");
+    assertEquals(
+        "Hit the Points!", secondTitle.getText(), "Second card should be 'Hit the Points!'");
 
     VBox thirdCard = (VBox) container.getChildren().get(2);
     Label thirdTitle = (Label) thirdCard.lookup("#titleLabel");

@@ -1,8 +1,15 @@
 package at.fh.burgenland.games.hitthepoints;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.testfx.api.FxAssert.verifyThat;
+
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
+import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -18,25 +25,26 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.testfx.api.FxAssert.verifyThat;
-
+/** Test class for the HitThePointsResultController. */
 @ExtendWith(ApplicationExtension.class)
 public class HitThePointsResultControllerTest {
 
   private FxRobot robot;
 
+  /**
+   * Initializes the JavaFX application for testing. It loads the hitpoints_result.fxml and creates
+   * a dummyUser.
+   *
+   * @param stage the primary stage for this application
+   * @throws IOException if the FXML file cannot be loaded
+   */
   @Start
   public void start(Stage stage) throws IOException {
     UserProfile dummyProfile = new UserProfile("TestUser", VoiceProfile.MAENNLICH);
     ProfileManager.setCurrentProfile(dummyProfile);
 
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/fh/burgenland/hitpoints_result.fxml"));
+    FXMLLoader loader =
+        new FXMLLoader(getClass().getResource("/at/fh/burgenland/hitpoints_result.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));
     stage.show();
@@ -47,7 +55,6 @@ public class HitThePointsResultControllerTest {
     this.robot = robot;
   }
 
-
   @Test
   public void testCanvasInitialization() {
     Canvas canvas = robot.lookup("#resultCanvas").queryAs(Canvas.class);
@@ -55,7 +62,7 @@ public class HitThePointsResultControllerTest {
   }
 
   @Test
-  void scoreLabelTest(){
+  void scoreLabelTest() {
     Label scoreLabel = robot.lookup("#scoreLabel").queryAs(Label.class);
     assertEquals("Your Score: 0", scoreLabel.getText(), "Der Score-Label sollte 'Score: 0' sein.");
   }
