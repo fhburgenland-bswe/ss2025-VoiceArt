@@ -1,13 +1,9 @@
-package at.fh.burgenland.profilestest;
+package at.fh.burgenland.profiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import at.fh.burgenland.profiles.ProfileManager;
-import at.fh.burgenland.profiles.UserProfile;
-import at.fh.burgenland.profiles.UserProfileList;
-import at.fh.burgenland.profiles.VoiceProfile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

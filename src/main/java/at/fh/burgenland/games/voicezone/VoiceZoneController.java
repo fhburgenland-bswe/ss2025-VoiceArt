@@ -1,4 +1,4 @@
-package at.fh.burgenland.games;
+package at.fh.burgenland.games.voicezone;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;

@@ -1,8 +1,9 @@
-package at.fh.burgenland;
+package at.fh.burgenland.games;
 
 import at.fh.burgenland.card.CardController;
 import at.fh.burgenland.profiles.ProfileManager;
 import java.io.IOException;
+import java.net.URL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,7 +52,12 @@ public class GameSelectionController {
 
     for (int i = 0; i < games.length; i++) {
       try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("card.fxml"));
+        // FXMLLoader loader = new FXMLLoader(getClass().getResource("at/fh/burgenland/card.fxml"));
+        // final Parent card = loader.load();
+
+        // Korrekter Ansatz
+        URL location = getClass().getResource("/at/fh/burgenland/card.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
         final Parent card = loader.load();
 
         CardController controller = loader.getController();
@@ -74,7 +80,7 @@ public class GameSelectionController {
    */
   public void handleBackButton(ActionEvent event) {
     try {
-      root = FXMLLoader.load(getClass().getResource("landing.fxml"));
+      root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

@@ -1,4 +1,4 @@
-package at.fh.burgenland.treasurehunttest;
+package at.fh.burgenland.games.treasurehunt;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
@@ -8,17 +8,16 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import at.fh.burgenland.treasurehunt.LiveDigger;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit tests for the {@link at.fh.burgenland.treasurehunt.LiveDigger} class. Verifies that the
- * {@code digLiveLine} method interacts correctly with the {@link GraphicsContext} by performing
- * drawing operations such as {@code clearRect}, {@code setFill}, and {@code fillOval} for valid
- * input, and does nothing for out-of-range input.
+ * Unit tests for the {@link LiveDigger} class. Verifies that the {@code digLiveLine} method
+ * interacts correctly with the {@link GraphicsContext} by performing drawing operations such as
+ * {@code clearRect}, {@code setFill}, and {@code fillOval} for valid input, and does nothing for
+ * out-of-range input.
  */
 public class LiveDiggerTest {
 

@@ -1,11 +1,9 @@
-package at.fh.burgenland.gamestest.voicezonetest;
+package at.fh.burgenland.games.voicezone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import at.fh.burgenland.games.VoiceZoneController;
-import at.fh.burgenland.games.VoiceZoneTrainingMode;
 import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

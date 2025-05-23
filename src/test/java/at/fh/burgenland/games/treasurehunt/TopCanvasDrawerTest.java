@@ -1,4 +1,4 @@
-package at.fh.burgenland.treasurehunttest;
+package at.fh.burgenland.games.treasurehunt;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
@@ -7,17 +7,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import at.fh.burgenland.treasurehunt.TopCanvasDrawer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit tests for the {@link at.fh.burgenland.treasurehunt.TopCanvasDrawer} class. Verifies that the
- * {@code drawAxes} method interacts correctly with the {@link GraphicsContext} by performing
- * drawing operations such as {@code setStroke}, {@code strokeLine}, {@code setFill}, {@code
- * fillText}, and {@code fillRect}.
+ * Unit tests for the {@link TopCanvasDrawer} class. Verifies that the {@code drawAxes} method
+ * interacts correctly with the {@link GraphicsContext} by performing drawing operations such as
+ * {@code setStroke}, {@code strokeLine}, {@code setFill}, {@code fillText}, and {@code fillRect}.
  */
 public class TopCanvasDrawerTest {
   private Canvas canvas;

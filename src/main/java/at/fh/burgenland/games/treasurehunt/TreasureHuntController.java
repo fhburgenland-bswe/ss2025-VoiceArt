@@ -1,4 +1,4 @@
-package at.fh.burgenland.treasurehunt;
+package at.fh.burgenland.games.treasurehunt;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.ExponentialSmoother;

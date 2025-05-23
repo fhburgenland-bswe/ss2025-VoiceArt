@@ -1,4 +1,4 @@
-package at.fh.burgenland;
+package at.fh.burgenland.games;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -45,7 +45,8 @@ public class GameSelectionControllerTest {
   public void start(Stage stage) throws IOException {
     UserProfile dummyProfile = new UserProfile("TestUser", VoiceProfile.MAENNLICH);
     ProfileManager.setCurrentProfile(dummyProfile);
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("game_selection.fxml"));
+    FXMLLoader loader =
+        new FXMLLoader(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));
     stage.show();

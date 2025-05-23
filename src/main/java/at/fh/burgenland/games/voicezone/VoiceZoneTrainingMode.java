@@ -1,4 +1,4 @@
-package at.fh.burgenland.games;
+package at.fh.burgenland.games.voicezone;
 
 /**
  * Enum representing the two training modes available in the VoiceZone game. FREQUENCY: trains the

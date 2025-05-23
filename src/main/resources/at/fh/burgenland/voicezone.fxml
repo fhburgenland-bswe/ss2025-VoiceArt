@@ -5,7 +5,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="at.fh.burgenland.games.VoiceZoneController"
+      fx:controller="at.fh.burgenland.games.voicezone.VoiceZoneController"
       prefHeight="700" prefWidth="820"
       alignment="CENTER" spacing="20" style="-fx-padding: 10 30 30 30;">
 

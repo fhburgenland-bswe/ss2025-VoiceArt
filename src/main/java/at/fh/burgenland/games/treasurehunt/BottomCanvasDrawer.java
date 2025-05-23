@@ -1,4 +1,4 @@
-package at.fh.burgenland.treasurehunt;
+package at.fh.burgenland.games.treasurehunt;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
