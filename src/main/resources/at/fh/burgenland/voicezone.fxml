@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="at.fh.burgenland.games.voicezone.VoiceZoneController"
+      prefHeight="700" prefWidth="820"
+      alignment="CENTER" spacing="20" style="-fx-padding: 10 30 30 30;">
+
+     <HBox alignment="TOP_LEFT">
+        <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceArt" textFill="#1d3e9a">
+        </Label>
+    </HBox>
+    
+    <Label fx:id="titleLabel" text="VoiceZone – Stimmbereichstraining" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <!--Label fx:id="textLabel" text="Halte deine Stimme im Zielbereich." /-->
+
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Trainingsmodus:" />
+        <RadioButton fx:id="freqButton"
+                    text="Frequenz"
+                    onAction="#setFrequencyMode"
+                    selected="true"/>
+        <RadioButton fx:id="volumeButton"
+                    text="Lautstärke"
+                    onAction="#setVolumeMode"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Benutzer:" />
+        <Label fx:id="usernameLabel" />
+        <Label text="Stimmprofil:" />
+        <Label fx:id="voiceProfileLabel" />
+    </HBox>
+
+    <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
+
+    <!--Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" /-->
+
+    <StackPane VBox.vgrow="ALWAYS">
+    <Canvas fx:id="coordinateSystemCanvas" />
+
+    <Label fx:id="overlayMessageLabel"
+           text=""
+           style="-fx-font-size: 22px; -fx-text-fill: green; -fx-font-weight: bold;"
+           visible="false"
+           StackPane.alignment="TOP_LEFT"
+           translateX="75"
+           translateY="20" />
+    </StackPane>
+
+
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Level:" />
+        <Label fx:id="levelLabel" />
+        <Label text="Zielwert:" />
+        <Label fx:id="targetLabel" />
+        <Label text="Toleranz:" />
+        <Label fx:id="toleranceLabel" />
+    </HBox>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button fx:id="backButton" text="Zurück" onAction="#switchToGameSelectionScene" />
+        <Button fx:id="exportButton" text="Zeichnung exportieren" />
+        <Button text="Start" onAction="#startRecording" />
+        <Button text="Stop" onAction="#stopRecording" />
+    </HBox>
+
+</VBox>
+
+

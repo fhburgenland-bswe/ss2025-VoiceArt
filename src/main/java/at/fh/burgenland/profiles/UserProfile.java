@@ -1,6 +1,7 @@
 package at.fh.burgenland.profiles;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@Getter
 public class UserProfile {
 
   // neccessary fields

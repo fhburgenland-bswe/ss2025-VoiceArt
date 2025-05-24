@@ -1,8 +1,7 @@
-package at.fh.burgenland.profilestest;
+package at.fh.burgenland.profiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import at.fh.burgenland.profiles.VoiceProfile;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -15,19 +14,19 @@ public class VoiceProfileTest {
   @Test
   public void testMaleProfileRanges() {
     VoiceProfile male = VoiceProfile.MAENNLICH;
-    assertEquals(85, male.getMinFreq());
-    assertEquals(180, male.getMaxFreq());
+    assertEquals(80, male.getMinFreq());
+    assertEquals(530, male.getMaxFreq());
     assertEquals(-50, male.getMinDb());
-    assertEquals(0, male.getMaxDb());
+    assertEquals(-5, male.getMaxDb());
   }
 
   /** Tests that the female profile has the expected frequency and dB range. */
   @Test
   public void testFemaleProfileRanges() {
     VoiceProfile female = VoiceProfile.WEIBLICH;
-    assertEquals(165, female.getMinFreq());
-    assertEquals(255, female.getMaxFreq());
+    assertEquals(150, female.getMinFreq());
+    assertEquals(1050, female.getMaxFreq());
     assertEquals(-45, female.getMinDb());
-    assertEquals(0, female.getMaxDb());
+    assertEquals(-5, female.getMaxDb());
   }
 }

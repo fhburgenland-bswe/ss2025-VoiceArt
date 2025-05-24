@@ -26,6 +26,7 @@ public class FrequenzDbOutput {
 
   private AudioDispatcher dispatcher;
   private Thread audioThread;
+  private TargetDataLine targetDataLine;
 
   private final int sampleRate;
   private final int bufferSize;
@@ -228,6 +229,12 @@ public class FrequenzDbOutput {
     }
     audioThread.interrupt();
     running = false;
+
+    if (targetDataLine != null) {
+      targetDataLine.stop();
+      targetDataLine.close();
+      targetDataLine = null;
+    }
   }
 
   /**
@@ -253,7 +260,7 @@ public class FrequenzDbOutput {
     }
   }
 
-  private static AudioDispatcher fromMixer(Mixer mixer, int sampleRate, int bufferSize, int overlap)
+  private AudioDispatcher fromMixer(Mixer mixer, int sampleRate, int bufferSize, int overlap)
       throws LineUnavailableException {
     if (mixer == null) {
       return AudioDispatcherFactory.fromDefaultMicrophone(sampleRate, bufferSize, overlap);
@@ -268,6 +275,8 @@ public class FrequenzDbOutput {
     TargetDataLine line = (TargetDataLine) mixer.getLine(dataLineInfo);
     line.open(format, bufferSize);
     line.start();
+
+    this.targetDataLine = line;
 
     AudioInputStream stream = new AudioInputStream(line);
     return new AudioDispatcher(new JVMAudioInputStream(stream), bufferSize, overlap);

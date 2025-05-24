@@ -1,8 +1,9 @@
-package at.fh.burgenland;
+package at.fh.burgenland.games;
 
 import at.fh.burgenland.card.CardController;
 import at.fh.burgenland.profiles.ProfileManager;
 import java.io.IOException;
+import java.net.URL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,18 +36,28 @@ public class GameSelectionController {
             + ProfileManager.getCurrentProfile().getUserName()
             + ", wählen Sie ein Spiel aus:");
 
-    final String[] games = {"Draw Game", "Redraw Game"};
+    final String[] games = {"Draw Game", "Hit the Points!", "VoiceZone", "Treasure Hunt"};
     final String[] descriptions = {
       "Draw a line on the canvas using your voice pitch and volume.",
-      "Redraw the line you just drew using your voice pitch and volume."
+      "In this game you have to hit the points with the frequency and db",
+      "Hold your Voice in the given box.",
+      "Find the Treasure using your voice."
     };
     final String[] fxmlTargets = {
-      "/at/fh/burgenland/landing.fxml", "/at/fh/burgenland/coordinate-system.fxml"
+      "/at/fh/burgenland/coordinate-system.fxml",
+      "/at/fh/burgenland/hitpoints.fxml",
+      "/at/fh/burgenland/voicezone.fxml",
+      "/at/fh/burgenland/treasurehunt.fxml"
     };
 
     for (int i = 0; i < games.length; i++) {
       try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("card.fxml"));
+        // FXMLLoader loader = new FXMLLoader(getClass().getResource("at/fh/burgenland/card.fxml"));
+        // final Parent card = loader.load();
+
+        // Korrekter Ansatz
+        URL location = getClass().getResource("/at/fh/burgenland/card.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
         final Parent card = loader.load();
 
         CardController controller = loader.getController();
@@ -69,7 +80,7 @@ public class GameSelectionController {
    */
   public void handleBackButton(ActionEvent event) {
     try {
-      root = FXMLLoader.load(getClass().getResource("landing.fxml"));
+      root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

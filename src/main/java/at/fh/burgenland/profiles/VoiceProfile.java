@@ -8,8 +8,8 @@ package at.fh.burgenland.profiles;
 public enum VoiceProfile {
 
   /** Definition of two voice profiles based on typical voice frequence ranges for men and women. */
-  MAENNLICH(85, 180, -50, 0),
-  WEIBLICH(165, 255, -45, 0);
+  MAENNLICH(80, 530, -50, -5),
+  WEIBLICH(150, 1050, -45, -5); // Normal -45, -5 - NUR FÜR TEST ABGEÄNDERT
 
   // neccessary fields for every voice profile
   private final int minFreq;

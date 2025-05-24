@@ -1,4 +1,4 @@
-package at.fh.burgenland.coordinatesystemtest;
+package at.fh.burgenland.coordinatesystem;
 
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.mock;
@@ -7,7 +7,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import at.fh.burgenland.coordinatesystem.LiveDrawer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import org.junit.jupiter.api.BeforeEach;
