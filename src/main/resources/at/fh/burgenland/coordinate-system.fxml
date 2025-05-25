@@ -21,10 +21,10 @@
     <Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" />
 
     <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="backButton" text="Zurück" onAction="#switchToStartScene" />
-        <Button fx:id="exportButton" text="Zeichnung exportieren" />
-        <Button text="Start Recording" onAction="#startRecording" />
-        <Button text="Stop Recording" onAction="#stopRecording" />  
+        <Button fx:id="backButton" text="Zurück" onAction="#switchToStartScene" styleClass="btn, btn-default"/>
+        <Button fx:id="exportButton" text="Zeichnung exportieren" styleClass="btn, btn-default"/>
+        <Button text="Start Recording" onAction="#startRecording" styleClass="btn, btn-primary"/>
+        <Button text="Stop Recording" onAction="#stopRecording" styleClass="btn, btn-danger"/>
     </HBox>
 
 </VBox>

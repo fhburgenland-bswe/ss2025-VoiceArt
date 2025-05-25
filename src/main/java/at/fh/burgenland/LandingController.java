@@ -1,6 +1,8 @@
 package at.fh.burgenland;
 
 import java.io.IOException;
+
+import at.fh.burgenland.utils.SceneUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,12 +47,8 @@ public class LandingController {
    * @param event The {@link ActionEvent} that triggered the switch (e.g., a button click).
    * @throws IOException If the "hello.fxml" file cannot be loaded.
    */
-  public void switchToDebug(ActionEvent event) throws IOException {
-    root = FXMLLoader.load(getClass().getResource("hello.fxml"));
-    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+  public void switchToDebug(ActionEvent event) {
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/hello.fxml");
   }
 
   /**
@@ -59,11 +57,7 @@ public class LandingController {
    *
    * @param event The {@link ActionEvent} that triggers the method (button click)
    */
-  public void showCoordinateSystem(ActionEvent event) throws IOException {
-    root = FXMLLoader.load(getClass().getResource("coordinate-system.fxml"));
-    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+  public void showCoordinateSystem(ActionEvent event) {
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/coordinate-system.fxml");
   }
 }

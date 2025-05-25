@@ -40,7 +40,7 @@ public class HelloApplication extends Application {
    */
   public static void main(String[] args) {
     try {
-      ProfileManager.loadProfilesFromJson("profiles.json");
+      ProfileManager.loadProfilesFromJson("./profiles.json");
       System.out.println("Profiles loaded: " + ProfileManager.getUserProfiles().size());
     } catch (IOException e) {
       System.err.println("Failed to load profiles: " + e.getMessage());

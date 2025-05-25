@@ -3,6 +3,8 @@ package at.fh.burgenland;
 import at.fh.burgenland.card.CardController;
 import at.fh.burgenland.profiles.ProfileManager;
 import java.io.IOException;
+
+import at.fh.burgenland.utils.SceneUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -67,15 +69,7 @@ public class GameSelectionController {
    *
    * @param event The ActionEvent triggered by clicking the back button
    */
-  public void handleBackButton(ActionEvent event) {
-    try {
-      root = FXMLLoader.load(getClass().getResource("landing.fxml"));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+  public void handleBackButton(ActionEvent event) throws IOException {
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/landing.fxml");
   }
 }

@@ -9,8 +9,6 @@ module at.fh.burgenland {
   requires com.fasterxml.jackson.databind;
   requires static lombok;
 
-  opens at.fh.burgenland to
-      javafx.fxml;
   opens at.fh.burgenland.audioinput to
       javafx.fxml;
   opens at.fh.burgenland.fft to
@@ -24,4 +22,6 @@ module at.fh.burgenland {
       javafx.fxml;
 
   exports at.fh.burgenland;
+  opens at.fh.burgenland to com.fasterxml.jackson.databind, javafx.fxml;
+  exports at.fh.burgenland.profiles;
 }

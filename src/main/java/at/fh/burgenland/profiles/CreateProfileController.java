@@ -1,6 +1,8 @@
 package at.fh.burgenland.profiles;
 
 import java.io.IOException;
+
+import at.fh.burgenland.utils.SceneUtil;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
 /** Controller for Profile Creation Page. */
 public class CreateProfileController {
@@ -102,13 +105,7 @@ public class CreateProfileController {
 
   @FXML
   protected void backtoLanding(ActionEvent event) throws IOException {
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
-
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-
-    stage.setScene(scene);
-    stage.show();
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/landing.fxml");
   }
 
   @FXML
@@ -139,11 +136,7 @@ public class CreateProfileController {
             + ", Stimmprofil: "
             + userProfile.getVoiceProfile());
 
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
   }
 
   private void saveUser(UserProfile userProfile) {

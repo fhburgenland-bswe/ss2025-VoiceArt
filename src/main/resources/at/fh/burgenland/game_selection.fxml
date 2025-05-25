@@ -22,7 +22,7 @@
    </center>
    <bottom>
       <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 20 20 20 20;" BorderPane.alignment="CENTER">
-         <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Zurück zum Hauptmenü" />
+         <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Zurück zum Hauptmenü" styleClass="btn, btn-secondary"/>
       </HBox>
    </bottom>
 </BorderPane>

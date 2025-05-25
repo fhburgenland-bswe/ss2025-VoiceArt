@@ -1,6 +1,8 @@
 package at.fh.burgenland.profiles;
 
 import java.io.IOException;
+
+import at.fh.burgenland.utils.SceneUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,30 +33,14 @@ public class ProfileController {
           System.out.println("Selected item: " + profiles.getSelectionModel().getSelectedItem());
           ProfileManager.setCurrentProfile(
               (UserProfile) profiles.getSelectionModel().getSelectedItem());
-          switchPage("/at/fh/burgenland/game_selection.fxml");
+          SceneUtil.changeScene((Stage) profiles.getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
         });
   }
 
   @FXML
-  protected void showProfileCreationScreen(ActionEvent event) throws IOException {
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/create_profile.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-
-    stage.setScene(scene);
-    stage.show();
+  protected void showProfileCreationScreen(ActionEvent event) {
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/create_profile.fxml");
   }
 
-  protected void switchPage(String path) {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-    Parent nextPage = null;
-    try {
-      nextPage = loader.load();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
 
-    Stage stage = (Stage) profiles.getScene().getWindow();
-    stage.setScene(new Scene(nextPage));
-  }
 }

@@ -28,7 +28,7 @@
     <RadioButton fx:id="maleProfile" text="Männlich" toggleGroup="$voiceProfileGroup"/>
   </VBox>
   <HBox spacing="20.0" alignment="BOTTOM_RIGHT">
-    <Button fx:id="backButton" text="Zurück" onAction="#backtoLanding"/>
-    <Button fx:id="letsGoButton" text="Los geht's" onAction="#createNewProfile"/>
+    <Button fx:id="backButton" text="Zurück" onAction="#backtoLanding" styleClass="btn, btn-secondary"/>
+    <Button fx:id="letsGoButton" text="Los geht's" onAction="#createNewProfile" styleClass="btn, btn-primary"/>
   </HBox>
 </VBox>

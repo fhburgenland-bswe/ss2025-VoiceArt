@@ -1,8 +1,11 @@
 package at.fh.burgenland.card;
 
 import java.io.IOException;
+
+import at.fh.burgenland.utils.SceneUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -39,15 +42,7 @@ public class CardController {
   @FXML
   private void handleCardClick(MouseEvent event) {
     if (nextPageFxml != null && !nextPageFxml.isEmpty()) {
-      try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(nextPageFxml));
-        Parent nextPage = loader.load();
-
-        Stage stage = (Stage) titleLabel.getScene().getWindow();
-        stage.setScene(new Scene(nextPage));
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), nextPageFxml);
     }
   }
 }
