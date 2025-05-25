@@ -8,6 +8,7 @@ module at.fh.burgenland {
   requires jdk.jdi;
   requires com.fasterxml.jackson.databind;
   requires static lombok;
+  requires javafx.graphics;
 
   opens at.fh.burgenland.audioinput to
       javafx.fxml;
@@ -20,8 +21,19 @@ module at.fh.burgenland {
       com.fasterxml.jackson.databind;
   opens at.fh.burgenland.card to
       javafx.fxml;
+  opens at.fh.burgenland.games.treasurehunt to
+      javafx.fxml;
+  opens at.fh.burgenland.games.hitthepoints to
+      javafx.fxml;
+  opens at.fh.burgenland.games.voicezone to
+      javafx.fxml;
 
   exports at.fh.burgenland;
   opens at.fh.burgenland to com.fasterxml.jackson.databind, javafx.fxml;
   exports at.fh.burgenland.profiles;
+
+  exports at.fh.burgenland.games;
+
+  opens at.fh.burgenland.games to
+      javafx.fxml;
 }

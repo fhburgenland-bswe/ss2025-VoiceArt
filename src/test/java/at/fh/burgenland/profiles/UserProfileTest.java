@@ -1,9 +1,7 @@
-package at.fh.burgenland.profilestest;
+package at.fh.burgenland.profiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import at.fh.burgenland.profiles.UserProfile;
-import at.fh.burgenland.profiles.VoiceProfile;
 import org.junit.jupiter.api.Test;
 
 /**

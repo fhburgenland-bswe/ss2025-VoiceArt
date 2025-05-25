@@ -21,8 +21,8 @@ public class ProfileController {
   @FXML private ComboBox profiles;
 
   /**
-   * Initializes the profile controller by populating the ComboBox with user profiles
-   * and setting up the action for when a profile is selected.
+   * Initializes the profile controller by populating the ComboBox with user profiles and setting up
+   * the action for when a profile is selected.
    */
   public void initialize() {
     for (UserProfile profile : ProfileManager.getUserProfiles()) {

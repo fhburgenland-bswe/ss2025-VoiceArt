@@ -7,7 +7,7 @@
   xmlns="http://javafx.com/javafx/17.0.12"
   xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.profiles.ProfileController">
 
-  <Label text="Bestehendes Profil wählen" styleClass="profile-label"/>
+  <Label fx:id="ProfilLabel" text="Bestehendes Profil wählen"/>
 
   <ComboBox fx:id="profiles" prefHeight="30.0" prefWidth="400.0" promptText="(wählen Sie ein Profil)" styleClass="combo-box"/>
 

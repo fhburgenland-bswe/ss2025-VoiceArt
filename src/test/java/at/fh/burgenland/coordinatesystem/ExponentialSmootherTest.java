@@ -1,8 +1,7 @@
-package at.fh.burgenland.coordinatesystemtest;
+package at.fh.burgenland.coordinatesystem;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
 import org.junit.jupiter.api.Test;
 
 /** Tests the logic for exponential smoothing. */

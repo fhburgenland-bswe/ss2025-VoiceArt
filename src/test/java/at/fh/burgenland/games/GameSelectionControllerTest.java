@@ -1,4 +1,4 @@
-package at.fh.burgenland;
+package at.fh.burgenland.games;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -45,7 +45,8 @@ public class GameSelectionControllerTest {
   public void start(Stage stage) throws IOException {
     UserProfile dummyProfile = new UserProfile("TestUser", VoiceProfile.MAENNLICH);
     ProfileManager.setCurrentProfile(dummyProfile);
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("game_selection.fxml"));
+    FXMLLoader loader =
+        new FXMLLoader(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));
     stage.show();
@@ -71,7 +72,7 @@ public class GameSelectionControllerTest {
   @Test
   void twoGameCardsAreLoaded(FxRobot robot) {
     FlowPane container = robot.lookup("#cardContainer").queryAs(FlowPane.class);
-    assertEquals(2, container.getChildren().size(), "There should be 2 game cards loaded.");
+    assertEquals(4, container.getChildren().size(), "There should be 2 game cards loaded.");
   }
 
   @Test
@@ -93,6 +94,15 @@ public class GameSelectionControllerTest {
 
     VBox secondCard = (VBox) container.getChildren().get(1);
     Label secondTitle = (Label) secondCard.lookup("#titleLabel");
-    assertEquals("Redraw Game", secondTitle.getText(), "Second card should be 'Redraw Game'");
+    assertEquals(
+        "Hit the Points!", secondTitle.getText(), "Second card should be 'Hit the Points!'");
+
+    VBox thirdCard = (VBox) container.getChildren().get(2);
+    Label thirdTitle = (Label) thirdCard.lookup("#titleLabel");
+    assertEquals("VoiceZone", thirdTitle.getText(), "Third card should be 'VoiceZone'");
+
+    VBox fourthCard = (VBox) container.getChildren().get(3);
+    Label fourthTitle = (Label) fourthCard.lookup("#titleLabel");
+    assertEquals("Treasure Hunt", fourthTitle.getText(), "Fourth card should be 'Treasure Hunt'");
   }
 }
