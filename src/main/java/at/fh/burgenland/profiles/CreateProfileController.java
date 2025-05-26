@@ -9,7 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -67,6 +69,11 @@ public class CreateProfileController {
     usernameErrorLabel.setManaged(false);
     voiceProfileErrorLabel.setVisible(false);
     voiceProfileErrorLabel.setManaged(false);
+
+    customFields.setVisible(customProfile.isSelected());
+    voiceProfileGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+      customFields.setVisible(customProfile.isSelected());
+    });
 
     // Listener for Textfield
     usernameField
@@ -145,6 +152,9 @@ public class CreateProfileController {
         voiceProfile = VoiceProfile.WEIBLICH;
         break;
       case "benutzerdefiniert":
+        if (!validateCustomProfileInput()) {
+          return;
+        }
         int minDb = Integer.parseInt(minDbField.getText());
         int maxDb = Integer.parseInt(maxDbField.getText());
         int minHz = Integer.parseInt(minHzField.getText());
@@ -186,4 +196,42 @@ public class CreateProfileController {
     }
     ProfileManager.addProfile(userProfile);
   }
+
+  private boolean validateCustomProfileInput(){
+    try {
+      int minDb = Integer.parseInt(minDbField.getText());
+      int maxDb = Integer.parseInt(maxDbField.getText());
+      int minHz = Integer.parseInt(minHzField.getText());
+      int maxHz = Integer.parseInt(maxHzField.getText());
+
+      if (minDb < -60 || minDb > 0 || maxDb < -60 || maxDb > 0) {
+        showError("dB-Werte müssen zwischen -60 und 0 liegen.");
+        return false;
+      }
+      if (minHz < 0 || maxHz < 0) {
+        showError("Frequenzwerte dürfen nicht negativ sein.");
+        return false;
+      }
+      if (minDb >= maxDb) {
+        showError("Minimale dB muss kleiner als maximale dB sein.");
+        return false;
+      }
+      if (minHz >= maxHz) {
+        showError("min Frequenz muss kleiner als max Frequenz sein.");
+        return false;
+      }
+      return true;
+    } catch (NumberFormatException e) {
+      showError("Bitte geben Sie gültige Zahlen ein.");
+      return false;
+    }
+  }
+
+  private void showError(String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+    alert.showAndWait();
+  }
+
+
+
 }
