@@ -1,1 +1,1 @@
-[{"userName":"TestMännlich","voiceProfile":"MAENNLICH"},{"userName":"TestWeiblich","voiceProfile":"WEIBLICH"},{"userName":"Andreas","voiceProfile":"MAENNLICH"},{"userName":"Peter","voiceProfile":"MAENNLICH"},{"userName":"Günther","voiceProfile":"MAENNLICH"},{"userName":"Franz","voiceProfile":"MAENNLICH"},{"userName":"Michi","voiceProfile":"MAENNLICH"}]
+[{"userName":"Michi Mann","voiceProfile":["enum","MAENNLICH"]},{"userName":"ben","voiceProfile":{"type":"custom","minDb":-77,"maxDb":-7,"minFreq":77,"maxFreq":777}},{"userName":"gerta","voiceProfile":["enum","WEIBLICH"]}]

@@ -15,28 +15,50 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-/** Controller for Profile Creation Page. */
+/**
+ * Controller for Profile Creation Page.
+ */
 public class CreateProfileController {
 
-  @FXML private TextField usernameField;
+  @FXML
+  private TextField usernameField;
 
-  @FXML private Label usernameErrorLabel;
+  @FXML
+  private Label usernameErrorLabel;
 
-  @FXML private RadioButton femaleProfile;
+  @FXML
+  private RadioButton femaleProfile;
 
-  @FXML private RadioButton maleProfile;
+  @FXML
+  private RadioButton maleProfile;
 
-  @FXML private Label voiceProfileErrorLabel;
+  @FXML
+  private RadioButton customProfile;
 
-  @FXML private ToggleGroup voiceProfileGroup;
+  @FXML
+  private HBox customFields;
 
-  @FXML private Button backButton;
+  @FXML
+  private TextField minDbField, maxDbField, minHzField, maxHzField;
 
-  @FXML private Button letsGoButton;
+  @FXML
+  private Label voiceProfileErrorLabel;
 
-  /** Method to initialize the Buttonstate (not clickable, if form not filled out). */
+  @FXML
+  private ToggleGroup voiceProfileGroup;
+
+  @FXML
+  private Button backButton;
+
+  @FXML
+  private Button letsGoButton;
+
+  /**
+   * Method to initialize the Buttonstate (not clickable, if form not filled out).
+   */
   public void initialize() {
     letsGoButton.setDisable(true);
 
@@ -114,13 +136,20 @@ public class CreateProfileController {
     String username = usernameField.getText();
     String selectedText = ((RadioButton) voiceProfileGroup.getSelectedToggle()).getText();
 
-    VoiceProfile voiceProfile = null;
+    IVoiceProfile voiceProfile = null;
     switch (selectedText.toLowerCase()) {
       case "männlich":
         voiceProfile = VoiceProfile.MAENNLICH;
         break;
       case "weiblich":
         voiceProfile = VoiceProfile.WEIBLICH;
+        break;
+      case "benutzerdefiniert":
+        int minDb = Integer.parseInt(minDbField.getText());
+        int maxDb = Integer.parseInt(maxDbField.getText());
+        int minHz = Integer.parseInt(minHzField.getText());
+        int maxHz = Integer.parseInt(maxHzField.getText());
+        voiceProfile = new CustomVoiceProfile(minDb, maxDb, minHz, maxHz);
         break;
       default:
         break;
@@ -143,6 +172,12 @@ public class CreateProfileController {
     stage.setScene(scene);
     stage.show();
   }
+
+  @FXML
+  private void onCustomSelected() {
+    customFields.setVisible(customProfile.isSelected());
+  }
+
 
   private void saveUser(UserProfile userProfile) {
     if (ProfileManager.getUserProfiles().contains(userProfile)) {

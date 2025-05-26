@@ -15,10 +15,10 @@ public class UserProfile {
 
   // neccessary fields
   private String userName;
-  private VoiceProfile voiceProfile;
+  private IVoiceProfile voiceProfile;
 
   // Constructor
-  public UserProfile(String userName, VoiceProfile voiceProfile) {
+  public UserProfile(String userName, IVoiceProfile voiceProfile) {
     this.userName = userName;
     this.voiceProfile = voiceProfile;
   }

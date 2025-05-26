@@ -3,6 +3,7 @@ package at.fh.burgenland.games.voicezone;
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import at.fh.burgenland.fft.FrequenzDbOutput;
+import at.fh.burgenland.profiles.IVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
@@ -158,7 +159,7 @@ public class VoiceZoneController {
   private void loadVoiceProfile() {
     UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (userProfile != null) {
-      VoiceProfile voiceProfile = userProfile.getVoiceProfile();
+      IVoiceProfile voiceProfile = userProfile.getVoiceProfile();
       minFreq = voiceProfile.getMinFreq();
       maxFreq = voiceProfile.getMaxFreq();
       minDb = voiceProfile.getMinDb();

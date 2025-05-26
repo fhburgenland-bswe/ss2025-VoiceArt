@@ -5,6 +5,7 @@ import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
 import at.fh.burgenland.coordinatesystem.LiveDrawer;
 import at.fh.burgenland.fft.FrequenzDbOutput;
+import at.fh.burgenland.profiles.IVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
@@ -91,7 +92,7 @@ public class HitThePointsController {
   public void initialize() {
     UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (userProfile != null) {
-      VoiceProfile voiceProfile = userProfile.getVoiceProfile();
+      IVoiceProfile voiceProfile = userProfile.getVoiceProfile();
       minFreq = voiceProfile.getMinFreq();
       maxFreq = voiceProfile.getMaxFreq();
       minDb = voiceProfile.getMinDb();
@@ -108,7 +109,7 @@ public class HitThePointsController {
     updateScoreLabel();
     setUserInfo(
         ProfileManager.getCurrentProfile().getUserName(),
-        ProfileManager.getCurrentProfile().getVoiceProfile().name());
+        ProfileManager.getCurrentProfile().getVoiceProfile().getClass().getSimpleName());
   }
 
   /**
