@@ -53,7 +53,7 @@ dependencies {
   testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.27.3'
   testImplementation "org.testfx:testfx-junit5:4.0.18"
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-  testImplementation 'org.mockito:mockito-core:5.17.0'
+  testImplementation 'org.mockito:mockito-core:5.18.0'
   testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
   testRuntimeOnly 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
