@@ -11,7 +11,7 @@
       <top>
          <VBox prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
             <HBox alignment="TOP_LEFT" BorderPane.alignment="CENTER_RIGHT">
-               <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceArt" textFill="#1d3e9a">
+               <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames" textFill="#1d3e9a">
          </Label>
                <Region prefHeight="1.0" prefWidth="1.0" HBox.hgrow="ALWAYS" />
                <fx:include fx:id="inputControlsPane" source="input_controls.fxml" />

@@ -13,7 +13,7 @@ public class HelloApplication extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("landing.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/fh/burgenland/landing.fxml"));
     Scene scene = new Scene(fxmlLoader.load());
 
     // CSS einbinden
@@ -27,7 +27,7 @@ public class HelloApplication extends Application {
 
 
     // Stage konfigurieren
-    stage.setTitle("VoiceArt");
+    stage.setTitle("VoiceGames");
     stage.setScene(scene);
     stage.show();
   }

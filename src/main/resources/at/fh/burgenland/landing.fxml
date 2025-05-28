@@ -29,7 +29,7 @@
 
     <!-- App-Titel und Untertitel -->
     <VBox alignment="CENTER" spacing="10">
-      <Label text="VoiceArt" styleClass="h1"/>
+      <Label text="VoiceGames" styleClass="h1"/>
       <Label text="Mit der Stimme malen" styleClass="lead"/>
     </VBox>
 

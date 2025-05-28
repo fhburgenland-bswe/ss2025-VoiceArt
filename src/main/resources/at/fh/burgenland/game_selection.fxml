@@ -7,7 +7,7 @@
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.games.GameSelectionController">
    <top>
       <AnchorPane>
-         <Label layoutX="242.0" text="VoiceArt" textFill="#1d3e9a">
+         <Label layoutX="242.0" text="VoiceGames" textFill="#1d3e9a">
             <font>
                <Font size="31.0" />
             </font>

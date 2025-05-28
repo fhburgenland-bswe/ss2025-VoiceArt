@@ -9,6 +9,8 @@ import at.fh.burgenland.profiles.VoiceProfile;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
+
+import at.fh.burgenland.utils.SceneUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -490,10 +492,7 @@ public class VoiceZoneController {
    */
   @FXML
   public void switchToGameSelectionScene(ActionEvent event) throws IOException {
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    stage.setScene(new Scene(root));
-    stage.show();
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
   }
 
   /** Switches training mode to FREQUENCY. */

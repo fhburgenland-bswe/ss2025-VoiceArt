@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+
+import at.fh.burgenland.utils.SceneUtil;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -394,11 +396,7 @@ public class TreasureHuntController {
     alert.setContentText(message);
     alert.showAndWait();
 
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/landing.fxml");
   }
 
   /**
@@ -410,11 +408,7 @@ public class TreasureHuntController {
   @FXML
   public void switchToGameSelection(ActionEvent event) throws IOException {
     stopRecording();
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
   }
 
   /**

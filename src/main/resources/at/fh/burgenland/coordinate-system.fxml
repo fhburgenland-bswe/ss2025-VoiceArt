@@ -10,7 +10,7 @@
 <VBox alignment="CENTER" prefHeight="700" prefWidth="820" spacing="20" style="-fx-padding: 10 30 30 30;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.coordinatesystem.CoordinateSystemController">
     
     <HBox alignment="TOP_LEFT">
-        <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceArt" textFill="#1d3e9a">
+        <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames" textFill="#1d3e9a">
         </Label>
     </HBox>
 

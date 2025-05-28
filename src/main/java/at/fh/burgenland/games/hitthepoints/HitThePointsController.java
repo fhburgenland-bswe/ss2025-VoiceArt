@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import at.fh.burgenland.utils.SceneUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -213,19 +215,7 @@ public class HitThePointsController {
   @FXML
   public void switchToStartScene(ActionEvent event) throws IOException {
     stopRecording();
-
-    // Pop-Up mit Userdaten und Level
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Spiel beendet");
-    alert.setHeaderText("Hier dein Ergebnis:");
-    alert.setContentText(Integer.toString(score));
-    alert.showAndWait();
-
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/landing.fxml");
   }
 
   /**
@@ -337,11 +327,6 @@ public class HitThePointsController {
    */
   public void switchToGameSelection(ActionEvent event) throws IOException {
     stopRecording();
-
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
   }
 }

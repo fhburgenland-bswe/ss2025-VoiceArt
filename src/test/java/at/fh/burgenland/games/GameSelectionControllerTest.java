@@ -64,7 +64,7 @@ public class GameSelectionControllerTest {
 
   @Test
   void pageLoadsWithCorrectTitle(FxRobot robot) {
-    verifyThat(".label", LabeledMatchers.hasText("VoiceArt"));
+    verifyThat(".label", LabeledMatchers.hasText("VoiceGames"));
     verifyThat(
         "#weclomeText", LabeledMatchers.hasText("Willkommen TestUser, wählen Sie ein Spiel aus:"));
   }
