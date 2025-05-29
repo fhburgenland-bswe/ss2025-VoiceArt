@@ -1,14 +1,9 @@
 package at.fh.burgenland.profiles;
 
-import java.io.IOException;
-
 import at.fh.burgenland.utils.SceneUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
@@ -33,14 +28,15 @@ public class ProfileController {
           System.out.println("Selected item: " + profiles.getSelectionModel().getSelectedItem());
           ProfileManager.setCurrentProfile(
               (UserProfile) profiles.getSelectionModel().getSelectedItem());
-          SceneUtil.changeScene((Stage) profiles.getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
+          SceneUtil.changeScene(
+              (Stage) profiles.getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
         });
   }
 
   @FXML
   protected void showProfileCreationScreen(ActionEvent event) {
-    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/create_profile.fxml");
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/create_profile.fxml");
   }
-
-
 }

@@ -29,9 +29,12 @@ module at.fh.burgenland {
       javafx.fxml;
 
   exports at.fh.burgenland;
-  opens at.fh.burgenland to com.fasterxml.jackson.databind, javafx.fxml;
-  exports at.fh.burgenland.profiles;
 
+  opens at.fh.burgenland to
+      com.fasterxml.jackson.databind,
+      javafx.fxml;
+
+  exports at.fh.burgenland.profiles;
   exports at.fh.burgenland.games;
 
   opens at.fh.burgenland.games to

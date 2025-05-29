@@ -13,18 +13,17 @@ public class HelloApplication extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/fh/burgenland/landing.fxml"));
+    FXMLLoader fxmlLoader =
+        new FXMLLoader(getClass().getResource("/at/fh/burgenland/landing.fxml"));
     Scene scene = new Scene(fxmlLoader.load());
 
     // CSS einbinden
     scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
     scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 
-
     // Fenstergröße festlegen
-    stage.setWidth(800);  // Breite in Pixeln
+    stage.setWidth(800); // Breite in Pixeln
     stage.setHeight(600); // Höhe in Pixeln
-
 
     // Stage konfigurieren
     stage.setTitle("VoiceGames");

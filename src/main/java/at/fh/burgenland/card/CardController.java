@@ -1,13 +1,8 @@
 package at.fh.burgenland.card;
 
-import java.io.IOException;
-
 import at.fh.burgenland.utils.SceneUtil;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -42,7 +37,8 @@ public class CardController {
   @FXML
   private void handleCardClick(MouseEvent event) {
     if (nextPageFxml != null && !nextPageFxml.isEmpty()) {
-      SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), nextPageFxml);
+      SceneUtil.changeScene(
+          (Stage) ((Node) event.getSource()).getScene().getWindow(), nextPageFxml);
     }
   }
 }

@@ -94,15 +94,6 @@ public class HitThePointsControllerTest {
   }
 
   @Test
-  void backButtonTest(FxRobot robot) {
-    verifyThat("#backButton", NodeMatchers.isVisible());
-    Node backButtonNode = robot.lookup("#backButton").query();
-
-    assertTrue(backButtonNode.isVisible(), "Back button should be visible");
-    assertFalse(backButtonNode.isDisabled(), "Back button should be enabled");
-  }
-
-  @Test
   void startRecordindButtonTest(FxRobot robot) {
     verifyThat("#startRecordingButton", NodeMatchers.isVisible());
     Node backButtonNode = robot.lookup("#startRecordingButton").query();

@@ -6,21 +6,22 @@ import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
+import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
-
-import at.fh.burgenland.utils.SceneUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 /**
@@ -48,9 +49,14 @@ public class VoiceZoneController {
   @FXML private Label voiceProfileLabel;
   @FXML private Label overlayMessageLabel;
 
-  @FXML
-  private CheckBox recordingIndicator;
+  @FXML private CheckBox recordingIndicator;
 
+  /**
+   * Sets the recording indicator state based on the specified parameter.
+   *
+   * @param isRecording a boolean value indicating whether recording is active. If true, the
+   *     recording indicator is set to selected; otherwise, it is deselected.
+   */
   public void setRecording(boolean isRecording) {
     recordingIndicator.setSelected(isRecording);
   }
@@ -498,7 +504,9 @@ public class VoiceZoneController {
   @FXML
   public void switchToGameSelectionScene(ActionEvent event) throws IOException {
     this.stopRecording();
-    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/game_selection.fxml");
   }
 
   /** Switches training mode to FREQUENCY. */

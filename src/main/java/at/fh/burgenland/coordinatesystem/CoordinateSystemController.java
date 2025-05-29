@@ -5,18 +5,14 @@ import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
+import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import at.fh.burgenland.utils.SceneUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -219,6 +215,8 @@ public class CoordinateSystemController {
    */
   @FXML
   public void switchToStartScene(ActionEvent event) {
-    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/landing.fxml");
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/landing.fxml");
   }
 }

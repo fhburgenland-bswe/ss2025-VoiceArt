@@ -8,12 +8,11 @@ import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
+import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import at.fh.burgenland.utils.SceneUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +21,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -41,9 +39,14 @@ public class HitThePointsController {
   @FXML private Label usernameLabel;
   @FXML private Label profileLabel;
 
-  @FXML
-  private CheckBox recordingIndicator;
+  @FXML private CheckBox recordingIndicator;
 
+  /**
+   * Sets the recording state of the application. This method updates the recording indicator to
+   * visually reflect whether recording is active or not.
+   *
+   * @param isRecording true if recording is active, false otherwise
+   */
   public void setRecording(boolean isRecording) {
     recordingIndicator.setSelected(isRecording);
   }
@@ -51,7 +54,7 @@ public class HitThePointsController {
   private int score = 0;
   private double circleX;
   private double circleY;
-  private double circle_radius = 60;
+  private double circleRadius = 60;
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private int minFreq;
@@ -183,7 +186,7 @@ public class HitThePointsController {
               double dy = y - circleY;
               double distance = Math.sqrt(dx * dx + dy * dy);
 
-              if (distance <= circle_radius + 5) {
+              if (distance <= circleRadius + 5) {
                 recordedPoints.clear();
                 score++;
                 updateScoreLabel();
@@ -212,19 +215,6 @@ public class HitThePointsController {
       LiveDrawer.drawLiveLine(
           canvas, point.pitch, point.db, minFreq, maxFreq, minDb, maxDb, lastX, lastY);
     }
-  }
-
-  /**
-   * Switches to the start scene after stopping the recording. This method is called when the user
-   * wants to return to the main menu.
-   *
-   * @param event the action event triggered by the user
-   * @throws IOException if an error occurs while loading the FXML file
-   */
-  @FXML
-  public void switchToStartScene(ActionEvent event) throws IOException {
-    stopRecording();
-    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/landing.fxml");
   }
 
   /**
@@ -278,7 +268,9 @@ public class HitThePointsController {
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     Scene scene = new Scene(resultRoot);
     scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-    scene.getStylesheets().add(SceneUtil.class.getResource("/at/fh/burgenland/styles.css").toExternalForm());
+    scene
+        .getStylesheets()
+        .add(SceneUtil.class.getResource("/at/fh/burgenland/styles.css").toExternalForm());
     stage.setScene(scene);
     stage.show();
   }
@@ -288,8 +280,8 @@ public class HitThePointsController {
     double canvasHeight = gameCanvas.getHeight();
 
     // Adjust circle radius based on score
-    circle_radius = Math.max(circle_radius - 4, 18);
-    double adjustedRadius = circle_radius;
+    circleRadius = Math.max(circleRadius - 4, 18);
+    double adjustedRadius = circleRadius;
 
     circleX = ThreadLocalRandom.current().nextDouble(adjustedRadius, canvasWidth - adjustedRadius);
     circleY = ThreadLocalRandom.current().nextDouble(adjustedRadius, canvasHeight - adjustedRadius);
@@ -308,7 +300,7 @@ public class HitThePointsController {
   }
 
   private void drawResultCircle(boolean passed) {
-    double adjustedRadius = circle_radius;
+    double adjustedRadius = circleRadius;
 
     var resultGc = resultCanvas.getGraphicsContext2D();
     resultGc.setFill(passed ? Color.GREEN : Color.RED);
@@ -341,6 +333,8 @@ public class HitThePointsController {
    */
   public void switchToGameSelection(ActionEvent event) throws IOException {
     stopRecording();
-    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/game_selection.fxml");
   }
 }

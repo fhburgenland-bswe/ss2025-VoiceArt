@@ -6,24 +6,24 @@ import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
+import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-
-import at.fh.burgenland.utils.SceneUtil;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -44,9 +44,13 @@ public class TreasureHuntController {
   @FXML private Label usernameLabel;
   @FXML private Label profileLabel;
 
-  @FXML
-  private CheckBox recordingIndicator;
+  @FXML private CheckBox recordingIndicator;
 
+  /**
+   * Sets the recording state by updating the recording indicator.
+   *
+   * @param isRecording true to indicate that recording is active, false otherwise
+   */
   public void setRecording(boolean isRecording) {
     recordingIndicator.setSelected(isRecording);
   }
@@ -274,7 +278,7 @@ public class TreasureHuntController {
    */
   @FXML
   public void startRecording() {
-  this.setRecording(true);
+    this.setRecording(true);
     if (recorder == null) {
       recorder = new FrequenzDbOutput(audioInputService.getSelectedMixer());
 
@@ -401,7 +405,9 @@ public class TreasureHuntController {
     alert.setContentText(message);
     alert.showAndWait();
 
-    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/landing.fxml");
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/landing.fxml");
   }
 
   /**
@@ -413,7 +419,9 @@ public class TreasureHuntController {
   @FXML
   public void switchToGameSelection(ActionEvent event) throws IOException {
     stopRecording();
-    SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/game_selection.fxml");
   }
 
   /**
