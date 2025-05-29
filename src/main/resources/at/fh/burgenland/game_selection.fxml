@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.games.GameSelectionController">
+<BorderPane prefHeight="700" prefWidth="820" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.games.GameSelectionController">
    <top>
-      <AnchorPane>
-         <Label layoutX="242.0" text="VoiceGames" textFill="#1d3e9a">
-            <font>
-               <Font size="31.0" />
-            </font>
-         </Label>
-         <Label fx:id="weclomeText" layoutX="209.0" layoutY="38.0" />
-         <fx:include fx:id="inputControlsPane" alignment="TOP_RIGHT" source="input_controls.fxml" />
-
-      </AnchorPane>
+      <HBox>
+         <children>
+            <Region prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="VoiceGames" textFill="#1d3e9a">
+                     <font>
+                        <Font size="31.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="weclomeText" />
+               </children>
+            </VBox>
+            <Region prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <fx:include fx:id="inputControlsPane" alignment="TOP_RIGHT" source="input_controls.fxml" />
+         </children>
+      </HBox>
    </top>
    <center>
       <FlowPane fx:id="cardContainer" alignment="CENTER" hgap="20" vgap="20" />
    </center>
    <bottom>
       <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 20 20 20 20;" BorderPane.alignment="CENTER">
-         <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Zurück zum Hauptmenü" styleClass="btn, btn-secondary"/>
+         <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" styleClass="btn, btn-secondary" text="Zurück zum Hauptmenü" />
       </HBox>
    </bottom>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
 </BorderPane>

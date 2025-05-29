@@ -6,14 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" prefHeight="700" prefWidth="820" spacing="20" style="-fx-padding: 10 30 30 30;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.games.hitthepoints.HitThePointsController">
-   <BorderPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+<BorderPane prefHeight="700" prefWidth="820" style="-fx-padding: 20 20 20 20;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.games.hitthepoints.HitThePointsController">
       <top>
-         <VBox prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
+         <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
             <HBox alignment="TOP_LEFT" BorderPane.alignment="CENTER_RIGHT">
                <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames" textFill="#1d3e9a">
          </Label>
-               <Region prefHeight="1.0" prefWidth="1.0" HBox.hgrow="ALWAYS" />
+               <Region HBox.hgrow="ALWAYS" />
                <fx:include fx:id="inputControlsPane" source="input_controls.fxml" />
             </HBox>
             <HBox alignment="CENTER">
@@ -37,32 +36,28 @@
                   </padding></Label>
                <Label fx:id="profileLabel" text="Stimmprofil: " />
                <padding>
-                  <Insets top="30.0" />
+                  <Insets top="10.0" />
                </padding>
             </HBox>
-            <padding>
-               <Insets top="20.0" />
-            </padding>
          </VBox>
       </top>
       <center>
 
          <StackPane fx:id="stackPane" BorderPane.alignment="CENTER">
-            <Canvas fx:id="gameCanvas" height="400" width="800" />
-            <Canvas fx:id="resultCanvas" height="400" visible="false" width="800" />
+            <Canvas fx:id="gameCanvas" height="400" width="750" />
+            <Canvas fx:id="resultCanvas" height="400" visible="false" width="750" />
 
          </StackPane>
       </center>
       <bottom>
       
          <HBox alignment="CENTER" spacing="20" BorderPane.alignment="CENTER">
-            <Button fx:id="backButton" onAction="#switchToStartScene" text="Zurück zum Hauptmenü" />
-            <Button fx:id="skipPoint" onAction="#skipPoint" text="Skip it!" />
-            <Button fx:id="gameSelectionButton" onAction="#switchToGameSelection" text="Zur Spielauswahl" />
-            <Button fx:id="startRecordingButton" onAction="#startRecording" text="Start Recording" />
-            <Button fx:id="stopRecording" onAction="#stopRecording" text="Stop Recording" />
-            <Button onAction="#switchToResultScreen" text="Finish!" />
+            <Button fx:id="gameSelectionButton" onAction="#switchToGameSelection" styleClass="btn, btn-danger" text="Zur Spielauswahl" />
+            <CheckBox fx:id="recordingIndicator" disable="true" mnemonicParsing="false" />
+            <Button fx:id="startRecordingButton" onAction="#startRecording" styleClass="btn, btn-primary" text="Start" />
+            <Button fx:id="stopRecording" onAction="#stopRecording" styleClass="btn, btn-warning" text="Stop" />
+            <Button fx:id="skipPoint" onAction="#skipPoint" styleClass="btn, btn-info" text="Überspringe den Punkt!" />
+            <Button onAction="#switchToResultScreen" styleClass="btn, btn-success" text="Spiel beenden" />
          </HBox>
-      </bottom></BorderPane>
-
-</VBox>
+      </bottom>
+</BorderPane>

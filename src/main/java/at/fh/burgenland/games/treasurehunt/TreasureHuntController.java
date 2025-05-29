@@ -22,11 +22,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -46,6 +43,13 @@ public class TreasureHuntController {
   @FXML private Label levelLabel;
   @FXML private Label usernameLabel;
   @FXML private Label profileLabel;
+
+  @FXML
+  private CheckBox recordingIndicator;
+
+  public void setRecording(boolean isRecording) {
+    recordingIndicator.setSelected(isRecording);
+  }
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private int minFreq;
@@ -270,7 +274,7 @@ public class TreasureHuntController {
    */
   @FXML
   public void startRecording() {
-
+  this.setRecording(true);
     if (recorder == null) {
       recorder = new FrequenzDbOutput(audioInputService.getSelectedMixer());
 
@@ -355,6 +359,7 @@ public class TreasureHuntController {
    */
   @FXML
   public void stopRecording() {
+    this.setRecording(false);
     if (recorder != null) {
       recorder.setListener(null);
       recorder.stop();

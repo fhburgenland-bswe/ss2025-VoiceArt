@@ -1,73 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.canvas.Canvas?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="at.fh.burgenland.games.voicezone.VoiceZoneController"
-      prefHeight="700" prefWidth="820"
-      alignment="CENTER" spacing="20" style="-fx-padding: 10 30 30 30;">
-
-     <HBox alignment="TOP_LEFT">
-        <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames" textFill="#1d3e9a">
+<BorderPane prefHeight="700" prefWidth="820" style="-fx-padding: 20 20 20 20;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.games.voicezone.VoiceZoneController">
+      <top>
+          <VBox>
+         <HBox BorderPane.alignment="CENTER">
+            <children>
+               <Region HBox.hgrow="ALWAYS" />
+                 <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames" textFill="#1d3e9a">
         </Label>
-    </HBox>
-    
-    <Label fx:id="titleLabel" text="VoiceZone – Stimmbereichstraining" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-    <!--Label fx:id="textLabel" text="Halte deine Stimme im Zielbereich." /-->
+               <Region HBox.hgrow="ALWAYS" />
+            
+                <fx:include fx:id="inputControlsPane" source="input_controls.fxml" />
 
-    <HBox spacing="10" alignment="CENTER">
-        <Label text="Trainingsmodus:" />
-        <RadioButton fx:id="freqButton"
-                    text="Frequenz"
-                    onAction="#setFrequencyMode"
-                    selected="true"/>
-        <RadioButton fx:id="volumeButton"
-                    text="Lautstärke"
-                    onAction="#setVolumeMode"/>
-    </HBox>
-
-    <HBox spacing="10" alignment="CENTER">
-        <Label text="Benutzer:" />
-        <Label fx:id="usernameLabel" />
-        <Label text="Stimmprofil:" />
-        <Label fx:id="voiceProfileLabel" />
-    </HBox>
-
-    <fx:include source="input_controls.fxml" fx:id="inputControlsPane"/>
-
-    <!--Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" /-->
-
-    <StackPane VBox.vgrow="ALWAYS">
-    <Canvas fx:id="coordinateSystemCanvas" />
-
-    <Label fx:id="overlayMessageLabel"
-           text=""
-           style="-fx-font-size: 22px; -fx-text-fill: green; -fx-font-weight: bold;"
-           visible="false"
-           StackPane.alignment="TOP_LEFT"
-           translateX="75"
-           translateY="20" />
-    </StackPane>
-
-
-    <HBox spacing="10" alignment="CENTER">
-        <Label text="Level:" />
-        <Label fx:id="levelLabel" />
-        <Label text="Zielwert:" />
-        <Label fx:id="targetLabel" />
-        <Label text="Toleranz:" />
-        <Label fx:id="toleranceLabel" />
-    </HBox>
-
-    <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="backButton" text="Zurück" onAction="#switchToGameSelectionScene" />
-        <Button fx:id="exportButton" text="Zeichnung exportieren" />
-        <Button text="Start" onAction="#startRecording" />
-        <Button text="Stop" onAction="#stopRecording" />
-    </HBox>
-
-</VBox>
-
-
+            </children>
+         </HBox>
+            <HBox alignment="TOP_CENTER">
+               <children>
+                   
+                   <Label fx:id="titleLabel" alignment="TOP_CENTER" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="VoiceZone – Stimmbereichstraining" />
+               </children>
+            <padding>
+               <Insets bottom="5.0" />
+            </padding>
+            </HBox>
+             <!--Label fx:id="textLabel" text="Halte deine Stimme im Zielbereich." /-->
+         
+             <HBox alignment="CENTER" spacing="10">
+                 <Label text="Trainingsmodus:" />
+                 <RadioButton fx:id="freqButton" onAction="#setFrequencyMode" selected="true" text="Frequenz" />
+                 <RadioButton fx:id="volumeButton" onAction="#setVolumeMode" text="Lautstärke" />
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+            <padding>
+               <Insets bottom="10.0" />
+            </padding>
+             </HBox>
+         
+             <HBox alignment="CENTER" spacing="10">
+                 <Label text="Benutzer:" />
+                 <Label fx:id="usernameLabel" />
+                 <Label text="Stimmprofil:" />
+                 <Label fx:id="voiceProfileLabel" />
+             </HBox>
+          </VBox>
+      </top>
+      <center>
+      
+          <!--Canvas fx:id="coordinateSystemCanvas" VBox.vgrow="ALWAYS" /-->
+      
+          <StackPane BorderPane.alignment="CENTER">
+          <Canvas fx:id="coordinateSystemCanvas" />
+      
+          <Label fx:id="overlayMessageLabel" style="-fx-font-size: 22px; -fx-text-fill: green; -fx-font-weight: bold;" text="" translateX="75" translateY="20" visible="false" StackPane.alignment="TOP_LEFT" />
+          </StackPane>
+      </center>
+      <bottom>
+         <VBox BorderPane.alignment="CENTER">
+            <children>
+            
+            
+                <HBox alignment="CENTER" spacing="10">
+                    <Label text="Level:" />
+                    <Label fx:id="levelLabel" />
+                    <Label text="Zielwert:" />
+                    <Label fx:id="targetLabel" />
+                    <Label text="Toleranz:" />
+                    <Label fx:id="toleranceLabel" />
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+                </HBox>
+            
+                <HBox alignment="CENTER" spacing="20">
+                    <Button fx:id="backButton" onAction="#switchToGameSelectionScene" styleClass="btn, btn-danger" text="Zurück" />
+                    <CheckBox fx:id="recordingIndicator" disable="true" mnemonicParsing="false" />
+                    <Button onAction="#startRecording" styleClass="btn, btn-primary" text="Start" />
+                    <Button onAction="#stopRecording" styleClass="btn, btn-warning" text="Stop" />
+                </HBox>
+            </children>
+         </VBox>
+      </bottom>
+   </BorderPane>

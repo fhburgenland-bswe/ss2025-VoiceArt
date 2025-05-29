@@ -19,12 +19,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 /**
@@ -51,6 +47,13 @@ public class VoiceZoneController {
   @FXML private Label usernameLabel;
   @FXML private Label voiceProfileLabel;
   @FXML private Label overlayMessageLabel;
+
+  @FXML
+  private CheckBox recordingIndicator;
+
+  public void setRecording(boolean isRecording) {
+    recordingIndicator.setSelected(isRecording);
+  }
 
   // Audio is recorded from the choosen microphone und in dB and Hz converted
   private final AudioInputService audioInputService = AudioInputService.getInstance();
@@ -131,7 +134,7 @@ public class VoiceZoneController {
               .bind(coordinateSystemCanvas.getScene().widthProperty().subtract(60));
           coordinateSystemCanvas
               .heightProperty()
-              .bind(coordinateSystemCanvas.getScene().heightProperty().subtract(320));
+              .bind(coordinateSystemCanvas.getScene().heightProperty().subtract(200));
           coordinateSystemCanvas
               .widthProperty()
               .addListener((obs, oldVal, newVal) -> drawCoordinateSystemAndTargetBar());
@@ -312,6 +315,7 @@ public class VoiceZoneController {
    */
   @FXML
   public void startRecording() {
+    this.setRecording(true);
     recorder.setListener(
         (pitch, db) -> {
           boolean isSilent =
@@ -471,6 +475,7 @@ public class VoiceZoneController {
   /** Stops the ongoing recording and analysis. */
   @FXML
   public void stopRecording() {
+    this.setRecording(false);
     recorder.setListener(null);
     recorder.stop();
     recentDbValues.clear();
@@ -492,6 +497,7 @@ public class VoiceZoneController {
    */
   @FXML
   public void switchToGameSelectionScene(ActionEvent event) throws IOException {
+    this.stopRecording();
     SceneUtil.changeScene((Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/game_selection.fxml");
   }
 

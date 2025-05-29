@@ -172,3 +172,24 @@
 .microphone-icon:hover {
   -fx-opacity: 0.8;
 }
+
+.check-box {
+  -fx-padding: 0;
+  -fx-background-color: transparent;
+}
+
+.check-box .box {
+  -fx-background-radius: 50%;
+  -fx-border-radius: 50%;
+  -fx-min-width: 16px;
+  -fx-min-height: 16px;
+  -fx-max-width: 16px;
+  -fx-max-height: 16px;
+  -fx-border-color: black;
+  -fx-border-width: 1;
+  -fx-background-color: red; /* default to off */
+}
+
+.check-box:selected .box {
+  -fx-background-color: green;
+}
