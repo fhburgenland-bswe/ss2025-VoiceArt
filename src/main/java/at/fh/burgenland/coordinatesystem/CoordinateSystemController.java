@@ -133,6 +133,17 @@ public class CoordinateSystemController {
    * whenever the window is resized.
    */
   private void drawCoordinateSystemStructure() {
+
+    // NEU FÜR LOG SKALA
+    double plotWidth =
+        coordinateSystemCanvas.getWidth()
+            - CoordinateSystemDrawer.PADDING_LEFT
+            - CoordinateSystemDrawer.PADDING_RIGHT;
+
+    LogScaleConverter.init(minFreq, maxFreq, plotWidth);
+
+    // BIS HIER
+
     CoordinateSystemDrawer.drawAxes(coordinateSystemCanvas, minFreq, maxFreq, minDb, maxDb);
 
     // reset last coordinates

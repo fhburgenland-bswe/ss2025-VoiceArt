@@ -71,10 +71,23 @@ public class CoordinateSystemDrawer {
       stepHz = 1;
     }
 
-    for (int hz = minFreq; hz <= maxFreq; hz += stepHz) {
+    // URSPRÜNGLICHER CODE VOR LOG SKALA
+    /*for (int hz = minFreq; hz <= maxFreq; hz += stepHz) {
       double x = PADDING_LEFT + ((hz - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
       g.strokeLine(x, PADDING_TOP, x, height - PADDING_BOTTOM);
       g.fillText(hz + " Hz", x - 20, height - PADDING_BOTTOM + 20);
+    }*/
+    // Anzahl der Achsenmarkierungen
+    int numLabels = 6;
+    LogScaleConverter.init(minFreq, maxFreq, plotWidth);
+
+    for (int i = 0; i <= numLabels; i++) {
+      double x = i * plotWidth / numLabels;
+      double freq = LogScaleConverter.xToFreq(x);
+      double absX = PADDING_LEFT + x;
+
+      g.strokeLine(absX, PADDING_TOP, absX, height - PADDING_BOTTOM);
+      g.fillText(String.format("%.0f Hz", freq), absX - 20, height - PADDING_BOTTOM + 20);
     }
 
     // x-axis title
