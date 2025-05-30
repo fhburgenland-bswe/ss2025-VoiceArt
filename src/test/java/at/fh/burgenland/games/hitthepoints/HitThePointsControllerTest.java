@@ -79,7 +79,7 @@ public class HitThePointsControllerTest {
 
     Label userProfileLabel = robot.lookup("#profileLabel").queryAs(Label.class);
     assertEquals(
-        "Stimmprofil: MAENNLICH",
+        "Stimmprofil: männlich",
         userProfileLabel.getText(),
         "Der UserInfo-Label sollte 'TestUser' sein.");
   }

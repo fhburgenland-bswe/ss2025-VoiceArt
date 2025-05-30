@@ -241,11 +241,12 @@ public class HitThePointsController {
    * @param profileName the name of the selected voice profile
    */
   public void setUserInfo(String username, String profileName) {
+    UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (usernameLabel != null) {
       usernameLabel.setText("Benutzer: " + username);
     }
     if (profileLabel != null) {
-      profileLabel.setText("Stimmprofil: " + profileName);
+      profileLabel.setText("Stimmprofil: " + userProfile.getVoiceProfile().toString());
     }
   }
 
