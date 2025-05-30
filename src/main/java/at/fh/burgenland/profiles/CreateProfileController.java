@@ -7,8 +7,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -20,47 +18,38 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-/**
- * Controller for Profile Creation Page.
- */
+/** Controller for Profile Creation Page. */
 public class CreateProfileController {
 
-  @FXML
-  private TextField usernameField;
+  @FXML private TextField usernameField;
 
-  @FXML
-  private Label usernameErrorLabel;
+  @FXML private Label usernameErrorLabel;
 
-  @FXML
-  private RadioButton femaleProfile;
+  @FXML private RadioButton femaleProfile;
 
-  @FXML
-  private RadioButton maleProfile;
+  @FXML private RadioButton maleProfile;
 
-  @FXML
-  private RadioButton customProfile;
+  @FXML private RadioButton customProfile;
 
-  @FXML
-  private HBox customFields;
+  @FXML private HBox customFields;
 
-  @FXML
-  private TextField minDbField, maxDbField, minHzField, maxHzField;
+  @FXML private TextField minDbField;
 
-  @FXML
-  private Label voiceProfileErrorLabel;
+  @FXML private TextField maxDbField;
 
-  @FXML
-  private ToggleGroup voiceProfileGroup;
+  @FXML private TextField minHzField;
 
-  @FXML
-  private Button backButton;
+  @FXML private TextField maxHzField;
 
-  @FXML
-  private Button letsGoButton;
+  @FXML private Label voiceProfileErrorLabel;
 
-  /**
-   * Method to initialize the Buttonstate (not clickable, if form not filled out).
-   */
+  @FXML private ToggleGroup voiceProfileGroup;
+
+  @FXML private Button backButton;
+
+  @FXML private Button letsGoButton;
+
+  /** Method to initialize the Buttonstate (not clickable, if form not filled out). */
   public void initialize() {
     letsGoButton.setDisable(true);
 
@@ -71,9 +60,12 @@ public class CreateProfileController {
     voiceProfileErrorLabel.setManaged(false);
 
     customFields.setVisible(customProfile.isSelected());
-    voiceProfileGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-      customFields.setVisible(customProfile.isSelected());
-    });
+    voiceProfileGroup
+        .selectedToggleProperty()
+        .addListener(
+            (obs, oldToggle, newToggle) -> {
+              customFields.setVisible(customProfile.isSelected());
+            });
 
     // Listener for Textfield
     usernameField
@@ -141,7 +133,7 @@ public class CreateProfileController {
     String username = usernameField.getText();
     String selectedText = ((RadioButton) voiceProfileGroup.getSelectedToggle()).getText();
 
-    IVoiceProfile voiceProfile = null;
+    IfVoiceProfile voiceProfile = null;
     switch (selectedText.toLowerCase()) {
       case "männlich":
         voiceProfile = VoiceProfile.MAENNLICH;
@@ -184,7 +176,6 @@ public class CreateProfileController {
     customFields.setVisible(customProfile.isSelected());
   }
 
-
   private void saveUser(UserProfile userProfile) {
     if (ProfileManager.getUserProfiles().contains(userProfile)) {
       usernameErrorLabel.setText("Benutzername bereits vergeben.");
@@ -193,7 +184,7 @@ public class CreateProfileController {
     ProfileManager.addProfile(userProfile);
   }
 
-  private boolean validateCustomProfileInput(){
+  private boolean validateCustomProfileInput() {
     try {
       int minDb = Integer.parseInt(minDbField.getText());
       int maxDb = Integer.parseInt(maxDbField.getText());
@@ -213,7 +204,7 @@ public class CreateProfileController {
         return false;
       }
       if (minHz >= maxHz) {
-        showError("min Frequenz muss kleiner als max Frequenz sein.");
+        showError("Minimale Frequenz muss kleiner als maximale Frequenz sein.");
         return false;
       }
       return true;
@@ -227,7 +218,4 @@ public class CreateProfileController {
     Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
     alert.showAndWait();
   }
-
-
-
 }

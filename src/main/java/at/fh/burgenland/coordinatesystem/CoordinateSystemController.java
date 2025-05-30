@@ -2,10 +2,9 @@ package at.fh.burgenland.coordinatesystem;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.fft.FrequenzDbOutput;
-import at.fh.burgenland.profiles.IVoiceProfile;
+import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
-import at.fh.burgenland.profiles.VoiceProfile;
 import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,7 +92,7 @@ public class CoordinateSystemController {
 
     UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (userProfile != null) {
-      IVoiceProfile voiceProfile = userProfile.getVoiceProfile();
+      IfVoiceProfile voiceProfile = userProfile.getVoiceProfile();
       minFreq = voiceProfile.getMinFreq();
       maxFreq = voiceProfile.getMaxFreq();
       minDb = voiceProfile.getMinDb();
