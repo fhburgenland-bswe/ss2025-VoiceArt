@@ -110,5 +110,5 @@ jobs:
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: voiceart
+          name: voicegames
           path: build/jpackage/app/

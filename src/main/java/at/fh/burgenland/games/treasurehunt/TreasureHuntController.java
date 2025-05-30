@@ -7,6 +7,7 @@ import at.fh.burgenland.profiles.IVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
+import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +17,13 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -45,6 +44,17 @@ public class TreasureHuntController {
   @FXML private Label levelLabel;
   @FXML private Label usernameLabel;
   @FXML private Label profileLabel;
+
+  @FXML private CheckBox recordingIndicator;
+
+  /**
+   * Sets the recording state by updating the recording indicator.
+   *
+   * @param isRecording true to indicate that recording is active, false otherwise
+   */
+  public void setRecording(boolean isRecording) {
+    recordingIndicator.setSelected(isRecording);
+  }
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private int minFreq;
@@ -269,7 +279,7 @@ public class TreasureHuntController {
    */
   @FXML
   public void startRecording() {
-
+    this.setRecording(true);
     if (recorder == null) {
       recorder = new FrequenzDbOutput(audioInputService.getSelectedMixer());
 
@@ -354,6 +364,7 @@ public class TreasureHuntController {
    */
   @FXML
   public void stopRecording() {
+    this.setRecording(false);
     if (recorder != null) {
       recorder.setListener(null);
       recorder.stop();
@@ -395,11 +406,9 @@ public class TreasureHuntController {
     alert.setContentText(message);
     alert.showAndWait();
 
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/landing.fxml");
   }
 
   /**
@@ -411,11 +420,9 @@ public class TreasureHuntController {
   @FXML
   public void switchToGameSelection(ActionEvent event) throws IOException {
     stopRecording();
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/game_selection.fxml");
   }
 
   /**

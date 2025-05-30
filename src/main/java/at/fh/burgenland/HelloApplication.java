@@ -6,15 +6,27 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
 /** JavaFX example using for pipeline test. */
 public class HelloApplication extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("landing.fxml"));
-    Scene scene = new Scene(fxmlLoader.load(), 800, 500);
-    stage.setTitle("Hello!");
+    FXMLLoader fxmlLoader =
+        new FXMLLoader(getClass().getResource("/at/fh/burgenland/landing.fxml"));
+    Scene scene = new Scene(fxmlLoader.load());
+
+    // CSS einbinden
+    scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+    scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+
+    // Fenstergröße festlegen
+    stage.setWidth(800); // Breite in Pixeln
+    stage.setHeight(600); // Höhe in Pixeln
+
+    // Stage konfigurieren
+    stage.setTitle("VoiceGames");
     stage.setScene(scene);
     stage.show();
   }
@@ -27,7 +39,7 @@ public class HelloApplication extends Application {
    */
   public static void main(String[] args) {
     try {
-      ProfileManager.loadProfilesFromJson("profiles.json");
+      ProfileManager.loadProfilesFromJson("./profiles.json");
       System.out.println("Profiles loaded: " + ProfileManager.getUserProfiles().size());
     } catch (IOException e) {
       System.err.println("Failed to load profiles: " + e.getMessage());

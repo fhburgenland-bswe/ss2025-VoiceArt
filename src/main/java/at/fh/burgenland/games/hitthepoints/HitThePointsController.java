@@ -9,6 +9,7 @@ import at.fh.burgenland.profiles.IVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.profiles.VoiceProfile;
+import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
 /** Controller class for the HitThePoints game. This class handles the game logic */
 public class HitThePointsController {
@@ -38,10 +40,22 @@ public class HitThePointsController {
   @FXML private Label usernameLabel;
   @FXML private Label profileLabel;
 
+  @FXML private CheckBox recordingIndicator;
+
+  /**
+   * Sets the recording state of the application. This method updates the recording indicator to
+   * visually reflect whether recording is active or not.
+   *
+   * @param isRecording true if recording is active, false otherwise
+   */
+  public void setRecording(boolean isRecording) {
+    recordingIndicator.setSelected(isRecording);
+  }
+
   private int score = 0;
   private double circleX;
   private double circleY;
-  private static final double INITIAL_CIRCLE_RADIUS = 60;
+  private double circleRadius = 60;
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private int minFreq;
@@ -121,7 +135,7 @@ public class HitThePointsController {
    */
   @FXML
   public void startRecording() {
-
+    this.setRecording(true);
     if (recorder == null) {
       recorder = new FrequenzDbOutput(audioInputService.getSelectedMixer());
 
@@ -173,7 +187,7 @@ public class HitThePointsController {
               double dy = y - circleY;
               double distance = Math.sqrt(dx * dx + dy * dy);
 
-              if (distance <= INITIAL_CIRCLE_RADIUS + 5) {
+              if (distance <= circleRadius + 5) {
                 recordedPoints.clear();
                 score++;
                 updateScoreLabel();
@@ -205,31 +219,6 @@ public class HitThePointsController {
   }
 
   /**
-   * Switches to the start scene after stopping the recording. This method is called when the user
-   * wants to return to the main menu.
-   *
-   * @param event the action event triggered by the user
-   * @throws IOException if an error occurs while loading the FXML file
-   */
-  @FXML
-  public void switchToStartScene(ActionEvent event) throws IOException {
-    stopRecording();
-
-    // Pop-Up mit Userdaten und Level
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Spiel beendet");
-    alert.setHeaderText("Hier dein Ergebnis:");
-    alert.setContentText(Integer.toString(score));
-    alert.showAndWait();
-
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
-  }
-
-  /**
    * Stops the audio recording and drawing process.
    *
    * <p>Unregisters the audio listener and halts the processing thread from {@link
@@ -237,6 +226,7 @@ public class HitThePointsController {
    */
   @FXML
   public void stopRecording() {
+    this.setRecording(false);
     if (recorder != null) {
       recorder.setListener(null);
       recorder.stop();
@@ -277,7 +267,12 @@ public class HitThePointsController {
     resultController.setCanvas(resultCanvas); // pass the actual canvas
 
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    stage.setScene(new Scene(resultRoot));
+    Scene scene = new Scene(resultRoot);
+    scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+    scene
+        .getStylesheets()
+        .add(SceneUtil.class.getResource("/at/fh/burgenland/styles.css").toExternalForm());
+    stage.setScene(scene);
     stage.show();
   }
 
@@ -286,7 +281,8 @@ public class HitThePointsController {
     double canvasHeight = gameCanvas.getHeight();
 
     // Adjust circle radius based on score
-    double adjustedRadius = Math.max(INITIAL_CIRCLE_RADIUS - (score * 2), 5); // Minimum radius of 5
+    circleRadius = Math.max(circleRadius - 4, 18);
+    double adjustedRadius = circleRadius;
 
     circleX = ThreadLocalRandom.current().nextDouble(adjustedRadius, canvasWidth - adjustedRadius);
     circleY = ThreadLocalRandom.current().nextDouble(adjustedRadius, canvasHeight - adjustedRadius);
@@ -305,7 +301,7 @@ public class HitThePointsController {
   }
 
   private void drawResultCircle(boolean passed) {
-    double adjustedRadius = Math.max(INITIAL_CIRCLE_RADIUS - (score * 2), 5);
+    double adjustedRadius = circleRadius;
 
     var resultGc = resultCanvas.getGraphicsContext2D();
     resultGc.setFill(passed ? Color.GREEN : Color.RED);
@@ -338,11 +334,8 @@ public class HitThePointsController {
    */
   public void switchToGameSelection(ActionEvent event) throws IOException {
     stopRecording();
-
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/game_selection.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/game_selection.fxml");
   }
 }
