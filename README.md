@@ -1,6 +1,6 @@
-# 🎨 VoiceArt
+# 🎨 VoiceGames
 
-**VoiceArt** is a Java application that allows you to create art using your **voice**. Unleash your creativity in a whole new way!
+**VoiceGames** is a Java application that allows you to create art using your **voice**. Unleash your creativity in a whole new way!
 
 ---
 

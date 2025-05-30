@@ -1,13 +1,14 @@
 package at.fh.burgenland;
 
+import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /** JavaFX example using for pipeline test. */
@@ -18,6 +19,20 @@ public class LandingController {
   private Stage stage;
   private Scene scene;
   private Parent root;
+
+  @FXML private HBox debugContainer; // Referenz zum Debug-Container
+
+  /**
+   * Initializes the controller by making the debug container visible and managed if it is not null.
+   * This ensures that debug-related UI elements are consistently displayed in the application.
+   */
+  public void initialize() {
+    // Debug-Buttons immer sichtbar machen
+    if (debugContainer != null) {
+      debugContainer.setVisible(true);
+      debugContainer.setManaged(true);
+    }
+  }
 
   @FXML
   protected void onHelloButtonClick() {
@@ -30,12 +45,9 @@ public class LandingController {
    * @param event The {@link ActionEvent} that triggered the switch (e.g., a button click).
    * @throws IOException If the "hello.fxml" file cannot be loaded.
    */
-  public void switchToDebug(ActionEvent event) throws IOException {
-    root = FXMLLoader.load(getClass().getResource("hello.fxml"));
-    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+  public void switchToDebug(ActionEvent event) {
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/hello.fxml");
   }
 
   /**
@@ -44,11 +56,9 @@ public class LandingController {
    *
    * @param event The {@link ActionEvent} that triggers the method (button click)
    */
-  public void showCoordinateSystem(ActionEvent event) throws IOException {
-    root = FXMLLoader.load(getClass().getResource("coordinate-system.fxml"));
-    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+  public void showCoordinateSystem(ActionEvent event) {
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/coordinate-system.fxml");
   }
 }

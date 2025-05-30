@@ -38,18 +38,18 @@ jobs:
 
       - name: Zip jpackage output
         if: runner.os == 'Windows'
-        run: powershell Compress-Archive -Path build/jpackage/app/* -DestinationPath voiceart-${{runner.os}}.zip
+        run: powershell Compress-Archive -Path build/jpackage/app/* -DestinationPath voicegames-${{runner.os}}.zip
 
       - name: Zip jpackage output
         if: runner.os == 'Linux'
-        run: zip -r voiceart-${{runner.os}}.zip build/jpackage/app/
+        run: zip -r voicegames-${{runner.os}}.zip build/jpackage/app/
 
 
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: voiceart-${{runner.os}}
-          path: voiceart-${{runner.os}}.zip
+          name: voicegames-${{runner.os}}
+          path: voicegames-${{runner.os}}.zip
 
   deploy:
     needs: build
@@ -58,12 +58,12 @@ jobs:
       - name: Download Windows Artifact
         uses: actions/download-artifact@v4
         with:
-          name: voiceart-Windows
+          name: voicegames-Windows
 
       - name: Download Linux Artifact
         uses: actions/download-artifact@v4
         with:
-          name: voiceart-Linux
+          name: voicegames-Linux
 
       - name: Create Release
         id: create_release
@@ -72,7 +72,7 @@ jobs:
           tag_name: v${{ github.run_number }}
           name: Release ${{ github.run_number }}
           files: |
-            voiceart-Windows.zip
-            voiceart-Linux.zip
+            voicegames-Windows.zip
+            voicegames-Linux.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

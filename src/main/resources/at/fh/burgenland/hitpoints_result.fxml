@@ -15,5 +15,5 @@
       </padding>
    </Label>
    <Canvas fx:id="resultCanvas" width="800" height="400" />
-   <Button fx:id="backButton" text="Zurück zum Start" onAction="#switchToStartScene"/>
+   <Button fx:id="backButton" text="Zurück zum Start" onAction="#switchToStartScene" styleClass="btn, btn-danger"/>
 </VBox>
