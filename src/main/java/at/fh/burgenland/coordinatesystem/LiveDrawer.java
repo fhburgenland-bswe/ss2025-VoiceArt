@@ -55,7 +55,7 @@ public class LiveDrawer {
     CoordinateSystemDrawer.PADDING_LEFT
         + ((pitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;*/
 
-    double x = CoordinateSystemDrawer.PADDING_LEFT + LogScaleConverter.freqToX(pitch);
+    double x = CoordinateSystemDrawer.PADDING_LEFT + LogScaleConverter.frequencyToX(pitch);
 
     double y =
         CoordinateSystemDrawer.PADDING_TOP + ((maxDb - db) / (double) (maxDb - minDb)) * plotHeight;

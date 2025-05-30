@@ -306,22 +306,22 @@ public class TreasureHuntController {
               System.out.println("Pitch: " + pitch + " | dB: " + db);
               double width1 = overlapCanvas.getWidth();
               double height1 = overlapCanvas.getHeight();
-              double plotWidth = width1 
-                  - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
-              double plotHeight = height1 - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
-
+              double plotWidth =
+                  width1 - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
+              double plotHeight =
+                  height1 - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
 
               LogScaleConverter.init(minFreq, maxFreq, plotWidth);
 
-               
               /*double x =
               TopCanvasDrawer.PADDING_LEFT
                   + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;*/
-               
-              // NEU MIT LOG SKALA 
-              double x = TopCanvasDrawer.PADDING_LEFT + LogScaleConverter.freqToX(smoothedPitch);
-              //BIS HIER
-              
+
+              // NEU MIT LOG SKALA
+              double x =
+                  TopCanvasDrawer.PADDING_LEFT + LogScaleConverter.frequencyToX(smoothedPitch);
+              // BIS HIER
+
               double y =
                   TopCanvasDrawer.PADDING_TOP
                       + ((maxDb - smoothedDb) / (double) (maxDb - minDb)) * plotHeight;
@@ -438,8 +438,7 @@ public class TreasureHuntController {
    * @param increaseLevel true to increase the level, false to keep the current level
    */
   private void resetLevelAndTreasure(boolean increaseLevel) {
-    
-    
+
     if (increaseLevel && level < maxLevel) {
       level++;
       updateTreasureRadii();
@@ -459,9 +458,9 @@ public class TreasureHuntController {
     double minY = TopCanvasDrawer.PADDING_TOP + treasureRadiusOuter;
     double maxY = height - TopCanvasDrawer.PADDING_BOTTOM - treasureRadiusOuter;
 
-    //treasureX = ThreadLocalRandom.current().nextDouble(minX, maxX);
+    // treasureX = ThreadLocalRandom.current().nextDouble(minX, maxX);
 
-    //MIT LOG SKALA
+    // MIT LOG SKALA
     double plotWidth = width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
     LogScaleConverter.init(minFreq, maxFreq, plotWidth);
 
@@ -469,12 +468,12 @@ public class TreasureHuntController {
     double randomFreq = ThreadLocalRandom.current().nextDouble(minFreq, maxFreq);
 
     // Umrechnung: Frequenz → X-Koordinate in Pixeln (logarithmisch)
-    double logX = LogScaleConverter.freqToX(randomFreq);
+    double logX = LogScaleConverter.frequencyToX(randomFreq);
     treasureX = TopCanvasDrawer.PADDING_LEFT + logX;
 
     treasureY = ThreadLocalRandom.current().nextDouble(minY, maxY);
 
-    //treasureRelX = (treasureX - minX) / (maxX - minX);
+    // treasureRelX = (treasureX - minX) / (maxX - minX);
     treasureRelX = logX / plotWidth;
     treasureRelY = (treasureY - minY) / (maxY - minY);
 

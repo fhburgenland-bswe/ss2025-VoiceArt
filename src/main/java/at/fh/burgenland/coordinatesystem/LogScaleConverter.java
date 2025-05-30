@@ -12,12 +12,12 @@ public class LogScaleConverter {
 
   /**
    * logarithmic scale factor per pixel the frequency distribution can be mapped in the drawing
-   * width
+   * width.
    */
   private static double lnBase;
 
   /**
-   * Initializes the logarithmic scale with frequency are and drawing width
+   * Initializes the logarithmic scale with frequency are and drawing width.
    *
    * @param minFreq the minimum frequency value to be displayed
    * @param maxFreq the maximum frequency value to be displayed
@@ -33,23 +33,23 @@ public class LogScaleConverter {
   }
 
   /**
-   * Given frequency is converted into a x-coordinate (pixel)
+   * Given frequency is converted into a x-coordinate (pixel).
    *
-   * @param freq frequency value in Hz
-   * @return the related x-position in the drawing area without padding
+   * @param freq frequency value in Hz.
+   * @return the related x-position in the drawing area without padding.
    */
-  public static double freqToX(double freq) {
+  public static double frequencyToX(double freq) {
     return Math.log(freq / minFreq) / lnBase;
   }
 
   /**
    * Converts a given x-coordinate (pixels) back to the related frequency (Hz) Mostly used for the
-   * axis naming
+   * axis naming.
    *
    * @param x x-coordinate within the drawing area
    * @return calculated frequency in Hz on this position
    */
-  public static double xToFreq(double x) {
+  public static double xcoordinateToFrequency(double x) {
     return minFreq * Math.exp(lnBase * x);
   }
 }

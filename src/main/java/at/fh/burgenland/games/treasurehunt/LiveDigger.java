@@ -42,21 +42,21 @@ public class LiveDigger {
       return;
     }
 
-    //double width = coordinateSystemCanvas.getWidth();
+    // double width = coordinateSystemCanvas.getWidth();
     double height = coordinateSystemCanvas.getHeight();
 
-    //double plotWidth = width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
+    // double plotWidth = width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
     double plotHeight = height - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
 
     // converting Hz & dB to coordinates
 
     /*double x =
-        TopCanvasDrawer.PADDING_LEFT
-            + ((pitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;*/
-    
-    //NEU MIT LOG SKALA
-    double x = TopCanvasDrawer.PADDING_LEFT + LogScaleConverter.freqToX(pitch);
-    //BIS HIER
+    TopCanvasDrawer.PADDING_LEFT
+        + ((pitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;*/
+
+    // NEU MIT LOG SKALA
+    double x = TopCanvasDrawer.PADDING_LEFT + LogScaleConverter.frequencyToX(pitch);
+    // BIS HIER
 
     double y = TopCanvasDrawer.PADDING_TOP + ((maxDb - db) / (double) (maxDb - minDb)) * plotHeight;
 

@@ -29,7 +29,6 @@ public class CoordinateSystemDrawer {
 
     System.out.println("Canvasgroesse: " + width + " x " + height);
 
-    double plotWidth = width - PADDING_LEFT - PADDING_RIGHT;
     double plotHeight = height - PADDING_TOP - PADDING_BOTTOM;
 
     // background of the coordinate system
@@ -71,6 +70,7 @@ public class CoordinateSystemDrawer {
       stepHz = 1;
     }
 
+    double plotWidth = width - PADDING_LEFT - PADDING_RIGHT;
     // URSPRÜNGLICHER CODE VOR LOG SKALA
     /*for (int hz = minFreq; hz <= maxFreq; hz += stepHz) {
       double x = PADDING_LEFT + ((hz - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
@@ -83,7 +83,7 @@ public class CoordinateSystemDrawer {
 
     for (int i = 0; i <= numLabels; i++) {
       double x = i * plotWidth / numLabels;
-      double freq = LogScaleConverter.xToFreq(x);
+      double freq = LogScaleConverter.xcoordinateToFrequency(x);
       double absX = PADDING_LEFT + x;
 
       g.strokeLine(absX, PADDING_TOP, absX, height - PADDING_BOTTOM);

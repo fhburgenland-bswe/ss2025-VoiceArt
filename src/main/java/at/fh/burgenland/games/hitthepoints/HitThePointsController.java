@@ -4,6 +4,7 @@ import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
 import at.fh.burgenland.coordinatesystem.LiveDrawer;
+import at.fh.burgenland.coordinatesystem.LogScaleConverter;
 import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
@@ -24,8 +25,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import at.fh.burgenland.coordinatesystem.LogScaleConverter;
-
 
 /** Controller class for the HitThePoints game. This class handles the game logic */
 public class HitThePointsController {
@@ -163,13 +162,14 @@ public class HitThePointsController {
                       - CoordinateSystemDrawer.PADDING_TOP
                       - CoordinateSystemDrawer.PADDING_BOTTOM;
 
-              //NEU MIT LOG SKALA
+              // NEU MIT LOG SKALA
               LogScaleConverter.init(minFreq, maxFreq, plotWidth);
               double x =
-                CoordinateSystemDrawer.PADDING_LEFT + LogScaleConverter.freqToX(smoothedPitch);
-              /*double x =
                   CoordinateSystemDrawer.PADDING_LEFT
-                      + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;*/
+                      + LogScaleConverter.frequencyToX(smoothedPitch);
+              /*double x =
+              CoordinateSystemDrawer.PADDING_LEFT
+                  + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;*/
               double y =
                   CoordinateSystemDrawer.PADDING_TOP
                       + ((maxDb - smoothedDb) / (double) (maxDb - minDb)) * plotHeight;

@@ -1,10 +1,10 @@
 package at.fh.burgenland.games.treasurehunt;
 
+import at.fh.burgenland.coordinatesystem.LogScaleConverter;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import at.fh.burgenland.coordinatesystem.LogScaleConverter;
 
 /**
  * Utility class for drawing the coordinate system with labeled axes for frequency (Hz) and volume
@@ -36,7 +36,6 @@ public class TopCanvasDrawer {
 
     System.out.println("Canvasgroesse: " + width + " x " + height);
 
-    double plotWidth = width - PADDING_LEFT - PADDING_RIGHT;
     double plotHeight = height - PADDING_TOP - PADDING_BOTTOM;
 
     // background of the coordinate system
@@ -69,27 +68,27 @@ public class TopCanvasDrawer {
       stepHz = 1;
     }
 
-    /* 
+    /*
     for (int hz = minFreq; hz <= maxFreq; hz += stepHz) {
       double x = PADDING_LEFT + ((hz - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
       g.strokeLine(x, PADDING_TOP, x, height - PADDING_BOTTOM);
       g.fillText(hz + " Hz", x - 20, height - PADDING_BOTTOM + 20);
     }*/
 
-    //MIT LOG SKALA
+    double plotWidth = width - PADDING_LEFT - PADDING_RIGHT;
+    // MIT LOG SKALA
     int numLabels = 6;
     LogScaleConverter.init(minFreq, maxFreq, plotWidth);
 
     for (int i = 0; i <= numLabels; i++) {
-        double xPixel = i * plotWidth / numLabels;
-        double freq = LogScaleConverter.xToFreq(xPixel);
-        double absX = PADDING_LEFT + xPixel;
+      double pixelX = i * plotWidth / numLabels;
+      double freq = LogScaleConverter.xcoordinateToFrequency(pixelX);
+      double absX = PADDING_LEFT + pixelX;
 
-        g.strokeLine(absX, PADDING_TOP, absX, height - PADDING_BOTTOM);
-        g.fillText(String.format("%.0f Hz", freq), absX - 20, height - PADDING_BOTTOM + 20);
+      g.strokeLine(absX, PADDING_TOP, absX, height - PADDING_BOTTOM);
+      g.fillText(String.format("%.0f Hz", freq), absX - 20, height - PADDING_BOTTOM + 20);
     }
-    //BIS HIER
-
+    // BIS HIER
 
     // x-axis title
     g.setFont(Font.font(12));

@@ -217,10 +217,10 @@ public class VoiceZoneController {
       LogScaleConverter.init(minFreq, maxFreq, plotWidth);
       double x1 =
           CoordinateSystemDrawer.PADDING_LEFT
-              + LogScaleConverter.freqToX(targetValue - currentTolerance);
+              + LogScaleConverter.frequencyToX(targetValue - currentTolerance);
       double x2 =
           CoordinateSystemDrawer.PADDING_LEFT
-              + LogScaleConverter.freqToX(targetValue + currentTolerance);
+              + LogScaleConverter.frequencyToX(targetValue + currentTolerance);
       gc.fillRect(Math.min(x1, x2), (height - thickness) / 2, Math.abs(x2 - x1), thickness);
     } else {
       double plotHeight =
