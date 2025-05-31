@@ -2,6 +2,7 @@ package at.fh.burgenland.games.treasurehunt;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
+import at.fh.burgenland.coordinatesystem.LogScaleConverter;
 import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
@@ -229,6 +230,11 @@ public class TreasureHuntController {
    * whenever the window is resized or the treasure position changes.
    */
   private void drawCoordinateSystemStructure() {
+    // NEU MIT LOG SKALA
+    double width = baseCanvas.getWidth();
+    double plotWidth = width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
+    LogScaleConverter.init(minFreq, maxFreq, plotWidth);
+
     updateTreasureRadii();
 
     TopCanvasDrawer.drawAxes(overlapCanvas, minFreq, maxFreq, minDb, maxDb);
@@ -236,7 +242,7 @@ public class TreasureHuntController {
 
     BottomCanvasDrawer.drawCoveringLayer(baseCanvas);
 
-    double width = baseCanvas.getWidth();
+    // double width = baseCanvas.getWidth();
     double height = baseCanvas.getHeight();
     double minX = TopCanvasDrawer.PADDING_LEFT + treasureRadiusOuter;
     double maxX = width - TopCanvasDrawer.PADDING_RIGHT - treasureRadiusOuter;
@@ -315,9 +321,17 @@ public class TreasureHuntController {
               double plotHeight =
                   height1 - TopCanvasDrawer.PADDING_TOP - TopCanvasDrawer.PADDING_BOTTOM;
 
+              LogScaleConverter.init(minFreq, maxFreq, plotWidth);
+
+              /*double x =
+              TopCanvasDrawer.PADDING_LEFT
+                  + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;*/
+
+              // NEU MIT LOG SKALA
               double x =
-                  TopCanvasDrawer.PADDING_LEFT
-                      + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
+                  TopCanvasDrawer.PADDING_LEFT + LogScaleConverter.frequencyToX(smoothedPitch);
+              // BIS HIER
+
               double y =
                   TopCanvasDrawer.PADDING_TOP
                       + ((maxDb - smoothedDb) / (double) (maxDb - minDb)) * plotHeight;
@@ -451,10 +465,23 @@ public class TreasureHuntController {
     double minY = TopCanvasDrawer.PADDING_TOP + treasureRadiusOuter;
     double maxY = height - TopCanvasDrawer.PADDING_BOTTOM - treasureRadiusOuter;
 
-    treasureX = ThreadLocalRandom.current().nextDouble(minX, maxX);
+    // treasureX = ThreadLocalRandom.current().nextDouble(minX, maxX);
+
+    // MIT LOG SKALA
+    double plotWidth = width - TopCanvasDrawer.PADDING_LEFT - TopCanvasDrawer.PADDING_RIGHT;
+    LogScaleConverter.init(minFreq, maxFreq, plotWidth);
+
+    // Zufällige Frequenz im erlaubten Bereich
+    double randomFreq = ThreadLocalRandom.current().nextDouble(minFreq, maxFreq);
+
+    // Umrechnung: Frequenz → X-Koordinate in Pixeln (logarithmisch)
+    double logX = LogScaleConverter.frequencyToX(randomFreq);
+    treasureX = TopCanvasDrawer.PADDING_LEFT + logX;
+
     treasureY = ThreadLocalRandom.current().nextDouble(minY, maxY);
 
-    treasureRelX = (treasureX - minX) / (maxX - minX);
+    // treasureRelX = (treasureX - minX) / (maxX - minX);
+    treasureRelX = logX / plotWidth;
     treasureRelY = (treasureY - minY) / (maxY - minY);
 
     drawCoordinateSystemStructure();

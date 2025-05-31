@@ -49,9 +49,14 @@ public class LiveDrawer {
         height - CoordinateSystemDrawer.PADDING_TOP - CoordinateSystemDrawer.PADDING_BOTTOM;
 
     // converting Hz & dB to coordinates
-    double x =
-        CoordinateSystemDrawer.PADDING_LEFT
-            + ((pitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
+
+    // VOR LOG SKALA
+    /*double x =
+    CoordinateSystemDrawer.PADDING_LEFT
+        + ((pitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;*/
+
+    double x = CoordinateSystemDrawer.PADDING_LEFT + LogScaleConverter.frequencyToX(pitch);
+
     double y =
         CoordinateSystemDrawer.PADDING_TOP + ((maxDb - db) / (double) (maxDb - minDb)) * plotHeight;
 

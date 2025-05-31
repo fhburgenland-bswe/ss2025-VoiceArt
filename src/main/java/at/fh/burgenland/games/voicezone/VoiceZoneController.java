@@ -2,6 +2,7 @@ package at.fh.burgenland.games.voicezone;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
+import at.fh.burgenland.coordinatesystem.LogScaleConverter;
 import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
@@ -208,7 +209,8 @@ public class VoiceZoneController {
     if (trainingMode == VoiceZoneTrainingMode.FREQUENCY) {
       double plotWidth =
           width - CoordinateSystemDrawer.PADDING_LEFT - CoordinateSystemDrawer.PADDING_RIGHT;
-      double x1 =
+      System.out.println("Plotwidth" + plotWidth);
+      /*double x1 =
           map(
               targetValue - currentTolerance,
               minFreq,
@@ -221,7 +223,15 @@ public class VoiceZoneController {
               minFreq,
               maxFreq,
               CoordinateSystemDrawer.PADDING_LEFT,
-              CoordinateSystemDrawer.PADDING_LEFT + plotWidth);
+              CoordinateSystemDrawer.PADDING_LEFT + plotWidth);*/
+
+      LogScaleConverter.init(minFreq, maxFreq, plotWidth);
+      double x1 =
+          CoordinateSystemDrawer.PADDING_LEFT
+              + LogScaleConverter.frequencyToX(targetValue - currentTolerance);
+      double x2 =
+          CoordinateSystemDrawer.PADDING_LEFT
+              + LogScaleConverter.frequencyToX(targetValue + currentTolerance);
       gc.fillRect(Math.min(x1, x2), (height - thickness) / 2, Math.abs(x2 - x1), thickness);
     } else {
       double plotHeight =

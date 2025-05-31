@@ -4,6 +4,7 @@ import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
 import at.fh.burgenland.coordinatesystem.LiveDrawer;
+import at.fh.burgenland.coordinatesystem.LogScaleConverter;
 import at.fh.burgenland.fft.FrequenzDbOutput;
 import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
@@ -175,9 +176,14 @@ public class HitThePointsController {
                       - CoordinateSystemDrawer.PADDING_TOP
                       - CoordinateSystemDrawer.PADDING_BOTTOM;
 
+              // NEU MIT LOG SKALA
+              LogScaleConverter.init(minFreq, maxFreq, plotWidth);
               double x =
                   CoordinateSystemDrawer.PADDING_LEFT
-                      + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;
+                      + LogScaleConverter.frequencyToX(smoothedPitch);
+              /*double x =
+              CoordinateSystemDrawer.PADDING_LEFT
+                  + ((smoothedPitch - minFreq) / (double) (maxFreq - minFreq)) * plotWidth;*/
               double y =
                   CoordinateSystemDrawer.PADDING_TOP
                       + ((maxDb - smoothedDb) / (double) (maxDb - minDb)) * plotHeight;
