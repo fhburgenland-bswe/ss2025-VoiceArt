@@ -2,19 +2,17 @@ package at.fh.burgenland.coordinatesystem;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.fft.FrequenzDbOutput;
+import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
-import at.fh.burgenland.profiles.VoiceProfile;
+import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -94,7 +92,7 @@ public class CoordinateSystemController {
 
     UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (userProfile != null) {
-      VoiceProfile voiceProfile = userProfile.getVoiceProfile();
+      IfVoiceProfile voiceProfile = userProfile.getVoiceProfile();
       minFreq = voiceProfile.getMinFreq();
       maxFreq = voiceProfile.getMaxFreq();
       minDb = voiceProfile.getMinDb();
@@ -227,11 +225,9 @@ public class CoordinateSystemController {
    * @throws IOException If the FXML file for the start scene cannot be loaded.
    */
   @FXML
-  public void switchToStartScene(ActionEvent event) throws IOException {
-    Parent root = FXMLLoader.load(getClass().getResource("/at/fh/burgenland/landing.fxml"));
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+  public void switchToStartScene(ActionEvent event) {
+    SceneUtil.changeScene(
+        (Stage) ((Node) event.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/landing.fxml");
   }
 }

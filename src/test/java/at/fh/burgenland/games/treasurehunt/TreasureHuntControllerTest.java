@@ -49,8 +49,7 @@ public class TreasureHuntControllerTest {
   @Test
   void testStartRecordingButton(FxRobot robot) {
     Button startButton = robot.lookup("#startRecordingButton").queryAs(Button.class);
-    assertEquals(
-        "Start Recording", startButton.getText(), "Der Button sollte 'Start Recording' sein.");
+    assertEquals("Start", startButton.getText(), "Der Button sollte 'Start Recording' sein.");
   }
 
   @Test

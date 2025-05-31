@@ -5,7 +5,7 @@ package at.fh.burgenland.profiles;
  * frequency and volume ranges. These values are used to configure the axes of the coordinate system
  * visualization.
  */
-public enum VoiceProfile {
+public enum VoiceProfile implements IfVoiceProfile {
 
   /** Definition of two voice profiles based on typical voice frequence ranges for men and women. */
   MAENNLICH(80, 530, -50, -5),
@@ -26,19 +26,36 @@ public enum VoiceProfile {
   }
 
   // Getter
+
+  @Override
   public int getMinFreq() {
     return minFreq;
   }
 
+  @Override
   public int getMaxFreq() {
     return maxFreq;
   }
 
+  @Override
   public int getMinDb() {
     return minDb;
   }
 
+  @Override
   public int getMaxDb() {
     return maxDb;
+  }
+
+  @Override
+  public String toString() {
+    switch (this) {
+      case MAENNLICH:
+        return "männlich";
+      case WEIBLICH:
+        return "weiblich";
+      default:
+        return super.toString();
+    }
   }
 }

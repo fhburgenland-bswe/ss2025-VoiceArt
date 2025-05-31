@@ -3,25 +3,49 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20.0"
-  xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="at.fh.burgenland.LandingController">
-  <padding>
-    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-  </padding>
 
-  <fx:include fx:id="inputControlsPane" source="input_controls.fxml"/>
-  <fx:include fx:id="profilAuswahlPane" source="profile.fxml"/>
+  <!-- Hintergrund mit dekorativen Elementen -->
+  <Pane styleClass="background-pane">
+    <!-- Blaue geschwungene Form links -->
+    <Circle styleClass="blue-circle" centerX="-150" centerY="300" radius="400"/>
+    <!-- Graue geschwungene Form rechts unten -->
+    <Circle styleClass="gray-circle" centerX="700" centerY="800" radius="300"/>
+  </Pane>
 
-  <Label fx:id="welcomeText"/>
-  <Button onAction="#onHelloButtonClick" text="Hello!"/>
+  <!-- Hauptinhalt -->
+  <VBox fx:id="rootVBox" alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="30.0" styleClass="content-container">
+    <padding>
+      <Insets bottom="40.0" left="40.0" right="40.0" top="40.0"/>
+    </padding>
 
-  <Button layoutX="44.0" layoutY="177.0" mnemonicParsing="false" onAction="#switchToDebug"
-    text="DebugMenu">
-    <font></font>
-  </Button>
+    <!-- Mikrofon-Icon oben rechts -->
+    <HBox alignment="TOP_RIGHT">
+      <fx:include fx:id="inputControlsPane" source="input_controls.fxml"/>
+    </HBox>
 
-  <Button onAction="#showCoordinateSystem" text="Show Coordinate System"/>
+    <!-- App-Titel und Untertitel -->
+    <VBox alignment="CENTER" spacing="10">
+      <Label text="VoiceGames" styleClass="h1"/>
+      <Label text="Mit der Stimme malen" styleClass="lead"/>
+    </VBox>
 
-</VBox>
+    <Region VBox.vgrow="ALWAYS" minHeight="40"/> <!-- Abstand -->
+
+    <!-- Profile Auswahl -->
+    <VBox alignment="CENTER" spacing="20">
+      <fx:include fx:id="profilAuswahlPane" source="profile.fxml"/>
+    </VBox>
+
+    <Region VBox.vgrow="ALWAYS" minHeight="20"/> <!-- Abstand -->
+
+    <!-- Debug Buttons - explizit sichtbar gemacht -->
+    <HBox fx:id="debugContainer" alignment="CENTER" spacing="10" styleClass="debug-container" visible="true" managed="true">
+      <Button mnemonicParsing="false" onAction="#switchToDebug" text="DebugMenu" styleClass="btn, btn-secondary"/>
+      <Button onAction="#showCoordinateSystem" text="Show Coordinate System" styleClass="btn, btn-primary"/>
+    </HBox>
+  </VBox>
+</StackPane>

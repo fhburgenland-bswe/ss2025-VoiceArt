@@ -4,12 +4,12 @@ module at.fh.burgenland {
   requires java.desktop;
   requires TarsosDSP.core;
   requires TarsosDSP.jvm;
+  requires org.kordamp.bootstrapfx.core;
+  requires jdk.jdi;
   requires com.fasterxml.jackson.databind;
   requires static lombok;
   requires javafx.graphics;
 
-  opens at.fh.burgenland to
-      javafx.fxml;
   opens at.fh.burgenland.audioinput to
       javafx.fxml;
   opens at.fh.burgenland.fft to
@@ -29,6 +29,12 @@ module at.fh.burgenland {
       javafx.fxml;
 
   exports at.fh.burgenland;
+
+  opens at.fh.burgenland to
+      com.fasterxml.jackson.databind,
+      javafx.fxml;
+
+  exports at.fh.burgenland.profiles;
   exports at.fh.burgenland.games;
 
   opens at.fh.burgenland.games to

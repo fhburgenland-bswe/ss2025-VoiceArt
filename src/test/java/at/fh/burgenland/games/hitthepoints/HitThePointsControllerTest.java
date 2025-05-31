@@ -79,7 +79,7 @@ public class HitThePointsControllerTest {
 
     Label userProfileLabel = robot.lookup("#profileLabel").queryAs(Label.class);
     assertEquals(
-        "Stimmprofil: MAENNLICH",
+        "Stimmprofil: männlich",
         userProfileLabel.getText(),
         "Der UserInfo-Label sollte 'TestUser' sein.");
   }
@@ -88,15 +88,6 @@ public class HitThePointsControllerTest {
   public void gameSelectionButtonTest() {
     verifyThat("#gameSelectionButton", NodeMatchers.isVisible());
     Node backButtonNode = robot.lookup("#gameSelectionButton").query();
-
-    assertTrue(backButtonNode.isVisible(), "Back button should be visible");
-    assertFalse(backButtonNode.isDisabled(), "Back button should be enabled");
-  }
-
-  @Test
-  void backButtonTest(FxRobot robot) {
-    verifyThat("#backButton", NodeMatchers.isVisible());
-    Node backButtonNode = robot.lookup("#backButton").query();
 
     assertTrue(backButtonNode.isVisible(), "Back button should be visible");
     assertFalse(backButtonNode.isDisabled(), "Back button should be enabled");

@@ -18,7 +18,7 @@
   <Label fx:id="dbLabel" text="db" />
   <Label fx:id="pitchLabel" text="pitch" />
 
-  <Button mnemonicParsing="false" onAction="#onStartRecording" text="start" />
-  <Button mnemonicParsing="false" onAction="#onStopRecording" text="stop" />
+  <Button mnemonicParsing="false" onAction="#onStartRecording" text="start" styleClass="btn, btn-primary"/>
+  <Button mnemonicParsing="false" onAction="#onStopRecording" text="stop" styleClass="btn, btn-danger"/>
 
 </VBox>
