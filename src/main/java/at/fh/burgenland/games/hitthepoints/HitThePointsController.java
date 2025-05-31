@@ -5,9 +5,9 @@ import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
 import at.fh.burgenland.coordinatesystem.LiveDrawer;
 import at.fh.burgenland.fft.FrequenzDbOutput;
+import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
-import at.fh.burgenland.profiles.VoiceProfile;
 import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public class HitThePointsController {
   public void initialize() {
     UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (userProfile != null) {
-      VoiceProfile voiceProfile = userProfile.getVoiceProfile();
+      IfVoiceProfile voiceProfile = userProfile.getVoiceProfile();
       minFreq = voiceProfile.getMinFreq();
       maxFreq = voiceProfile.getMaxFreq();
       minDb = voiceProfile.getMinDb();
@@ -122,7 +122,7 @@ public class HitThePointsController {
     updateScoreLabel();
     setUserInfo(
         ProfileManager.getCurrentProfile().getUserName(),
-        ProfileManager.getCurrentProfile().getVoiceProfile().name());
+        ProfileManager.getCurrentProfile().getVoiceProfile().getClass().getSimpleName());
   }
 
   /**
@@ -240,11 +240,12 @@ public class HitThePointsController {
    * @param profileName the name of the selected voice profile
    */
   public void setUserInfo(String username, String profileName) {
+    UserProfile userProfile = ProfileManager.getCurrentProfile();
     if (usernameLabel != null) {
       usernameLabel.setText("Benutzer: " + username);
     }
     if (profileLabel != null) {
-      profileLabel.setText("Stimmprofil: " + profileName);
+      profileLabel.setText("Stimmprofil: " + userProfile.getVoiceProfile().toString());
     }
   }
 

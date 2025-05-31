@@ -26,6 +26,13 @@
     <Label fx:id="voiceProfileErrorLabel" style="-fx-text-fill: green;" visible="false" managed="false"/>
     <RadioButton fx:id="femaleProfile" text="Weiblich" toggleGroup="$voiceProfileGroup"/>
     <RadioButton fx:id="maleProfile" text="Männlich" toggleGroup="$voiceProfileGroup"/>
+    <RadioButton fx:id="customProfile" text="Benutzerdefiniert" toggleGroup="$voiceProfileGroup" onAction="#onCustomSelected"/>
+    <HBox fx:id="customFields" visible="false">
+      <TextField fx:id="minDbField" promptText="min dB"/>
+      <TextField fx:id="maxDbField" promptText="max dB"/>
+      <TextField fx:id="minHzField" promptText="min Hz"/>
+      <TextField fx:id="maxHzField" promptText="max Hz"/>
+    </HBox>
   </VBox>
   <HBox spacing="20.0" alignment="BOTTOM_RIGHT">
     <Button fx:id="backButton" text="Zurück" onAction="#backtoLanding" styleClass="btn, btn-secondary"/>

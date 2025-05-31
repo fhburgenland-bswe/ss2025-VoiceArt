@@ -7,12 +7,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /** Controller for Profile Creation Page. */
@@ -25,6 +28,18 @@ public class CreateProfileController {
   @FXML private RadioButton femaleProfile;
 
   @FXML private RadioButton maleProfile;
+
+  @FXML private RadioButton customProfile;
+
+  @FXML private HBox customFields;
+
+  @FXML private TextField minDbField;
+
+  @FXML private TextField maxDbField;
+
+  @FXML private TextField minHzField;
+
+  @FXML private TextField maxHzField;
 
   @FXML private Label voiceProfileErrorLabel;
 
@@ -43,6 +58,14 @@ public class CreateProfileController {
     usernameErrorLabel.setManaged(false);
     voiceProfileErrorLabel.setVisible(false);
     voiceProfileErrorLabel.setManaged(false);
+
+    customFields.setVisible(customProfile.isSelected());
+    voiceProfileGroup
+        .selectedToggleProperty()
+        .addListener(
+            (obs, oldToggle, newToggle) -> {
+              customFields.setVisible(customProfile.isSelected());
+            });
 
     // Listener for Textfield
     usernameField
@@ -110,13 +133,23 @@ public class CreateProfileController {
     String username = usernameField.getText();
     String selectedText = ((RadioButton) voiceProfileGroup.getSelectedToggle()).getText();
 
-    VoiceProfile voiceProfile = null;
+    IfVoiceProfile voiceProfile = null;
     switch (selectedText.toLowerCase()) {
       case "männlich":
         voiceProfile = VoiceProfile.MAENNLICH;
         break;
       case "weiblich":
         voiceProfile = VoiceProfile.WEIBLICH;
+        break;
+      case "benutzerdefiniert":
+        if (!validateCustomProfileInput()) {
+          return;
+        }
+        int minDb = Integer.parseInt(minDbField.getText());
+        int maxDb = Integer.parseInt(maxDbField.getText());
+        int minHz = Integer.parseInt(minHzField.getText());
+        int maxHz = Integer.parseInt(maxHzField.getText());
+        voiceProfile = new CustomVoiceProfile(minDb, maxDb, minHz, maxHz);
         break;
       default:
         break;
@@ -138,11 +171,51 @@ public class CreateProfileController {
         "/at/fh/burgenland/game_selection.fxml");
   }
 
+  @FXML
+  private void onCustomSelected() {
+    customFields.setVisible(customProfile.isSelected());
+  }
+
   private void saveUser(UserProfile userProfile) {
     if (ProfileManager.getUserProfiles().contains(userProfile)) {
       usernameErrorLabel.setText("Benutzername bereits vergeben.");
       return;
     }
     ProfileManager.addProfile(userProfile);
+  }
+
+  private boolean validateCustomProfileInput() {
+    try {
+      int minDb = Integer.parseInt(minDbField.getText());
+      int maxDb = Integer.parseInt(maxDbField.getText());
+      int minHz = Integer.parseInt(minHzField.getText());
+      int maxHz = Integer.parseInt(maxHzField.getText());
+
+      if (minDb < -60 || minDb > 0 || maxDb < -60 || maxDb > 0) {
+        showError("dB-Werte müssen zwischen -60 und 0 liegen.");
+        return false;
+      }
+      if (minHz < 0 || maxHz < 0) {
+        showError("Frequenzwerte dürfen nicht negativ sein.");
+        return false;
+      }
+      if (minDb >= maxDb) {
+        showError("Minimale dB muss kleiner als maximale dB sein.");
+        return false;
+      }
+      if (minHz >= maxHz) {
+        showError("Minimale Frequenz muss kleiner als maximale Frequenz sein.");
+        return false;
+      }
+      return true;
+    } catch (NumberFormatException e) {
+      showError("Bitte geben Sie gültige Zahlen ein.");
+      return false;
+    }
+  }
+
+  private void showError(String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+    alert.showAndWait();
   }
 }
