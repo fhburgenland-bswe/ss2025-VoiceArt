@@ -1,14 +1,27 @@
 package at.fh.burgenland.games.hitthepoints;
 
+import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.utils.SceneUtil;
+
+import javafx.embed.swing.SwingFXUtils;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import javax.imageio.ImageIO;
 
 /**
  * Controller class for the Hit The Points result screen. This class handles the display of the
@@ -52,5 +65,30 @@ public class HitThePointsResultController {
     SceneUtil.changeScene(
         (Stage) ((Node) event.getSource()).getScene().getWindow(),
         "/at/fh/burgenland/landing.fxml");
+  }
+
+  @FXML
+  private void exportPicture(ActionEvent actionEvent) throws IOException {
+
+    // Create folder
+    File folder = new File(ProfileManager.getCurrentProfile().getUserName());
+    if (!folder.exists()) folder.mkdirs();
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
+    String timestamp = LocalDateTime.now().format(formatter);
+
+    // Generate filename
+    String filename = "HitThePoints_" + timestamp + ".png";
+    // Take snapshot
+    WritableImage image = resultCanvas.snapshot(null, null);
+    File outputFile = new File(folder, filename);
+
+    try {
+      ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", outputFile);
+      System.out.println("Saved snapshot to: " + outputFile.getAbsolutePath());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    switchToStartScene(actionEvent);
   }
 }

@@ -18,10 +18,6 @@ import javafx.stage.Stage;
 /** Controller class for handling game selection functionality. */
 public class GameSelectionController {
 
-  private Stage stage;
-  private Scene scene;
-  private Parent root;
-
   @FXML private Label weclomeText;
 
   @FXML private FlowPane cardContainer;
@@ -83,5 +79,11 @@ public class GameSelectionController {
     SceneUtil.changeScene(
         (Stage) ((Node) event.getSource()).getScene().getWindow(),
         "/at/fh/burgenland/landing.fxml");
+  }
+
+  public void switchToGalerie(ActionEvent actionEvent) {
+    SceneUtil.changeScene(
+            (Stage) ((Node) actionEvent.getSource()).getScene().getWindow(),
+            "/at/fh/burgenland/gallery.fxml");
   }
 }
