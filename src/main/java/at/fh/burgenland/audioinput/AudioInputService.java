@@ -1,6 +1,9 @@
 package at.fh.burgenland.audioinput;
 
+import javafx.collections.ObservableList;
 import javax.sound.sampled.Mixer;
+import lombok.Getter;
+import lombok.Setter;
 
 /** Klasse für AudioInput Singleton. */
 public class AudioInputService {
@@ -8,6 +11,8 @@ public class AudioInputService {
   private static AudioInputService instance;
   private Mixer selectedMixer;
   private int selectedMixerIndex = -1; // Optional: Speichere den Index
+
+  @Getter @Setter private ObservableList<Mixer> mixers;
 
   private AudioInputService() {
     // Private Konstruktor für Singleton
