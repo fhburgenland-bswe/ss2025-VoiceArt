@@ -12,9 +12,7 @@ public class AudioInputService {
   private Mixer selectedMixer;
   private int selectedMixerIndex = -1; // Optional: Speichere den Index
 
-  @Getter
-  @Setter
-  private ObservableList<Mixer> mixers;
+  @Getter @Setter private ObservableList<Mixer> mixers;
 
   private AudioInputService() {
     // Private Konstruktor für Singleton
