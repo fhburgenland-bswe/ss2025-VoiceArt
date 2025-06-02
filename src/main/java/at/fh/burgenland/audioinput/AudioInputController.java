@@ -27,28 +27,43 @@ public class AudioInputController {
   private AudioFormat audioFormat =
       new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 2, 4, 48000, false);
 
-  // Speichert den ausgewählten Mixer
-  private ObservableList<Mixer.Info> mixerInfos;
   private final AudioInputService audioInputService = AudioInputService.getInstance();
+
+  private ObservableList<Mixer.Info> mixers = FXCollections.observableArrayList();
 
   /** Methode to fill out Audio-Input-Dropdown. */
   @FXML
   public void initialize() {
-    loadValidAudioInputs();
+    if (this.audioInputService.getMixers() == null) {
+      loadValidAudioInputs();
+    } else {
+      loadMixer();
+      audioInputComboBox.setItems(
+          FXCollections.observableArrayList(mixers.stream().map(Mixer.Info::getName).toList()));
+    }
 
-    // Stelle zuvor ausgewählten Mixer wieder her (falls vorhanden)
-    Mixer storedMixer = audioInputService.getSelectedMixer();
-
+    Mixer storedMixer;
+    if (audioInputService.getSelectedMixer() == null) {
+      if (!this.audioInputService.getMixers().isEmpty()) {
+        storedMixer = this.audioInputService.getMixers().get(0);
+        this.audioInputService.setSelectedMixer(storedMixer);
+      } else {
+        storedMixer = null;
+      }
+    } else {
+      // Stelle zuvor ausgewählten Mixer wieder her (falls vorhanden)
+      storedMixer = audioInputService.getSelectedMixer();
+    }
     if (storedMixer != null) {
       String storedMixerName = storedMixer.getMixerInfo().getName();
-      for (int i = 0; i < mixerInfos.size(); i++) {
-        if (mixerInfos.get(i).getName().equals(storedMixerName)) {
+      for (int i = 0; i < this.audioInputService.getMixers().size(); i++) {
+        if (mixers.get(i).getName().equals(storedMixerName)) {
           audioInputComboBox.getSelectionModel().select(i);
           break;
         }
       }
     } else if (audioInputService.getSelectedMixerIndex() != -1
-        && audioInputService.getSelectedMixerIndex() < mixerInfos.size()) {
+        && audioInputService.getSelectedMixerIndex() < this.audioInputService.getMixers().size()) {
       audioInputComboBox.getSelectionModel().select(audioInputService.getSelectedMixerIndex());
     }
 
@@ -58,7 +73,7 @@ public class AudioInputController {
         event -> {
           int selectedIndex = audioInputComboBox.getSelectionModel().getSelectedIndex();
           if (selectedIndex >= 0) {
-            Mixer selectedMixer = AudioSystem.getMixer(mixerInfos.get(selectedIndex));
+            Mixer selectedMixer = this.audioInputService.getMixers().get(selectedIndex);
             audioInputService.setSelectedMixer(selectedMixer);
             audioInputService.setSelectedMixerIndex(selectedIndex);
             System.out.println(
@@ -80,7 +95,7 @@ public class AudioInputController {
   private void loadValidAudioInputs() {
     Mixer.Info[] allMixerInfos = AudioSystem.getMixerInfo();
     List<String> validMixerNames = new ArrayList<>();
-    mixerInfos = FXCollections.observableArrayList();
+    ObservableList<Mixer> mixerInfos = FXCollections.observableArrayList();
 
     for (Mixer.Info mixerInfo : allMixerInfos) {
       Mixer mixer = AudioSystem.getMixer(mixerInfo);
@@ -92,7 +107,7 @@ public class AudioInputController {
             line.open(audioFormat);
             line.close();
             validMixerNames.add(mixerInfo.getName());
-            mixerInfos.add(mixerInfo);
+            mixerInfos.add(AudioSystem.getMixer(mixerInfo));
             break;
           } catch (LineUnavailableException e) {
             // Line nicht verfügbar, versuche die nächste Line
@@ -100,6 +115,8 @@ public class AudioInputController {
         }
       }
     }
+    this.audioInputService.setMixers(mixerInfos);
+    loadMixer();
     audioInputComboBox.setItems(FXCollections.observableArrayList(validMixerNames));
   }
 
@@ -114,6 +131,12 @@ public class AudioInputController {
       audioInputComboBox.hide();
       audioInputComboBox.setVisible(false);
       audioInputComboBox.setManaged(false);
+    }
+  }
+
+  private void loadMixer() {
+    for (Mixer mixer : this.audioInputService.getMixers()) {
+      mixers.add(mixer.getMixerInfo());
     }
   }
 
