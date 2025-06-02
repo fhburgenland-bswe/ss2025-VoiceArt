@@ -10,7 +10,7 @@
           
           <HBox alignment="TOP_LEFT" BorderPane.alignment="CENTER">
             <Region  HBox.hgrow="ALWAYS" />
-              <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames" textFill="#1d3e9a">
+              <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="FreeDraw" textFill="#0d6e9e">
                 
         </Label>
             <Region HBox.hgrow="ALWAYS" />
