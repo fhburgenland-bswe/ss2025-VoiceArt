@@ -44,8 +44,12 @@ public class AudioInputController {
 
     Mixer storedMixer;
     if (audioInputService.getSelectedMixer() == null) {
-      storedMixer = this.audioInputService.getMixers().get(0);
-      this.audioInputService.setSelectedMixer(storedMixer);
+      if(!this.audioInputService.getMixers().isEmpty()) {
+        storedMixer = this.audioInputService.getMixers().get(0);
+        this.audioInputService.setSelectedMixer(storedMixer);
+      } else {
+        storedMixer = null;
+      }
     } else {
       // Stelle zuvor ausgewählten Mixer wieder her (falls vorhanden)
       storedMixer = audioInputService.getSelectedMixer();
