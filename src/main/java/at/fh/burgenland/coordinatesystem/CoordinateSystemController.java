@@ -15,7 +15,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -36,6 +38,7 @@ public class CoordinateSystemController {
   @FXML private Label textLabel;
   @FXML private Button backButton;
   @FXML private Button exportButton;
+  @FXML private ColorPicker colorPicker;
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private int minFreq;
@@ -124,6 +127,8 @@ public class CoordinateSystemController {
               .heightProperty()
               .addListener((obs, oldVal, newVal) -> drawCoordinateSystemStructure());
         });
+
+    colorPicker.setValue(Color.BLACK);
   }
 
   /**
@@ -150,6 +155,7 @@ public class CoordinateSystemController {
 
     // draw all existing points new
     for (VoicePoint point : recordedPoints) {
+
       LiveDrawer.drawLiveLine(
           coordinateSystemCanvas,
           point.pitch,
@@ -159,7 +165,8 @@ public class CoordinateSystemController {
           minDb,
           maxDb,
           lastX,
-          lastY);
+          lastY,
+          colorPicker.getValue());
     }
   }
 
@@ -196,7 +203,8 @@ public class CoordinateSystemController {
                         minDb,
                         maxDb,
                         lastX,
-                        lastY));
+                        lastY,
+                        colorPicker.getValue()));
 
             System.out.println("Pitch: " + pitch + " | dB: " + db);
           }

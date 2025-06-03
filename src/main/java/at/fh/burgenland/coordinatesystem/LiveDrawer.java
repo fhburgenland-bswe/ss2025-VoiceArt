@@ -2,6 +2,7 @@ package at.fh.burgenland.coordinatesystem;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * Utility class for drawing live audio data onto a canvas.
@@ -10,6 +11,35 @@ import javafx.scene.canvas.GraphicsContext;
  * create a real-time voice visualization.
  */
 public class LiveDrawer {
+
+  /**
+   * Draws a line between the previous and current smoothed values on the canvas using default color
+   * (blue).
+   */
+  public static void drawLiveLine(
+      Canvas coordinateSystemCanvas,
+      float pitch,
+      double db,
+      int minFreq,
+      int maxFreq,
+      int minDb,
+      int maxDb,
+      double[] lastX,
+      double[] lastY) {
+
+    // Use default color (blue)
+    drawLiveLine(
+        coordinateSystemCanvas,
+        pitch,
+        db,
+        minFreq,
+        maxFreq,
+        minDb,
+        maxDb,
+        lastX,
+        lastY,
+        Color.BLUE);
+  }
 
   /**
    * Draws a line between the previous and current smoothed values on the canvas.
@@ -23,6 +53,7 @@ public class LiveDrawer {
    * @param maxDb the maximum dB range
    * @param lastX mutable container holding the last x-coordinate
    * @param lastY mutable container holding the last y-coordinate
+   * @param color the color to use for drawing the line
    */
   public static void drawLiveLine(
       Canvas coordinateSystemCanvas,
@@ -33,7 +64,8 @@ public class LiveDrawer {
       int minDb,
       int maxDb,
       double[] lastX,
-      double[] lastY) {
+      double[] lastY,
+      Color color) {
 
     // If values are outside the ranges return
     if (pitch < minFreq || pitch > maxFreq || db < minDb || db > maxDb) {
@@ -61,7 +93,7 @@ public class LiveDrawer {
         CoordinateSystemDrawer.PADDING_TOP + ((maxDb - db) / (double) (maxDb - minDb)) * plotHeight;
 
     GraphicsContext g = coordinateSystemCanvas.getGraphicsContext2D();
-    g.setStroke(javafx.scene.paint.Color.BLUE);
+    g.setStroke(color);
     g.setLineWidth(2);
 
     if (lastX[0] >= 0 && lastY[0] >= 0) {

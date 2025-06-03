@@ -10,17 +10,29 @@
           
           <HBox alignment="TOP_LEFT" BorderPane.alignment="CENTER">
             <Region  HBox.hgrow="ALWAYS" />
-              <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames" textFill="#1d3e9a">
+              <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="FreeDraw" textFill="#0d6e9e">
+                
         </Label>
             <Region HBox.hgrow="ALWAYS" />
          
              <fx:include fx:id="inputControlsPane" source="input_controls.fxml" />
           </HBox>
+           
       </top>
-      <center>
       
+      <!--center>
+          
           <Canvas fx:id="coordinateSystemCanvas" BorderPane.alignment="CENTER" />
+
+      </center-->
+
+      <center>
+        <VBox spacing="10" alignment="TOP_LEFT" BorderPane.alignment="CENTER">
+            <ColorPicker fx:id="colorPicker" />
+            <Canvas fx:id="coordinateSystemCanvas" />
+        </VBox>
       </center>
+
        <bottom>
            <VBox alignment="CENTER" BorderPane.alignment="CENTER">
            <Label fx:id="textLabel" alignment="CENTER" style="-fx-font-size: 14px;" text="Toben Sie sich kreativ aus und lassen Sie Ihre Stimme zeichnen." BorderPane.alignment="CENTER">

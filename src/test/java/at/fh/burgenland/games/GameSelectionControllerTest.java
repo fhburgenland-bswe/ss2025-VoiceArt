@@ -90,7 +90,7 @@ public class GameSelectionControllerTest {
 
     VBox firstCard = (VBox) container.getChildren().get(0);
     Label firstTitle = (Label) firstCard.lookup("#titleLabel");
-    assertEquals("Draw Game", firstTitle.getText(), "First card should be 'Draw Game'");
+    assertEquals("FreeDraw", firstTitle.getText(), "First card should be 'FreeDraw'");
 
     VBox secondCard = (VBox) container.getChildren().get(1);
     Label secondTitle = (Label) secondCard.lookup("#titleLabel");
@@ -103,6 +103,6 @@ public class GameSelectionControllerTest {
 
     VBox fourthCard = (VBox) container.getChildren().get(3);
     Label fourthTitle = (Label) fourthCard.lookup("#titleLabel");
-    assertEquals("Treasure Hunt", fourthTitle.getText(), "Fourth card should be 'Treasure Hunt'");
+    assertEquals("TreasureHunt", fourthTitle.getText(), "Fourth card should be 'TreasureHunt'");
   }
 }
