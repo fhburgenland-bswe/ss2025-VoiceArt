@@ -12,9 +12,9 @@
             <Region prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="VoiceGames" textFill="#1d3e9a">
+                  <Label text="VoiceGames" textFill="#0d6e9e">
                      <font>
-                        <Font size="31.0" />
+                        <Font name="System Bold" size="31.0"/>
                      </font>
                   </Label>
                   <Label fx:id="weclomeText" />

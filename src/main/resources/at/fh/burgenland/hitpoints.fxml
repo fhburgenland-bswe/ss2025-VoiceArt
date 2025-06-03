@@ -9,12 +9,14 @@
 <BorderPane prefHeight="700" prefWidth="820" style="-fx-padding: 20 20 20 20;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.games.hitthepoints.HitThePointsController">
       <top>
          <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
-            <HBox alignment="TOP_LEFT" BorderPane.alignment="CENTER_RIGHT">
-               <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames" textFill="#1d3e9a">
-         </Label>
-               <Region HBox.hgrow="ALWAYS" />
-               <fx:include fx:id="inputControlsPane" source="input_controls.fxml" />
+            
+             <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Hit The Points!" textFill="#0d6e9e" />
+                <Region HBox.hgrow="ALWAYS" />
+                <fx:include fx:id="inputControlsPane" source="input_controls.fxml" />
             </HBox>
+
             <HBox alignment="CENTER">
                   <Label />
                   <Region HBox.hgrow="ALWAYS" />
