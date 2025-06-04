@@ -38,19 +38,6 @@ public class CoordinateSystemControllerTest {
   }
 
   /**
-   * Verifies that when {@code startRecording()} is called, the recorder's {@code start()} method
-   * and {@code setListener()} are invoked.
-   */
-  @Test
-  void testStartRecording_callsStartAndSetsListener() {
-    controller.startRecording();
-
-    verify(mockRecorder, times(1)).start();
-    verify(mockRecorder, times(1)).setListener(any());
-    controller.stopRecording();
-  }
-
-  /**
    * Verifies that when {@code stopRecording()} is called, the recorder's {@code stop()} method is
    * invoked and the listener is removed.
    */

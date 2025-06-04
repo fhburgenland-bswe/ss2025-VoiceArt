@@ -2,6 +2,8 @@ package at.fh.burgenland.coordinatesystem;
 
 import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.fft.FrequenzDbOutput;
+import at.fh.burgenland.logging.SessionLog;
+import at.fh.burgenland.logging.SessionLogger;
 import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
@@ -20,8 +22,10 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
@@ -43,12 +47,20 @@ public class CoordinateSystemController {
   @FXML private Label textLabel;
   @FXML private Button backButton;
   @FXML private Button exportButton;
+  @FXML private ColorPicker colorPicker;
 
   // Frequency and Loudness ranges - later on enums for voice profiles (male, female, children)
   private int minFreq;
   private int maxFreq;
   private int minDb;
   private int maxDb;
+
+  // Session statistics for the current game session
+  private double sessionMaxDb = Double.NEGATIVE_INFINITY;
+  private double sessionMinDb = Double.POSITIVE_INFINITY;
+  private double sessionMaxHz = Double.NEGATIVE_INFINITY;
+  private double sessionMinHz = Double.POSITIVE_INFINITY;
+  private static final String LOG_FILE = "session_logs.json";
 
   // Holds the exponentially smoothed pitch value (Hz).
   // Initialized with -1 to indicate "no valid pitch received yet".
@@ -147,6 +159,8 @@ public class CoordinateSystemController {
               .heightProperty()
               .addListener((obs, oldVal, newVal) -> drawCoordinateSystemStructure());
         });
+
+    colorPicker.setValue(Color.BLACK);
   }
 
   /**
@@ -173,6 +187,7 @@ public class CoordinateSystemController {
 
     // draw all existing points new
     for (VoicePoint point : recordedPoints) {
+
       LiveDrawer.drawLiveLine(
           coordinateSystemCanvas,
           point.pitch,
@@ -182,7 +197,8 @@ public class CoordinateSystemController {
           minDb,
           maxDb,
           lastX,
-          lastY);
+          lastY,
+          colorPicker.getValue());
     }
   }
 
@@ -228,6 +244,20 @@ public class CoordinateSystemController {
         (pitch, db) -> {
           if (pitch > 0 && !Double.isInfinite(db)) {
 
+            // updates session statistics
+            if (db > sessionMaxDb) {
+              sessionMaxDb = db;
+            }
+            if (db < sessionMinDb) {
+              sessionMinDb = db;
+            }
+            if (pitch > sessionMaxHz) {
+              sessionMaxHz = pitch;
+            }
+            if (pitch < sessionMinHz) {
+              sessionMinHz = pitch;
+            }
+
             // Use the utility class for smoothing
             smoothedPitch = ExponentialSmoother.smooth(smoothedPitch, pitch, smoothingFactor);
             smoothedDb = ExponentialSmoother.smooth(smoothedDb, db, smoothingFactor);
@@ -246,7 +276,8 @@ public class CoordinateSystemController {
                         minDb,
                         maxDb,
                         lastX,
-                        lastY));
+                        lastY,
+                        colorPicker.getValue()));
 
             System.out.println("Pitch: " + pitch + " | dB: " + db);
           }
@@ -263,7 +294,6 @@ public class CoordinateSystemController {
    */
   @FXML
   public void stopRecording() {
-    setRecording(false);
     recorder.setListener(null); // stop drawing
     recorder.stop();
   }
@@ -277,6 +307,24 @@ public class CoordinateSystemController {
    */
   @FXML
   public void switchToStartScene(ActionEvent event) {
+    this.stopRecording();
+    // Log the session statistics
+    SessionLog log = new SessionLog();
+    log.setUsername(ProfileManager.getCurrentProfile().getUserName());
+    log.setProfile(ProfileManager.getCurrentProfile().getVoiceProfile().toString());
+    log.setGameName("HitThePoints");
+    log.setTimestamp(LocalDateTime.now());
+    log.setMaxDb(sessionMaxDb);
+    log.setMinDb(sessionMinDb);
+    log.setMaxHz(sessionMaxHz);
+    log.setMinHz(sessionMinHz);
+
+    try {
+      SessionLogger.logSession(log, LOG_FILE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     SceneUtil.changeScene(
         (Stage) ((Node) event.getSource()).getScene().getWindow(),
         "/at/fh/burgenland/landing.fxml");

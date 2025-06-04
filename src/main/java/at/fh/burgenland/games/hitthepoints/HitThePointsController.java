@@ -6,11 +6,14 @@ import at.fh.burgenland.coordinatesystem.ExponentialSmoother;
 import at.fh.burgenland.coordinatesystem.LiveDrawer;
 import at.fh.burgenland.coordinatesystem.LogScaleConverter;
 import at.fh.burgenland.fft.FrequenzDbOutput;
+import at.fh.burgenland.logging.SessionLog;
+import at.fh.burgenland.logging.SessionLogger;
 import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -75,6 +78,13 @@ public class HitThePointsController {
   // A value closer to 1 gives more weight to new values (less smoothing),
   // while a value closer to 0 gives more weight to previous values (more smoothing).
   private final float smoothingFactor = 0.3f;
+
+  // Session statistics for the current game session
+  private double sessionMaxDb = Double.NEGATIVE_INFINITY;
+  private double sessionMinDb = Double.POSITIVE_INFINITY;
+  private double sessionMaxHz = Double.NEGATIVE_INFINITY;
+  private double sessionMinHz = Double.POSITIVE_INFINITY;
+  private static final String LOG_FILE = "session_logs.json";
 
   /**
    * Represents a single data point of voice input containing pitch (Hz) and loudness (dB). Used to
@@ -143,6 +153,20 @@ public class HitThePointsController {
       recorder.setListener(
           (pitch, db) -> {
             if (pitch > 0 && !Double.isInfinite(db)) {
+
+              // updates session statistics
+              if (db > sessionMaxDb) {
+                sessionMaxDb = db;
+              }
+              if (db < sessionMinDb) {
+                sessionMinDb = db;
+              }
+              if (pitch > sessionMaxHz) {
+                sessionMaxHz = pitch;
+              }
+              if (pitch < sessionMinHz) {
+                sessionMinHz = pitch;
+              }
 
               // Use the utility class for smoothing
               smoothedPitch = ExponentialSmoother.smooth(smoothedPitch, pitch, smoothingFactor);
@@ -263,6 +287,22 @@ public class HitThePointsController {
   @FXML
   private void switchToResultScreen(ActionEvent event) throws IOException {
     stopRecording();
+    // Log the session statistics
+    SessionLog log = new SessionLog();
+    log.setUsername(ProfileManager.getCurrentProfile().getUserName());
+    log.setProfile(ProfileManager.getCurrentProfile().getVoiceProfile().toString());
+    log.setGameName("HitThePoints");
+    log.setTimestamp(LocalDateTime.now());
+    log.setMaxDb(sessionMaxDb);
+    log.setMinDb(sessionMinDb);
+    log.setMaxHz(sessionMaxHz);
+    log.setMinHz(sessionMinHz);
+
+    try {
+      SessionLogger.logSession(log, LOG_FILE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     FXMLLoader loader =
         new FXMLLoader(getClass().getResource("/at/fh/burgenland/hitpoints_result.fxml"));
@@ -340,6 +380,22 @@ public class HitThePointsController {
    */
   public void switchToGameSelection(ActionEvent event) throws IOException {
     stopRecording();
+    // Log the session statistics
+    SessionLog log = new SessionLog();
+    log.setUsername(ProfileManager.getCurrentProfile().getUserName());
+    log.setProfile(ProfileManager.getCurrentProfile().getVoiceProfile().toString());
+    log.setGameName("HitThePoints");
+    log.setTimestamp(LocalDateTime.now());
+    log.setMaxDb(sessionMaxDb);
+    log.setMinDb(sessionMinDb);
+    log.setMaxHz(sessionMaxHz);
+    log.setMinHz(sessionMinHz);
+
+    try {
+      SessionLogger.logSession(log, LOG_FILE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     SceneUtil.changeScene(
         (Stage) ((Node) event.getSource()).getScene().getWindow(),
         "/at/fh/burgenland/game_selection.fxml");
