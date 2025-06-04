@@ -10,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
@@ -81,9 +80,15 @@ public class GameSelectionController {
         "/at/fh/burgenland/landing.fxml");
   }
 
+  /**
+   * Switches to the gallery screen when triggered by an action event. This method changes the
+   * current scene to the gallery view defined in the FXML file.
+   *
+   * @param actionEvent The ActionEvent triggered by the user interaction, such as a button click.
+   */
   public void switchToGalerie(ActionEvent actionEvent) {
     SceneUtil.changeScene(
-            (Stage) ((Node) actionEvent.getSource()).getScene().getWindow(),
-            "/at/fh/burgenland/gallery.fxml");
+        (Stage) ((Node) actionEvent.getSource()).getScene().getWindow(),
+        "/at/fh/burgenland/gallery.fxml");
   }
 }

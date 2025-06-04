@@ -28,6 +28,7 @@ module at.fh.burgenland {
       javafx.fxml;
   opens at.fh.burgenland.games.voicezone to
       javafx.fxml;
+
   exports at.fh.burgenland;
 
   opens at.fh.burgenland to

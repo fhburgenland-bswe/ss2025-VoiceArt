@@ -51,8 +51,8 @@
             <Button fx:id="gameSelectionButton" onAction="#switchToGameSelection" styleClass="btn, btn-danger" text="Zur Spielauswahl" />
             <CheckBox fx:id="recordingIndicator" disable="true" mnemonicParsing="false" />
             <Button fx:id="startRecordingButton" onAction="#startRecording" styleClass="btn, btn-primary" text="Start" />
-            <Button onAction="#stopRecording" styleClass="btn, btn-danger" text="Stop" />
-            <Button fx:id="resetButton" onAction="#resetTreasureHunt" styleClass="btn, btn-danger" text="Restart Level" />
+            <Button onAction="#stopRecording" styleClass="btn, btn-warning" text="Stop" />
+            <Button fx:id="resetButton" onAction="#resetTreasureHunt" styleClass="btn, btn-info" text="Restart Level" />
          <padding>
             <Insets top="5.0" />
          </padding>

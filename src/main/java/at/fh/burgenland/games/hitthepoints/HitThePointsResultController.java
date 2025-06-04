@@ -2,16 +2,11 @@ package at.fh.burgenland.games.hitthepoints;
 
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.utils.SceneUtil;
-
-import javafx.embed.swing.SwingFXUtils;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -20,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import javax.imageio.ImageIO;
 
 /**
@@ -64,7 +58,7 @@ public class HitThePointsResultController {
   private void switchToStartScene(ActionEvent event) throws IOException {
     SceneUtil.changeScene(
         (Stage) ((Node) event.getSource()).getScene().getWindow(),
-        "/at/fh/burgenland/landing.fxml");
+        "/at/fh/burgenland/game_selection.fxml");
   }
 
   @FXML
@@ -72,7 +66,9 @@ public class HitThePointsResultController {
 
     // Create folder
     File folder = new File(ProfileManager.getCurrentProfile().getUserName());
-    if (!folder.exists()) folder.mkdirs();
+    if (!folder.exists()) {
+      folder.mkdirs();
+    }
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
     String timestamp = LocalDateTime.now().format(formatter);
