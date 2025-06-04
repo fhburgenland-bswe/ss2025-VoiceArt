@@ -135,7 +135,7 @@ public class CoordinateSystemController {
       maxDb = 0;
     }
 
-    if(userProfile == null) {
+    if (userProfile == null) {
       exportButton.setDisable(true);
     }
 

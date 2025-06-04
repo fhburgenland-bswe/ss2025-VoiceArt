@@ -23,9 +23,9 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 /**
- * Test class for the `GalleryController` in the JavaFX application.
- * This class uses TestFX to perform UI tests on the gallery view, ensuring
- * that the welcome text and accordion are correctly populated.
+ * Test class for the `GalleryController` in the JavaFX application. This class uses TestFX to
+ * perform UI tests on the gallery view, ensuring that the welcome text and accordion are correctly
+ * populated.
  */
 @ExtendWith(ApplicationExtension.class)
 public class GalleryControllerTest {
@@ -33,13 +33,13 @@ public class GalleryControllerTest {
   private FxRobot robot;
 
   /**
-   * Initializes the JavaFX application for testing purposes.
-   * This method sets up a dummy user profile, creates a directory with test image files,
-   * and loads the `gallery.fxml` file to display the gallery scene.
+   * Initializes the JavaFX application for testing purposes. This method sets up a dummy user
+   * profile, creates a directory with test image files, and loads the `gallery.fxml` file to
+   * display the gallery scene.
    *
    * @param stage The primary stage for the JavaFX application.
    * @throws IOException If the `gallery.fxml` file cannot be loaded or if there is an error
-   *                     creating the test image files.
+   *     creating the test image files.
    */
   @Start
   public void start(Stage stage) throws IOException {
