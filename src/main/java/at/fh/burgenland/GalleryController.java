@@ -33,7 +33,7 @@ public class GalleryController {
    */
   public void initialize() {
     weclomeText.setText(
-        "Willkommen " + ProfileManager.getCurrentProfile().getUserName() + ", in ihrer Galerie!");
+        "Willkommen " + ProfileManager.getCurrentProfile().getUserName() + ", in Ihrer Galerie!");
 
     loadImages();
   }
