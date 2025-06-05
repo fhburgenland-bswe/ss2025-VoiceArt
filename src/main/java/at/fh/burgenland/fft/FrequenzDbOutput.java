@@ -169,8 +169,7 @@ public class FrequenzDbOutput {
           }
 
           @Override
-          public void processingFinished() {
-          }
+          public void processingFinished() {}
         });
 
     dispatcher.addAudioProcessor(
@@ -206,24 +205,24 @@ public class FrequenzDbOutput {
           }
 
           @Override
-          public void processingFinished() {
-          }
+          public void processingFinished() {}
         });
 
-    audioThread = new Thread(
-        () -> {
-          try {
-            dispatcher.run();
-          } catch (Throwable t) {
-            // Fehler beim Lesen des Streams ignorieren,, for testing (thx copilot)
-            if (running) {
-              t.printStackTrace();
-            }
-          } finally {
-            running = false;
-          }
-        },
-        "Audio Dispatcher");
+    audioThread =
+        new Thread(
+            () -> {
+              try {
+                dispatcher.run();
+              } catch (Throwable t) {
+                // Fehler beim Lesen des Streams ignorieren,, for testing (thx copilot)
+                if (running) {
+                  t.printStackTrace();
+                }
+              } finally {
+                running = false;
+              }
+            },
+            "Audio Dispatcher");
     audioThread.start();
   }
 
