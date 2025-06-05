@@ -9,6 +9,8 @@ module at.fh.burgenland {
   requires com.fasterxml.jackson.databind;
   requires static lombok;
   requires javafx.graphics;
+  requires javafx.swing;
+  requires com.fasterxml.jackson.datatype.jsr310;
 
   opens at.fh.burgenland.audioinput to
       javafx.fxml;
@@ -39,4 +41,7 @@ module at.fh.burgenland {
 
   opens at.fh.burgenland.games to
       javafx.fxml;
+
+  exports at.fh.burgenland.logging to
+      com.fasterxml.jackson.databind;
 }

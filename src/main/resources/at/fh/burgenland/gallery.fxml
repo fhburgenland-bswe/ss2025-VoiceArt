@@ -5,33 +5,35 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="700" prefWidth="820" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.games.GameSelectionController">
+<BorderPane prefHeight="700" prefWidth="820" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.burgenland.GalleryController">
    <top>
       <HBox>
          <children>
-            <Region prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
             <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="VoiceGames" textFill="#0d6e9e">
+                  <Label text="VoiceGames Galerie" textFill="#1d3e9a">
                      <font>
-                        <Font name="System Bold" size="31.0"/>
+                        <Font size="31.0" />
                      </font>
                   </Label>
                   <Label fx:id="weclomeText" />
                </children>
             </VBox>
-            <Region prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
             <fx:include fx:id="inputControlsPane" alignment="TOP_RIGHT" source="input_controls.fxml" />
          </children>
       </HBox>
    </top>
    <center>
-      <FlowPane fx:id="cardContainer" alignment="CENTER" hgap="20" vgap="20" />
+      <ScrollPane fitToWidth="true">
+         <Accordion fx:id="galleryAccordion" />
+      </ScrollPane>
    </center>
    <bottom>
       <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 20 20 20 20;" BorderPane.alignment="CENTER">
-         <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" styleClass="btn, btn-secondary" text="Zurück zum Hauptmenü" />
-         <Button mnemonicParsing="false" onAction="#switchToGalerie" text="Galerie" styleClass="btn, btn-info"/>
+         <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" styleClass="btn, btn-danger" text="Zurück zur Spielauswahl" />
+
       </HBox>
    </bottom>
    <padding>

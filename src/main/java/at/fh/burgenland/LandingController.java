@@ -1,5 +1,6 @@
 package at.fh.burgenland;
 
+import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -32,6 +33,8 @@ public class LandingController {
       debugContainer.setVisible(true);
       debugContainer.setManaged(true);
     }
+
+    ProfileManager.setCurrentProfile(null);
   }
 
   @FXML

@@ -11,7 +11,7 @@
          <HBox BorderPane.alignment="CENTER">
             <children>
                <Region HBox.hgrow="ALWAYS" />
-                 <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames" textFill="#1d3e9a">
+                 <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceZone" textFill="#0d6e9e">
         </Label>
                <Region HBox.hgrow="ALWAYS" />
             
@@ -20,10 +20,10 @@
             </children>
          </HBox>
             <HBox alignment="TOP_CENTER">
-               <children>
+               <!--children>
                    
                    <Label fx:id="titleLabel" alignment="TOP_CENTER" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="VoiceZone – Stimmbereichstraining" />
-               </children>
+               </children-->
             <padding>
                <Insets bottom="5.0" />
             </padding>
@@ -78,7 +78,7 @@
                 </HBox>
             
                 <HBox alignment="CENTER" spacing="20">
-                    <Button fx:id="backButton" onAction="#switchToGameSelectionScene" styleClass="btn, btn-danger" text="Zurück" />
+                    <Button fx:id="backButton" onAction="#switchToGameSelectionScene" styleClass="btn, btn-danger" text="Zur Spielauswahl" />
                     <CheckBox fx:id="recordingIndicator" disable="true" mnemonicParsing="false" />
                     <Button onAction="#startRecording" styleClass="btn, btn-primary" text="Start" />
                     <Button onAction="#stopRecording" styleClass="btn, btn-warning" text="Stop" />

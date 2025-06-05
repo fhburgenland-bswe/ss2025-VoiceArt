@@ -38,7 +38,7 @@ application {
 
 javafx {
   version = '17.0.12'
-  modules = ['javafx.controls', 'javafx.fxml']
+  modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing']
 }
 
 dependencies {
@@ -60,6 +60,7 @@ dependencies {
   testRuntimeOnly 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
   testImplementation("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
   testImplementation 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
+  implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0'
 
 }
 

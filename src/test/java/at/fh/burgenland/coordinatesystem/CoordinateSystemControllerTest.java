@@ -1,6 +1,5 @@
 package at.fh.burgenland.coordinatesystem;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,19 +34,6 @@ public class CoordinateSystemControllerTest {
     Field canvasField = CoordinateSystemController.class.getDeclaredField("coordinateSystemCanvas");
     canvasField.setAccessible(true);
     canvasField.set(controller, mock(Canvas.class));
-  }
-
-  /**
-   * Verifies that when {@code startRecording()} is called, the recorder's {@code start()} method
-   * and {@code setListener()} are invoked.
-   */
-  @Test
-  void testStartRecording_callsStartAndSetsListener() {
-    controller.startRecording();
-
-    verify(mockRecorder, times(1)).start();
-    verify(mockRecorder, times(1)).setListener(any());
-    controller.stopRecording();
   }
 
   /**

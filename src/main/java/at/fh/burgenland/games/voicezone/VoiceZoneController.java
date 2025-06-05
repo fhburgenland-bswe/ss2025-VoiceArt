@@ -4,11 +4,14 @@ import at.fh.burgenland.audioinput.AudioInputService;
 import at.fh.burgenland.coordinatesystem.CoordinateSystemDrawer;
 import at.fh.burgenland.coordinatesystem.LogScaleConverter;
 import at.fh.burgenland.fft.FrequenzDbOutput;
+import at.fh.burgenland.logging.SessionLog;
+import at.fh.burgenland.logging.SessionLogger;
 import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.utils.SceneUtil;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import javafx.application.Platform;
@@ -72,6 +75,13 @@ public class VoiceZoneController {
   private int maxFreq;
   private int minDb;
   private int maxDb;
+
+  // Session statistics for the current game session
+  private double sessionMaxDb = Double.NEGATIVE_INFINITY;
+  private double sessionMinDb = Double.POSITIVE_INFINITY;
+  private double sessionMaxHz = Double.NEGATIVE_INFINITY;
+  private double sessionMinHz = Double.POSITIVE_INFINITY;
+  private static final String LOG_FILE = "session_logs.json";
 
   // Level organisation
   private int level = 1;
@@ -334,6 +344,21 @@ public class VoiceZoneController {
     this.setRecording(true);
     recorder.setListener(
         (pitch, db) -> {
+
+          // updates session statistics
+          if (db > sessionMaxDb) {
+            sessionMaxDb = db;
+          }
+          if (db < sessionMinDb) {
+            sessionMinDb = db;
+          }
+          if (pitch > sessionMaxHz) {
+            sessionMaxHz = pitch;
+          }
+          if (pitch < sessionMinHz) {
+            sessionMinHz = pitch;
+          }
+
           boolean isSilent =
               (trainingMode == VoiceZoneTrainingMode.FREQUENCY
                       && (pitch <= 0 || Double.isNaN(pitch)))
@@ -514,6 +539,24 @@ public class VoiceZoneController {
   @FXML
   public void switchToGameSelectionScene(ActionEvent event) throws IOException {
     this.stopRecording();
+
+    // Log the session statistics
+    SessionLog log = new SessionLog();
+    log.setUsername(ProfileManager.getCurrentProfile().getUserName());
+    log.setProfile(ProfileManager.getCurrentProfile().getVoiceProfile().toString());
+    log.setGameName("VoiceZone");
+    log.setTimestamp(LocalDateTime.now());
+    log.setMaxDb(sessionMaxDb);
+    log.setMinDb(sessionMinDb);
+    log.setMaxHz(sessionMaxHz);
+    log.setMinHz(sessionMinHz);
+
+    try {
+      SessionLogger.logSession(log, LOG_FILE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     SceneUtil.changeScene(
         (Stage) ((Node) event.getSource()).getScene().getWindow(),
         "/at/fh/burgenland/game_selection.fxml");
