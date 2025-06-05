@@ -33,7 +33,6 @@ public class FrequenzDbOutput {
   private final int overlap;
 
   private final InputSourceType sourceType;
-  // private final Mixer mixer;
   private Mixer mixer;
   private final File audioFile;
 
@@ -46,7 +45,7 @@ public class FrequenzDbOutput {
   private double noiseGateThresholdDb = -60.0;
   private boolean isGateOpen = true;
 
-  private AudioInputController audioInputController = new AudioInputController();
+  private final AudioInputController audioInputController = new AudioInputController();
 
   /**
    * Constructor for the FrequenzDbOutput class with MIC input option. This constructor sets default
@@ -126,6 +125,8 @@ public class FrequenzDbOutput {
     if (running) {
       return;
     }
+    running = true;
+
     try {
       switch (sourceType) {
         case MICROPHONE -> {
@@ -135,14 +136,12 @@ public class FrequenzDbOutput {
         case FILE -> {
           dispatcher = AudioDispatcherFactory.fromFile(audioFile, bufferSize, overlap);
         }
-        default -> {
-          throw new IllegalArgumentException("Unsupported input source type: " + sourceType);
-        }
+        default -> throw new IllegalArgumentException(
+            "Unsupported input source type: " + sourceType);
       }
-    } catch (LineUnavailableException e) {
-      throw new RuntimeException("Error initializing audio input: " + e.getMessage(), e);
-    } catch (IOException | UnsupportedAudioFileException e) {
-      throw new RuntimeException("Error reading audio file: " + e.getMessage(), e);
+    } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+      running = false;
+      throw new RuntimeException("Audio initialization failed: " + e.getMessage(), e);
     }
 
     // the noise gate processor
@@ -156,14 +155,9 @@ public class FrequenzDbOutput {
               rms += sample * sample;
             }
             rms = Math.sqrt(rms / buffer.length);
-            double currentBlockDb = 20.0 * Math.log10(rms + 1e-10); // Avoid log10(0)
-
-            // System.out.println("RMS: " + rms);
-            // System.out.println("dB: " + currentBlockDb);
-            // System.out.println("Threshold: " + noiseGateThresholdDb);
+            double currentBlockDb = 20.0 * Math.log10(rms + 1e-10);
 
             if (currentBlockDb < noiseGateThresholdDb) {
-              // Mute the buffer
               for (int i = 0; i < buffer.length; i++) {
                 buffer[i] = 0;
               }
@@ -201,7 +195,7 @@ public class FrequenzDbOutput {
               rms += sample * sample;
             }
             rms = Math.sqrt(rms / buffer.length);
-            double newDb = 20.0 * Math.log10(rms);
+            double newDb = 20.0 * Math.log10(rms + 1e-10);
 
             if (!Double.isInfinite(newDb) && Math.abs(newDb - currentDb) > 0.5) {
               currentDb = newDb;
@@ -214,9 +208,22 @@ public class FrequenzDbOutput {
           public void processingFinished() {}
         });
 
-    audioThread = new Thread(dispatcher, "Audio Dispatcher");
+    audioThread =
+        new Thread(
+            () -> {
+              try {
+                dispatcher.run();
+              } catch (Throwable t) {
+                // Fehler beim Lesen des Streams ignorieren,, for testing (thx copilot)
+                if (running) {
+                  t.printStackTrace();
+                }
+              } finally {
+                running = false;
+              }
+            },
+            "Audio Dispatcher");
     audioThread.start();
-    running = true;
   }
 
   /**
@@ -227,8 +234,13 @@ public class FrequenzDbOutput {
     if (!running) {
       return;
     }
-    audioThread.interrupt();
     running = false;
+    if (dispatcher != null) {
+      dispatcher.stop();
+    }
+    if (audioThread != null) {
+      audioThread.interrupt();
+    }
 
     if (targetDataLine != null) {
       targetDataLine.stop();
@@ -254,7 +266,6 @@ public class FrequenzDbOutput {
   }
 
   private synchronized void maybeNotify() {
-
     if (listener != null && currentPitch > 0 && !Double.isInfinite(currentDb)) {
       listener.onData(currentPitch, currentDb);
     }
