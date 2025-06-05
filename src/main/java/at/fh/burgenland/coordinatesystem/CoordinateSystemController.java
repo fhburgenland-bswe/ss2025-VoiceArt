@@ -8,20 +8,26 @@ import at.fh.burgenland.profiles.IfVoiceProfile;
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.profiles.UserProfile;
 import at.fh.burgenland.utils.SceneUtil;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
 /**
  * Controller class for the coordinate system view. This controller is responsible for:
@@ -69,6 +75,18 @@ public class CoordinateSystemController {
   // while a value closer to 0 gives more weight to previous values (more smoothing).
   private final float smoothingFactor = 0.3f;
 
+  @FXML private CheckBox recordingIndicator;
+
+  /**
+   * Sets the recording state of the application. This method updates the recording indicator to
+   * visually reflect whether recording is active or not.
+   *
+   * @param isRecording true if recording is active, false otherwise
+   */
+  public void setRecording(boolean isRecording) {
+    recordingIndicator.setSelected(isRecording);
+  }
+
   /**
    * Represents a single data point of voice input containing pitch (Hz) and loudness (dB). Used to
    * store and redraw smoothed voice data for responsive canvas updates.
@@ -77,10 +95,12 @@ public class CoordinateSystemController {
 
     float pitch;
     double db;
+    Color color;
 
-    VoicePoint(float pitch, double db) {
+    VoicePoint(float pitch, double db, Color color) {
       this.pitch = pitch;
       this.db = db;
+      this.color = color;
     }
   }
 
@@ -115,6 +135,10 @@ public class CoordinateSystemController {
       maxFreq = 1100;
       minDb = -60;
       maxDb = 0;
+    }
+
+    if (userProfile == null) {
+      exportButton.setDisable(true);
     }
 
     Platform.runLater(
@@ -176,8 +200,35 @@ public class CoordinateSystemController {
           maxDb,
           lastX,
           lastY,
-          colorPicker.getValue());
+          point.color);
     }
+  }
+
+  @FXML
+  private void exportPicture(ActionEvent actionEvent) throws IOException {
+
+    // Create folder
+    File folder = new File(ProfileManager.getCurrentProfile().getUserName());
+    if (!folder.exists()) {
+      folder.mkdirs();
+    }
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
+    String timestamp = LocalDateTime.now().format(formatter);
+
+    // Generate filename
+    String filename = "Draw_" + timestamp + ".png";
+    // Take snapshot
+    WritableImage image = coordinateSystemCanvas.snapshot(null, null);
+    File outputFile = new File(folder, filename);
+
+    try {
+      ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", outputFile);
+      System.out.println("Saved snapshot to: " + outputFile.getAbsolutePath());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    switchToStartScene(actionEvent);
   }
 
   /**
@@ -189,7 +240,7 @@ public class CoordinateSystemController {
    */
   @FXML
   public void startRecording() {
-
+    setRecording(true);
     // Set up the listener to receive live frequency (Hz) and loudness (dB) data
     recorder.setListener(
         (pitch, db) -> {
@@ -213,7 +264,7 @@ public class CoordinateSystemController {
             smoothedPitch = ExponentialSmoother.smooth(smoothedPitch, pitch, smoothingFactor);
             smoothedDb = ExponentialSmoother.smooth(smoothedDb, db, smoothingFactor);
 
-            recordedPoints.add(new VoicePoint(smoothedPitch, smoothedDb));
+            recordedPoints.add(new VoicePoint(smoothedPitch, smoothedDb, colorPicker.getValue()));
 
             // Draw on canvas with smoothed values
             Platform.runLater(
