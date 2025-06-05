@@ -11,11 +11,10 @@ import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +27,26 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.control.LabeledMatchers;
 
+/**
+ * Test class for the `CoordinateSystemController` in the JavaFX application. This class uses TestFX
+ * to perform UI tests on the coordinate system view, ensuring that all UI elements are correctly
+ * initialized and functional.
+ *
+ * <p>Key functionalities tested include: - Visibility and state of UI elements such as buttons,
+ * canvas, and color picker. - Interaction with UI components like the color picker and buttons.
+ *
+ * <p>TestFX framework is used for simulating user interactions and verifying UI behavior.
+ */
 @ExtendWith(ApplicationExtension.class)
 public class CoordinateSystemControllerTest {
 
+  /**
+   * Initializes the JavaFX application for testing purposes. This method sets up a dummy user
+   * profile and loads the coordinate system scene from the `coordinate-system.fxml` file.
+   *
+   * @param stage The primary stage for the JavaFX application.
+   * @throws IOException If the `coordinate-system.fxml` file cannot be loaded.
+   */
   @Start
   public void start(Stage stage) throws IOException {
     ProfileManager.setCurrentProfile(new UserProfile("TestUser", VoiceProfile.MAENNLICH));
