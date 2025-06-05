@@ -4,6 +4,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
@@ -41,3 +42,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+## profiles and logs ##
+profiles.json
+session_logs.json
