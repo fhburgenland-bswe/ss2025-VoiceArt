@@ -49,7 +49,8 @@ public class GalleryController {
     File[] allImages =
         userDir.listFiles(
             (dir, name) ->
-                name.matches("(HitThePoints|FreeDraw)_\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}\\.png"));
+                name.matches(
+                    "(HitThePoints|FreeDraw)_\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}\\.png"));
 
     if (allImages == null || allImages.length == 0) {
       return;
@@ -71,7 +72,8 @@ public class GalleryController {
       imageView.setSmooth(true); // Enable smoothing for better downscale
       // Extract timestamp from filename (removing prefix and .png)
       String fileName = imgFile.getName();
-      String dateTimeRaw = fileName.replaceFirst("^(HitThePoints|FreeDraw)_", "").replace(".png", "");
+      String dateTimeRaw =
+          fileName.replaceFirst("^(HitThePoints|FreeDraw)_", "").replace(".png", "");
       String labelText = dateTimeRaw.replace('_', ' ').replace('-', ':');
       // Result: "2025:06:02 16:26"
 
