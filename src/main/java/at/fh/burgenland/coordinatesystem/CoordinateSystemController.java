@@ -296,6 +296,7 @@ public class CoordinateSystemController {
    */
   @FXML
   public void stopRecording() {
+    setRecording(false);
     recorder.setListener(null); // stop drawing
     recorder.stop();
   }
