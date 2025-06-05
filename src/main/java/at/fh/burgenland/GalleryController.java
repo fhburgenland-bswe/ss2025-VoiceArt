@@ -49,7 +49,7 @@ public class GalleryController {
     File[] allImages =
         userDir.listFiles(
             (dir, name) ->
-                name.matches("(HitThePoints|Draw)_\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}\\.png"));
+                name.matches("(HitThePoints|FreeDraw)_\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}\\.png"));
 
     if (allImages == null || allImages.length == 0) {
       return;
@@ -71,21 +71,21 @@ public class GalleryController {
       imageView.setSmooth(true); // Enable smoothing for better downscale
       // Extract timestamp from filename (removing prefix and .png)
       String fileName = imgFile.getName();
-      String dateTimeRaw = fileName.replaceFirst("^(HitThePoints|Draw)_", "").replace(".png", "");
+      String dateTimeRaw = fileName.replaceFirst("^(HitThePoints|FreeDraw)_", "").replace(".png", "");
       String labelText = dateTimeRaw.replace('_', ' ').replace('-', ':');
       // Result: "2025:06:02 16:26"
 
       Label dateLabel = new Label(labelText);
       VBox imageWithLabel = new VBox(5, imageView, dateLabel);
 
-      if (fileName.startsWith("Draw")) {
+      if (fileName.startsWith("FreeDraw")) {
         drawImagesBox.getChildren().add(imageWithLabel);
       } else if (fileName.startsWith("HitThePoints")) {
         hitThePointsImagesBox.getChildren().add(imageWithLabel);
       }
     }
 
-    TitledPane drawPane = new TitledPane("Draw", drawImagesBox);
+    TitledPane drawPane = new TitledPane("FreeDraw", drawImagesBox);
     TitledPane hitThePointsPane = new TitledPane("HitThePoints", hitThePointsImagesBox);
 
     galleryAccordion.getPanes().addAll(hitThePointsPane, drawPane);
