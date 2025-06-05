@@ -73,7 +73,7 @@ public class GalleryControllerTest {
     Label welcomeLabel = robot.lookup("#weclomeText").queryAs(Label.class);
     assertNotNull(welcomeLabel);
     assertEquals(
-        "Willkommen TestUser, in ihrer Galerie!",
+        "Willkommen TestUser, in Ihrer Galerie!",
         welcomeLabel.getText(),
         "Welcome message should include username");
   }
