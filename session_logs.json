@@ -43,4 +43,22 @@
   "minDb" : -58.82378870289004,
   "maxHz" : 559.0745849609375,
   "minHz" : 14.56605339050293
+}, {
+  "username" : "TestUserMan",
+  "profile" : "männlich",
+  "gameName" : "HitThePoints",
+  "timestamp" : "2025-06-05T09:27:34.2310497",
+  "maxDb" : -30.378890378235685,
+  "minDb" : -49.613618832955595,
+  "maxHz" : 431.1123352050781,
+  "minHz" : 56.62664794921875
+}, {
+  "username" : "TestUserMan",
+  "profile" : "männlich",
+  "gameName" : "HitThePoints",
+  "timestamp" : "2025-06-05T09:34:06.2317987",
+  "maxDb" : -27.7939939767916,
+  "minDb" : -55.7758372363369,
+  "maxHz" : 664.9320068359375,
+  "minHz" : 87.2712173461914
 } ]

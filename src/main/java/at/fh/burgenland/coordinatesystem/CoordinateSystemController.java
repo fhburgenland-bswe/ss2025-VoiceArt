@@ -95,10 +95,12 @@ public class CoordinateSystemController {
 
     float pitch;
     double db;
+    Color color;
 
-    VoicePoint(float pitch, double db) {
+    VoicePoint(float pitch, double db, Color color) {
       this.pitch = pitch;
       this.db = db;
+      this.color = color;
     }
   }
 
@@ -198,7 +200,7 @@ public class CoordinateSystemController {
           maxDb,
           lastX,
           lastY,
-          colorPicker.getValue());
+          point.color);
     }
   }
 
@@ -262,7 +264,7 @@ public class CoordinateSystemController {
             smoothedPitch = ExponentialSmoother.smooth(smoothedPitch, pitch, smoothingFactor);
             smoothedDb = ExponentialSmoother.smooth(smoothedDb, db, smoothingFactor);
 
-            recordedPoints.add(new VoicePoint(smoothedPitch, smoothedDb));
+            recordedPoints.add(new VoicePoint(smoothedPitch, smoothedDb, colorPicker.getValue()));
 
             // Draw on canvas with smoothed values
             Platform.runLater(
