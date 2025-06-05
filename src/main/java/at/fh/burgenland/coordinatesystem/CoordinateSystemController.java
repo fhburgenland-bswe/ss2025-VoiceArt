@@ -213,11 +213,11 @@ public class CoordinateSystemController {
       folder.mkdirs();
     }
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
     String timestamp = LocalDateTime.now().format(formatter);
 
     // Generate filename
-    String filename = "Draw_" + timestamp + ".png";
+    String filename = "FreeDraw_" + timestamp + ".png";
     // Take snapshot
     WritableImage image = coordinateSystemCanvas.snapshot(null, null);
     File outputFile = new File(folder, filename);
@@ -296,6 +296,7 @@ public class CoordinateSystemController {
    */
   @FXML
   public void stopRecording() {
+    setRecording(false);
     recorder.setListener(null); // stop drawing
     recorder.stop();
   }

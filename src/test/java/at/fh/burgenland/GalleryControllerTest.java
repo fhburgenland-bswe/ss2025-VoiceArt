@@ -51,8 +51,8 @@ public class GalleryControllerTest {
     File userDir = new File(userName);
     userDir.mkdirs();
     try {
-      new File(userDir, "HitThePoints_2025-06-04_12-00.png").createNewFile();
-      new File(userDir, "Draw_2025-06-03_18-30.png").createNewFile();
+      new File(userDir, "HitThePoints_2025-06-04_12-00-00.png").createNewFile();
+      new File(userDir, "FreeDraw_2025-06-03_18-30-00.png").createNewFile();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
