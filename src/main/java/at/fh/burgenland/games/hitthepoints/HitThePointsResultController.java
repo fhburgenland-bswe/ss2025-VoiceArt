@@ -70,7 +70,7 @@ public class HitThePointsResultController {
       folder.mkdirs();
     }
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
     String timestamp = LocalDateTime.now().format(formatter);
 
     // Generate filename
