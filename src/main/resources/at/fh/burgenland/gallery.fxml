@@ -12,11 +12,7 @@
             <Region HBox.hgrow="ALWAYS" />
             <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="VoiceGames Galerie" textFill="#1d3e9a">
-                     <font>
-                        <Font size="31.0" />
-                     </font>
-                  </Label>
+                  <Label fx:id="logoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="VoiceGames Galerie" textFill="#0d6e9e" />
                   <Label fx:id="weclomeText" />
                </children>
             </VBox>
