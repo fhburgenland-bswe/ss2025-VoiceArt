@@ -2,6 +2,11 @@ package at.fh.burgenland.games.hitthepoints;
 
 import at.fh.burgenland.profiles.ProfileManager;
 import at.fh.burgenland.utils.SceneUtil;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -75,16 +80,36 @@ public class HitThePointsResultController {
 
     // Generate filename
     String filename = "HitThePoints_" + timestamp + ".png";
-    // Take snapshot
-    WritableImage image = resultCanvas.snapshot(null, null);
-    File outputFile = new File(folder, filename);
 
+    // Take snapshot
+    WritableImage fxImage = resultCanvas.snapshot(null, null);
+    BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
+
+    // Draw the score in the top-right corner
+    Graphics2D g2d = bufferedImage.createGraphics();
+    g2d.setFont(new Font("Arial", Font.BOLD, 20));
+    g2d.setColor(Color.BLUE); // Change color as needed
+
+    String scoreText = scoreLabel.getText(); // "Your Score: 123"
+    FontMetrics metrics = g2d.getFontMetrics();
+    int textWidth = metrics.stringWidth(scoreText);
+    int textHeight = metrics.getHeight();
+
+    int x = bufferedImage.getWidth() - textWidth - 10;
+    int y = textHeight;
+
+    g2d.drawString(scoreText, x, y);
+    g2d.dispose();
+
+    // Write image to file
+    File outputFile = new File(folder, filename);
     try {
-      ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", outputFile);
+      ImageIO.write(bufferedImage, "png", outputFile);
       System.out.println("Saved snapshot to: " + outputFile.getAbsolutePath());
     } catch (IOException e) {
       e.printStackTrace();
     }
+
     switchToStartScene(actionEvent);
   }
 }
