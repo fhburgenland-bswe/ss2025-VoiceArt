@@ -304,10 +304,10 @@ public class TreasureHuntController {
             if (pitch > 0 && !Double.isInfinite(db)) {
 
               // updates session statistics
-              if (db > sessionMaxDb) {
+              if (db > sessionMaxDb && db > -100) {
                 sessionMaxDb = db;
               }
-              if (db < sessionMinDb) {
+              if (db < sessionMinDb && db > -100) {
                 sessionMinDb = db;
               }
               if (pitch > sessionMaxHz) {
