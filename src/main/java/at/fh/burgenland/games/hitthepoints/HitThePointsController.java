@@ -326,14 +326,21 @@ public class HitThePointsController {
     double canvasWidth = gameCanvas.getWidth();
     double canvasHeight = gameCanvas.getHeight();
 
-    // Adjust circle radius based on score
+    // Shrink radius on each hit, down to a minimum of 18px
     circleRadius = Math.max(circleRadius - 4, 18);
-    double adjustedRadius = circleRadius;
+    double r = circleRadius;
 
-    circleX = ThreadLocalRandom.current().nextDouble(adjustedRadius, canvasWidth - adjustedRadius);
-    circleY = ThreadLocalRandom.current().nextDouble(adjustedRadius, canvasHeight - adjustedRadius);
+    // Compute the bounds of the plotting area
+    double minX = CoordinateSystemDrawer.PADDING_LEFT + r;
+    double maxX = canvasWidth  - CoordinateSystemDrawer.PADDING_RIGHT  - r;
+    double minY = CoordinateSystemDrawer.PADDING_TOP  + r;
+    double maxY = canvasHeight - CoordinateSystemDrawer.PADDING_BOTTOM - r;
 
-    drawCircle(adjustedRadius);
+    // Randomize circle center *within* the axes region
+    circleX = ThreadLocalRandom.current().nextDouble(minX, maxX);
+    circleY = ThreadLocalRandom.current().nextDouble(minY, maxY);
+
+    drawCircle(r);
   }
 
   private void drawCircle(double radius) {
