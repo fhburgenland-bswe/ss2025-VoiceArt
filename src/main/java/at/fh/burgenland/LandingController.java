@@ -42,16 +42,7 @@ public class LandingController {
     welcomeText.setText("Test");
   }
 
-  /**
-   * Switches the current scene to the "profile" view loaded from the "hello.fxml" file.
-   *
-   * @param event The {@link ActionEvent} that triggered the switch (e.g., a button click).
-   * @throws IOException If the "hello.fxml" file cannot be loaded.
-   */
-  public void switchToDebug(ActionEvent event) {
-    SceneUtil.changeScene(
-        (Stage) ((Node) event.getSource()).getScene().getWindow(), "/at/fh/burgenland/hello.fxml");
-  }
+
 
   /**
    * Opens the coordinate system view defined in coordinate-system.fxml. This method is triggered by

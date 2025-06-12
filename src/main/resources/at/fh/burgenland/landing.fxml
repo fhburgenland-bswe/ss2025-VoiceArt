@@ -44,7 +44,6 @@
 
     <!-- Debug Buttons - explizit sichtbar gemacht -->
     <HBox fx:id="debugContainer" alignment="CENTER" spacing="10" styleClass="debug-container" visible="true" managed="true">
-      <Button mnemonicParsing="false" onAction="#switchToDebug" text="DebugMenu" styleClass="btn, btn-secondary"/>
       <Button onAction="#showCoordinateSystem" text="Show Coordinate System" styleClass="btn, btn-primary"/>
     </HBox>
   </VBox>
