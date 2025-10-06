@@ -42,7 +42,7 @@ jobs:
           java-version: "${{ matrix.java-version }}"
           distribution: "temurin"
 
-      - uses: gradle/actions/setup-gradle@v4.1.0
+      - uses: gradle/actions/setup-gradle@v5
 
       - name: Grant execute permissions for gradlew
         run: chmod +x ./gradlew
@@ -76,7 +76,7 @@ jobs:
           Xvfb :99 -screen 0 1920x1080x24 &
           echo "DISPLAY=:99" >> $GITHUB_ENV
 
-      - uses: gradle/actions/setup-gradle@v4.1.0
+      - uses: gradle/actions/setup-gradle@v5
 
       - name: Make Gradle wrapper executable (non-Windows)
         if: runner.os != 'Windows'
@@ -102,7 +102,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       - name: create image
         run: ./gradlew jpackageImage
