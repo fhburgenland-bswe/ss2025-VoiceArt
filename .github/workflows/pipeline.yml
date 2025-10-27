@@ -108,7 +108,7 @@ jobs:
         run: ./gradlew jpackageImage
 
       - name: Upload JAR Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: voicegames
           path: build/jpackage/app/
